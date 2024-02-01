@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "profile": "Profil",
+    "myAccount": "Mon compte",
+    "email": "Email"
+  },
+  "profile": {
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Mis à jour avec succès"
+      },
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      }
+    },
+    "actions": {
+      "update": "Mettre à jour"
+    },
+    "title": "Informations du profil"
+  },
+  "data": {
+    "name": {
+      "label": "Nom",
+      "required": "Le nom est requis"
+    },
+    "email": {
+      "label": "Email",
+      "required": "L'email est requis",
+      "invalid": "L'email est invalide",
+      "current": "Ceci est votre email actuel"
+    },
+    "language": {
+      "label": "Langue"
+    }
+  },
+  "email": {
+    "actions": {
+      "update": "Mettre à jour"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      },
+      "updateSuccess": {
+        "title": "Email mis à jour"
+      }
+    },
+    "title": "Mettez à jour votre email"
+  },
+  "logout": {
+    "button": "Se déconnecter",
+    "confirm": {
+      "button": "Se déconnecter",
+      "message": "Vous êtes sur le point de terminer votre session",
+      "title": "Déconnexion du compte"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "dark": "Mode sombre",
+      "light": "Mode lumière"
+    },
+    "title": "Préférences"
+  },
+  "title": "Compte",
+  "admin": {
+    "button": "Ouvrir l'interface d'administration",
+    "title": "Utilisateur administrateur"
+  }
+}

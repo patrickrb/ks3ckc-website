@@ -1,0 +1,70 @@
+{
+  "title": "Account",
+  "nav": {
+    "profile": "Profile",
+    "email": "Email",
+    "myAccount": "My Account"
+  },
+  "admin": {
+    "title": "Admin user",
+    "button": "Open Administration"
+  },
+  "profile": {
+    "title": "Profile informations",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Profile updated"
+      },
+      "updateError": {
+        "title": "Update failed"
+      }
+    },
+    "actions": {
+      "update": "Update"
+    }
+  },
+  "email": {
+    "title": "Update your email",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Email updated"
+      },
+      "updateError": {
+        "title": "Update failed"
+      }
+    },
+    "actions": {
+      "update": "Update"
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "theme": {
+      "dark": "Dark mode",
+      "light": "Light mode"
+    }
+  },
+  "logout": {
+    "button": "Logout",
+    "confirm": {
+      "title": "Account logout",
+      "message": "You are about to end your session",
+      "button": "Logout"
+    }
+  },
+  "data": {
+    "name": {
+      "label": "Name",
+      "required": "Name is required"
+    },
+    "email": {
+      "label": "Email",
+      "required": "Email is required",
+      "invalid": "Email is invalid",
+      "current": "This is your current email"
+    },
+    "language": {
+      "label": "Language"
+    }
+  }
+}
