@@ -15,7 +15,7 @@
     "dev:email": "maildev -outgoing-host smtp.example.com --outgoing-secure --outgoing-user 'username' --outgoing-pass 'password'",
     "build": "pnpm build:info && next build",
     "build:info": "tsx scripts/build-info.ts",
-    "start": "next start",
+    "start": "next start -p 80",
     "pretty": "prettier -w .",
     "lint": "run-p lint:*",
     "lint:next": "SKIP_ENV_VALIDATION=true next lint",
