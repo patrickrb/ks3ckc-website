@@ -8,6 +8,7 @@ import common from './common.json';
 import components from './components.json';
 import emails from './emails.json';
 import management from './management.json';
+import navbar from './navbar.json';
 import repositories from './repositories.json';
 import users from './users.json';
 
@@ -22,6 +23,7 @@ export default {
   components,
   emails,
   management,
+  navbar,
   repositories,
   users,
 } as const;

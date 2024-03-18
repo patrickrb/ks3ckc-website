@@ -1,7 +1,7 @@
 {
   "layout": {
     "mainMenu": {
-      "dashboard": "Dashboard",
+      "home": "Home",
       "repositories": "Repositories",
       "management": "Management"
     },

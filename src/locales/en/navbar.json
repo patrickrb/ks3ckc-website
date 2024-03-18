@@ -1,0 +1,24 @@
+{
+  "layout": {
+    "mainMenu": {
+      "home": "Home",
+      "blog": "Blog",
+      "contests": "Contests",
+      "about": "About",
+      "login": "Login"
+    },
+    "accountMenu": {
+      "version": {
+        "copied": "Version copied",
+        "copy": "Copy version",
+        "label": "Version"
+      },
+      "apiDocs": "Api Documentation",
+      "openApp": "Open App",
+      "switchColorModeDark": "Switch to Dark Mode",
+      "switchColorModeLight": "Switch to Light Mode",
+      "myAccount": "My Account",
+      "logout": "Logout"
+    }
+  }
+}

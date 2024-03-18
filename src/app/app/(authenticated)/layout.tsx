@@ -10,10 +10,7 @@ export default function AutenticatedLayout({
   children: ReactNode;
 }) {
   return (
-    <GuardAuthenticated
-      authorizations={['APP']}
-      loginPath={`${APP_PATH}/login`}
-    >
+    <GuardAuthenticated authorizations={['APP']} loginPath={`${APP_PATH}/home`}>
       <AppLayout>{children}</AppLayout>
     </GuardAuthenticated>
   );
