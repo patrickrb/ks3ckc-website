@@ -48,7 +48,7 @@ export default function HomePage() {
       title: 'KS3CKC Achieves New Milestone in Long-Distance Communication',
       date: '2024-03-01',
       content:
-        "The KS3CKC HAM Radio Club recently set a new record in long-distance communication, reaching an amateur radio operator in a remote location over 8,000 miles away. This achievement showcases the club's commitment to advancing radio communication technologies.",
+        "The KS3CKC Ham Radio Club recently set a new record in long-distance communication, reaching an amateur radio operator in a remote location over 8,000 miles away. This achievement showcases the club's commitment to advancing radio communication technologies.",
     },
     {
       title:
@@ -58,23 +58,23 @@ export default function HomePage() {
         'Join us for an in-depth workshop on advanced radio frequency optimization techniques. The workshop, led by expert members of KS3CKC, will cover new strategies for enhancing signal strength and clarity.',
     },
     {
-      title: 'Annual HAM Radio Contest: A Resounding Success',
+      title: 'Annual Ham Radio Contest: A Resounding Success',
       date: '2024-05-20',
       content:
-        "KS3CKC's annual HAM radio contest brought together enthusiasts from all over the region. Participants competed in various categories, demonstrating skill and creativity in radio communication.",
+        "KS3CKC's annual Ham radio contest brought together enthusiasts from all over the region. Participants competed in various categories, demonstrating skill and creativity in radio communication.",
     },
     {
       title:
         'KS3CKC to Host a Series of Guest Talks on Emergency Communication',
       date: '2024-06-10',
       content:
-        'KS3CKC is proud to announce a series of guest lectures focusing on the role of amateur radio in emergency communication. Experts from various fields will discuss the importance of HAM radio during crises.',
+        'KS3CKC is proud to announce a series of guest lectures focusing on the role of amateur radio in emergency communication. Experts from various fields will discuss the importance of Ham radio during crises.',
     },
     {
       title: 'Member Spotlight: Journey of a Young Amateur Radio Operator',
       date: '2024-07-05',
       content:
-        'In our member spotlight series, we feature the journey of a young radio enthusiast who discovered a passion for HAM radio through KS3CKC. Read about their inspiring journey in the world of amateur radio.',
+        'In our member spotlight series, we feature the journey of a young radio enthusiast who discovered a passion for Ham radio through KS3CKC. Read about their inspiring journey in the world of amateur radio.',
     },
   ];
 
@@ -167,7 +167,7 @@ export default function HomePage() {
             collaboration with SecKC, the colossal titan of hacker meetups, we
             are not just a club; we're a powerhouse of the planet's most
             brilliant minds in technology, security, and radio wizardry. Picture
-            a place where the pulses of HAM radio merge with the electric sparks
+            a place where the pulses of ham radio merge with the electric sparks
             of hacking genius – that's where you'll find us, at the pinnacle of
             innovation. Our members? They're the crème de la crème, a league of
             extraordinary technophiles, each more skilled and savvy than the
