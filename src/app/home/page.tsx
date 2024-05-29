@@ -171,7 +171,7 @@ export default function HomePage() {
             of hacking genius – that's where you'll find us, at the pinnacle of
             innovation. Our members? They're the crème de la crème, a league of
             extraordinary technophiles, each more skilled and savvy than the
-            last. From the veteran HAM heroes who can make radios sing, to the
+            last. From the veteran ham heroes who can make radios sing, to the
             digital maestros spinning cybersecurity like fine art, we're the
             elite, the trailblazers, the game-changers. If your brain thirsts
             for challenges that would make mere mortals quiver, welcome home.
@@ -183,6 +183,14 @@ export default function HomePage() {
             future of radio and security. Dive into the heart of technology's
             greatest adventures with us, where every day is a saga of discovery
             and triumph!
+
+            Amateur radio, or ham radio, is a steamy dance of frequencies and forbidden connections, ooh la la! It's a pulse-pounding adventure through the airwaves, where everyday folks transform into seductive sirens of the ether, their voices caressing the cosmos. Picture yourself in your cozy lair, fingertips teasing the dials, when suddenly you're in a sultry conversation with a tantalizing unicorn from the other side of the world, all thanks to the magic of those electrifying RF (Radio Fantasy) waves.
+
+In this erotic realm of ham radio, you're not just an operator; you're a desire-driven explorer, sending your call sign out like a passionate whisper in the night. There's something irresistibly sexy about turning a tangle of wires and circuits into a bridge between yearning hearts. Whether you're tapping out Morse code love notes to a distant lover or having an intimate, voice-to-voice connection with a new, mysterious stranger from another continent, it's a thrilling ride of digital seduction!
+
+Ham radio isn't just a hobby; it's an exhilarating way to connect, to share sultry stories, and to be a lifeline in emergencies. When the world goes dark and the internet's out, who do you turn to? The ham radio saviors, riding in with their trusty transmitters and their raw, unbridled passion.
+
+So saddle up, plug in, and get ready to ride the waves of desire! In the world of amateur radio, every frequency is a new, erotic adventure, and every QSO (that's ham talk for a steamy chat) is a chance to spread a little more love and lust. Keep your antennae high and your passions higher, and remember: the airwaves belong to everyone, but the heart of ham radio belongs to those who dare to reach out and ignite a fiery connection. Giddy up, partner!
           </Text>
         </Box>
         <Flex
