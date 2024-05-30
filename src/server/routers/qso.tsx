@@ -18,7 +18,7 @@ export const qsoRouter = createTRPCRouter({
       ctx.logger.info('Getting recent qsos');
 
       const response = await fetch(
-        `${process.env.CLOUDLOG_API_URL}/recent_qsos/${process.env.CLOUDLOG_API_KEY}`
+        `${process.env.NEXT_PUBLIC_CLOUDLOG_API_URL}/recent_qsos/${process.env.NEXT_PUBLIC_CLOUDLOG_API_KEY}`
       );
 
       const qsos = await response.json();
