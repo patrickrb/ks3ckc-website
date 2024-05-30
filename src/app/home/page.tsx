@@ -42,7 +42,7 @@ export default function HomePage() {
           </Box>
           <Box textAlign="center" p={3}>
             <Icon as={AtSignIcon} mr={2} w={6} h={6} />
-            <Link href="/mailing-list" fontSize="lg">
+            <Link href="https://groups.io/g/SecKCARC/" isExternal fontSize="lg">
               Mailing List
             </Link>
           </Box>
