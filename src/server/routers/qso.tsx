@@ -2,12 +2,14 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { env } from '@/env.mjs';
+import { zQso } from '@/features/qso/schemas';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 const apiURL = `${env.CLOUDLOG_API_URL}/recent_qsos/${env.CLOUDLOG_API_KEY}`;
 export const qsoRouter = createTRPCRouter({
   getRecent: protectedProcedure({ authorizations: ['APP', 'ADMIN'] })
     .input(z.void())
+    .output(z.array(zQso()))
     .meta({
       openapi: {
         method: 'GET',
