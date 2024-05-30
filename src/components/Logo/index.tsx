@@ -55,7 +55,6 @@ export const Logo = ({ ...rest }: ComponentProps<typeof chakra.svg>) => {
 
 export const SeckKCLogo = ({ ...rest }: ComponentProps<typeof chakra.svg>) => {
   const theme = useTheme();
-  const gradientId = useId();
   return (
     <chakra.svg
       xmlns="http://www.w3.org/2000/svg"

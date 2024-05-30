@@ -20,6 +20,8 @@ export const env = createEnv({
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
+    CLOUDLOG_API_KEY: z.string().optional(),
+    CLOUDLOG_API_URL: z.string().optional(),
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
       .default(process.env.NODE_ENV === 'production' ? 'error' : 'info'),
@@ -59,6 +61,8 @@ export const env = createEnv({
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     LOGGER_LEVEL: process.env.LOGGER_LEVEL,
     LOGGER_PRETTY: process.env.LOGGER_PRETTY,
+    CLOUDLOG_API_KEY: process.env.CLOUDLOG_API_KEY,
+    CLOUDLOG_API_URL: process.env.CLOUDLOG_API_URL,
 
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_VERCEL_URL
       ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`

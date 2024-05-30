@@ -1,8 +1,10 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
+import { env } from '@/env.mjs';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
+const apiURL = `${env.CLOUDLOG_API_URL}/recent_qsos/${env.CLOUDLOG_API_KEY}`;
 export const qsoRouter = createTRPCRouter({
   getRecent: protectedProcedure({ authorizations: ['APP', 'ADMIN'] })
     .input(z.void())
@@ -16,7 +18,6 @@ export const qsoRouter = createTRPCRouter({
     })
     .query(async ({ ctx }) => {
       ctx.logger.info('Getting recent qsos');
-      const apiURL = `${process.env.NEXT_PUBLIC_CLOUDLOG_API_URL}/recent_qsos/${process.env.NEXT_PUBLIC_CLOUDLOG_API_KEY}`;
       const response = await fetch(apiURL);
 
       const qsos = await response.json();
