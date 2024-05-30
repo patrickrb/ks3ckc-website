@@ -1,5 +1,5 @@
 {
-  "name": "KS3CKC-Website",
+  "name": "@ks3ckc/website",
   "private": true,
   "version": "2.0.0",
   "description": "A club website for KS3CKC",
@@ -63,6 +63,7 @@
     "@trpc/client": "10.44.1",
     "@trpc/react-query": "10.44.1",
     "@trpc/server": "10.44.1",
+    "axios": "^1.7.2",
     "bcrypt": "5.1.1",
     "chakra-react-select": "4.7.6",
     "colorette": "2.0.20",
@@ -110,6 +111,7 @@
     "@storybook/theming": "7.6.4",
     "@svgr/cli": "8.1.0",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
+    "@types/axios": "^0.14.0",
     "@types/bcrypt": "5.0.2",
     "@types/jsonwebtoken": "9.0.5",
     "@types/node": "20.10.4",
@@ -140,23 +142,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bearstudio/start-ui-web.git"
+    "url": "git+https://github.com/patrickrb/ks3ckc-website.git"
   },
   "author": {
-    "name": "Ivan Dalmet",
-    "email": "ivan@dalmet.fr",
-    "url": "https://github.com/ivan-dalmet"
+    "name": "Patrick Burns",
+    "email": "burnsoft@gmail.com",
+    "url": "https://github.com/patrickrb"
   },
   "contributors": [
     {
-      "name": "Yoann Fleury",
-      "email": "yoannfleurydev@gmail.com",
-      "url": "https://github.com/yoannfleurydev"
+      "name": "Reid Crowe",
+      "email": "n0rc@arrl.net",
+      "url": "https://github.com/Reid-n0rc"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bearstudio/start-ui-web/issues"
+    "url": "https://github.com/patrickrb/ks3ckc-website/issues"
   },
-  "homepage": "https://github.com/bearstudio/start-ui-web#readme"
+  "homepage": "https://github.com/patrickrb/ks3ckc-website#readme"
 }
