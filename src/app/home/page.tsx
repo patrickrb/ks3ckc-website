@@ -18,7 +18,6 @@ import {
 
 import AboutUs from '@/components/AboutUs';
 import HeroComponent from '@/components/HeroComponent';
-import { NavBar } from '@/components/NavBar';
 import NewsItems from '@/components/NewsItems';
 import RecentContacts from '@/components/RecentContacts';
 import UpcomingEvents from '@/components/UpcomingEvents';
@@ -26,7 +25,6 @@ import UpcomingEvents from '@/components/UpcomingEvents';
 export default function HomePage() {
   return (
     <Box>
-      <NavBar />
       <HeroComponent />
       <Container maxW="container.lg" py={10}>
         <Flex
