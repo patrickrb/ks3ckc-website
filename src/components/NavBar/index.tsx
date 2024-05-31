@@ -49,10 +49,60 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
 };
 
 export const NavBar = (props: BoxProps) => {
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const showDrawer = useBreakpointValue({
     base: true,
     md: false,
   });
+
+  const setDrawerIsOpen = React.useCallback((isOpen: boolean) => {
+    setIsDrawerOpen(isOpen);
+  }, []);
+
+  const NavBarDrawerButton = (props: Partial<IconButtonProps>) => {
+    return (
+      <IconButton
+        aria-label="Navigation"
+        icon={<LuMenu size="1.5em" />}
+        onClick={() => {
+          setDrawerIsOpen(true);
+        }}
+        variant="unstyled"
+        _active={{ bg: 'gray.700' }}
+        _hover={{ bg: 'gray.900' }}
+        {...props}
+      />
+    );
+  };
+
+  const NavBarDrawer = ({ ...rest }) => {
+    const { rtlValue } = useRtl();
+    return (
+      <Drawer
+        isOpen={isDrawerOpen}
+        placement={rtlValue('left', 'right')}
+        onClose={() => setDrawerIsOpen(false)}
+        {...rest}
+      >
+        <DrawerOverlay>
+          <DrawerContent
+            bg="gray.800"
+            color="white"
+            pt="safe-top"
+            pb="safe-bottom"
+          >
+            <DrawerCloseButton mt="safe-top" />
+            <DrawerHeader>
+              <SeckKCLogo width="83" height="83" />
+            </DrawerHeader>
+            <DrawerBody p="2">
+              <NavBarMainMenu direction="column" />
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+    );
+  };
 
   return (
     <Box {...props}>
@@ -147,53 +197,7 @@ const NavBarMainMenuItem = ({ href, ...rest }: BoxProps & { href: string }) => {
         borderRadius: 'full',
         bg: 'currentColor',
       }}
-      onClick={() => console.log('NavBarMainMenuItem clicked')}
       {...rest}
     />
-  );
-};
-
-const NavBarDrawerButton = (props: Partial<IconButtonProps>) => {
-  return (
-    <IconButton
-      aria-label="Navigation"
-      icon={<LuMenu size="1.5em" />}
-      onClick={() => {
-        console.log('NavBarDrawerButton clicked');
-      }}
-      variant="unstyled"
-      _active={{ bg: 'gray.700' }}
-      _hover={{ bg: 'gray.900' }}
-      {...props}
-    />
-  );
-};
-
-const NavBarDrawer = ({ ...rest }) => {
-  const { rtlValue } = useRtl();
-  return (
-    <Drawer
-      isOpen={false}
-      placement={rtlValue('left', 'right')}
-      onClose={() => console.log('NavBarDrawer onClose')}
-      {...rest}
-    >
-      <DrawerOverlay>
-        <DrawerContent
-          bg="gray.800"
-          color="white"
-          pt="safe-top"
-          pb="safe-bottom"
-        >
-          <DrawerCloseButton mt="safe-top" />
-          <DrawerHeader>
-            <SeckKCLogo width="83" height="83" />
-          </DrawerHeader>
-          <DrawerBody p="2">
-            <NavBarMainMenu direction="column" />
-          </DrawerBody>
-        </DrawerContent>
-      </DrawerOverlay>
-    </Drawer>
   );
 };
