@@ -55,17 +55,13 @@ export const NavBar = (props: BoxProps) => {
     md: false,
   });
 
-  const setDrawerIsOpen = React.useCallback((isOpen: boolean) => {
-    setIsDrawerOpen(isOpen);
-  }, []);
-
   const NavBarDrawerButton = (props: Partial<IconButtonProps>) => {
     return (
       <IconButton
         aria-label="Navigation"
         icon={<LuMenu size="1.5em" />}
         onClick={() => {
-          setDrawerIsOpen(true);
+          setIsDrawerOpen(true);
         }}
         variant="unstyled"
         _active={{ bg: 'gray.700' }}
@@ -81,7 +77,7 @@ export const NavBar = (props: BoxProps) => {
       <Drawer
         isOpen={isDrawerOpen}
         placement={rtlValue('left', 'right')}
-        onClose={() => setDrawerIsOpen(false)}
+        onClose={() => setIsDrawerOpen(false)}
         {...rest}
       >
         <DrawerOverlay>
