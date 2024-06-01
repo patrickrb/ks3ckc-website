@@ -6,6 +6,7 @@ import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Providers } from '@/app/Providers';
+import { NavBar } from '@/components/NavBar';
 import { Viewport } from '@/components/Viewport';
 import { DevEnvHint } from '@/features/devtools/DevEnvHint';
 import i18n from '@/lib/i18n/client';
@@ -69,6 +70,7 @@ export const Document = ({ children }: { children: ReactNode }) => {
         />
         <Providers>
           <TrpcProvider>
+            <NavBar />
             <Viewport>{children}</Viewport>
             <DevEnvHint />
             <ReactQueryDevtools initialIsOpen={false} />

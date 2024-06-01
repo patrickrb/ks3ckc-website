@@ -25,6 +25,7 @@ import { LuMenu } from 'react-icons/lu';
 import { SeckKCLogo } from '@/components/Logo';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { useRtl } from '@/hooks/useRtl';
+import { trpc } from '@/lib/trpc/client';
 
 export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 
@@ -45,6 +46,25 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
         {t('navbar:layout.mainMenu.about')}
       </NavBarMainMenuItem>
     </Stack>
+  );
+};
+
+const NavBarAuthMenu = ({ ...rest }: StackProps) => {
+  const { t } = useTranslation(['navbar']);
+  const accountResponse = trpc.account.get.useQuery();
+  const account = React.useMemo(() => accountResponse.data, [accountResponse]);
+
+  return (
+    !account && (
+      <Stack spacing="1" {...rest}>
+        <NavBarMainMenuItem href="/app/login">
+          {t('navbar:layout.mainMenu.login')}
+        </NavBarMainMenuItem>
+        <NavBarMainMenuItem href="/app/register">
+          {t('navbar:layout.mainMenu.register')}
+        </NavBarMainMenuItem>
+      </Stack>
+    )
   );
 };
 
@@ -93,6 +113,7 @@ export const NavBar = (props: BoxProps) => {
             </DrawerHeader>
             <DrawerBody p="2">
               <NavBarMainMenu direction="column" />
+              <NavBarAuthMenu direction="column" />
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
@@ -134,6 +155,10 @@ export const NavBar = (props: BoxProps) => {
         <NavBarMainMenu
           me="auto"
           ms="4"
+          display={{ base: 'none', md: 'flex' }}
+        />
+        <NavBarAuthMenu
+          direction="row"
           display={{ base: 'none', md: 'flex' }}
         />
         {/* <NavBarAccountMenu /> */}

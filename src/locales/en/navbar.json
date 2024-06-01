@@ -5,7 +5,8 @@
       "blog": "Blog",
       "contests": "Contests",
       "about": "About",
-      "login": "Login"
+      "login": "Login",
+      "register": "Register"
     },
     "accountMenu": {
       "version": {
