@@ -5,8 +5,6 @@ import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';
 
 import { Viewport } from '@/components/Viewport';
-import { AppNavBarDesktop } from '@/features/app/AppNavBarDesktop';
-import { AppNavBarMobile } from '@/features/app/AppNavBarMobile';
 
 export type AppLayoutContextNavDisplayed = boolean | 'desktop';
 
@@ -63,11 +61,9 @@ export const AppLayout: FC<React.PropsWithChildren<unknown>> = ({
         bg="gray.50"
         _dark={{ bg: 'gray.900' }}
       >
-        {!!navDisplayed && <AppNavBarDesktop />}
         <Flex flex="1" direction="column">
           {children}
         </Flex>
-        {navDisplayed === true && <AppNavBarMobile />}
       </Viewport>
     </AppLayoutContext.Provider>
   );

@@ -14,10 +14,8 @@ import useMeasure from 'react-use-measure';
 
 import {
   AdminLayoutContextNavDisplayed,
-  useAdminLayoutContext,
   useAdminLayoutHideNav,
 } from '@/features/admin/AdminLayout';
-import { ADMIN_NAV_BAR_HEIGHT } from '@/features/admin/AdminNavBar';
 
 type AdminLayoutPageContextValue = {
   nav: React.ReactNode;
@@ -70,7 +68,6 @@ export const AdminLayoutPageTopBar = ({
   containerMaxWidth,
   ...rest
 }: AdminLayoutPageTopBarProps) => {
-  const { navDisplayed } = useAdminLayoutContext();
   const [ref, { height }] = useMeasure();
 
   return (
@@ -91,18 +88,6 @@ export const AdminLayoutPageTopBar = ({
           borderBottomColor: 'gray.800',
           boxShadow: 'layout-dark',
         }}
-        {...(isFixed
-          ? {
-              top: navDisplayed
-                ? navDisplayed === 'desktop'
-                  ? { base: 0, md: ADMIN_NAV_BAR_HEIGHT }
-                  : ADMIN_NAV_BAR_HEIGHT
-                : '0',
-              position: 'fixed',
-              right: '0',
-              left: '0',
-            }
-          : {})}
         {...rest}
       >
         <Box w="full" h="0" pb="safe-top" />
