@@ -5,7 +5,6 @@ import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';
 
 import { Viewport } from '@/components/Viewport';
-import { AdminNavBar } from '@/features/admin/AdminNavBar';
 
 export type AdminLayoutContextNavDisplayed = boolean | 'desktop';
 
@@ -62,15 +61,6 @@ export const AdminLayout: FC<React.PropsWithChildren<unknown>> = ({
         bg="gray.50"
         _dark={{ bg: 'gray.900' }}
       >
-        {!!navDisplayed && (
-          <AdminNavBar
-            display={
-              navDisplayed === 'desktop'
-                ? { base: 'none', md: 'block' }
-                : undefined
-            }
-          />
-        )}
         <Flex flex="1" direction="column">
           {children}
         </Flex>

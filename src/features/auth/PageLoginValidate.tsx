@@ -6,7 +6,6 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
-import { APP_PATH } from '@/features/app/constants';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -30,7 +29,7 @@ export default function PageLoginValidate() {
   });
 
   const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
-    defaultRedirect: APP_PATH,
+    defaultRedirect: '/',
   });
   const onVerificationCodeError = useOnVerificationCodeError({ form });
 

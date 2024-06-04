@@ -4,7 +4,6 @@ import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider, createLocalStorageManager } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { NavBar } from '@/components/NavBar';
 import '@/lib/dayjs/config';
 import '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
@@ -28,7 +27,6 @@ export const Providers: FC<React.PropsWithChildren<unknown>> = ({
             'ltr',
         }}
       >
-        <NavBar />
         {children}
       </ChakraProvider>
     </CacheProvider>
