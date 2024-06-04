@@ -29,7 +29,7 @@ export default function PageLoginValidate() {
   });
 
   const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
-    defaultRedirect: '/home',
+    defaultRedirect: '/',
   });
   const onVerificationCodeError = useOnVerificationCodeError({ form });
 
