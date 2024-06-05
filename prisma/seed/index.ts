@@ -2,7 +2,7 @@ import { createRepositories } from 'prisma/seed/models/repository';
 import { createUsers } from 'prisma/seed/models/user';
 import { prisma } from 'prisma/seed/utils';
 
-import { createBlogEntries } from './models/blogentry';
+import { createBlogEntries } from './models/blog';
 import { createNewsEntries } from './models/news';
 
 async function main() {
