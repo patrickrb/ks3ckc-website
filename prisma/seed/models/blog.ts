@@ -5,7 +5,7 @@ export async function createBlogEntries() {
   console.log(`⏳ Seeding blog entries...`);
 
   let createdCounter = 0;
-  const existingCount = await prisma.blogEntry.count();
+  const existingCount = await prisma.blogs.count();
 
   const user = await prisma.user.findUnique({
     where: { email: 'admin@admin.com' },
@@ -13,7 +13,7 @@ export async function createBlogEntries() {
 
   await Promise.all(
     Array.from({ length: Math.max(0, 10 - existingCount) }, async () => {
-      await prisma.blogEntry.create({
+      await prisma.blogs.create({
         data: {
           title: faker.hacker.phrase(),
           content: faker.lorem.paragraphs(3),

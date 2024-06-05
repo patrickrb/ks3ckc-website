@@ -28,7 +28,7 @@ model User {
   authorizations String[]      @default(["APP"])
   language       String        @default("en")
   lastLoginAt    DateTime?
-  blogEntries    BlogEntry[]
+  blogs          Blogs[]
   news           News[]
 }
 
@@ -53,7 +53,7 @@ model Repository {
   description String?
 }
 
-model BlogEntry {
+model Blogs {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
