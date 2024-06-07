@@ -10,5 +10,6 @@
     "Seck",
     "SECKC",
     "trpc"
-  ]
+  ],
+  "i18n-ally.localesPaths": ["src/locales", "src/lib/i18n"]
 }
