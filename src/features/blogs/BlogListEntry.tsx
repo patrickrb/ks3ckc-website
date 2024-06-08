@@ -140,7 +140,10 @@ export const BlogListEntry = ({
           >
             {blog.content}
           </Text>
-          <BlogAuthor name="John Doe" date={new Date(blog.createdAt)} />
+          <BlogAuthor
+            name={blog.author.name || 'anonymous'}
+            date={new Date(blog.createdAt)}
+          />
         </Box>
       </Box>
     </>

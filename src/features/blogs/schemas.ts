@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { zUser } from '@/features/users/schemas';
+
 export const zBlog = () =>
   z.object({
     id: z.string(),
@@ -8,4 +10,5 @@ export const zBlog = () =>
     title: z.string(),
     content: z.string(),
     authorId: z.string(),
+    author: zUser(),
   });
