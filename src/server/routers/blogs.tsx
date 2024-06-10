@@ -26,6 +26,9 @@ export const blogsRouter = createTRPCRouter({
       ctx.logger.info('Getting blog');
       const blog = await ctx.db.blogs.findUnique({
         where: { id: input.id },
+        include: {
+          author: true,
+        },
       });
 
       if (!blog) {
@@ -89,6 +92,9 @@ export const blogsRouter = createTRPCRouter({
             id: 'desc',
           },
           where,
+          include: {
+            author: true,
+          },
         }),
       ]);
 
@@ -130,6 +136,9 @@ export const blogsRouter = createTRPCRouter({
             ...input,
             author: { connect: { id: ctx.user.id } },
           },
+          include: {
+            author: true,
+          },
         });
       } catch (e) {
         throw new ExtendedTRPCError({
@@ -163,6 +172,9 @@ export const blogsRouter = createTRPCRouter({
         return await ctx.db.blogs.update({
           where: { id: input.id },
           data: input,
+          include: {
+            author: true,
+          },
         });
       } catch (e) {
         throw new ExtendedTRPCError({
@@ -198,6 +210,9 @@ export const blogsRouter = createTRPCRouter({
       ctx.logger.info({ input }, 'Removing blog');
       return await ctx.db.blogs.delete({
         where: { id: input.id },
+        include: {
+          author: true,
+        },
       });
     }),
 });
