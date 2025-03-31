@@ -22,7 +22,7 @@ jobs:
     env:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       NEXT_PUBLIC_DEV_ENV_NAME: tests
-      DATABASE_URL: postgres://startui:startui@localhost:5432/startui
+      DATABASE_URL: postgres://startui:startui@postgres:5432/startui
       NEXT_PUBLIC_IS_DEMO: false
       AUTH_SECRET: Replace me with `openssl rand -base64 32` generated secret
       EMAIL_SERVER: smtp://username:password@localhost:1025
@@ -113,6 +113,10 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps
+
+      - name: Wait for Postgres to be ready
+        run: |
+          until pg_isready -h postgres -p 5432; do echo "Waiting for Postgres..."; sleep 1; done
 
       - name: Migrate database
         run: pnpm db:push
