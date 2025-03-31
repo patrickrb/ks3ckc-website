@@ -72,3 +72,12 @@ model News {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
 }
+
+model Member {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  callsign  String   @unique
+  active    Boolean  @default(true)
+}

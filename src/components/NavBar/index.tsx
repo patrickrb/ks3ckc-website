@@ -43,6 +43,7 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
       <NavBarMainMenuItem href="/blog">
         {t('navbar:layout.mainMenu.blog')}
       </NavBarMainMenuItem>
+      <NavBarMainMenuItem href="/members">Members</NavBarMainMenuItem>
       <NavBarMainMenuItem href="/contests">
         {t('navbar:layout.mainMenu.contests')}
       </NavBarMainMenuItem>
