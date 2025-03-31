@@ -91,7 +91,6 @@ jobs:
             libxdamage1 \
             libxfixes3 \
             libxrandr2 \
-            libgconf-2-4 \
             libxkbcommon0 \
             libx11-6 \
             libxcb1 \
