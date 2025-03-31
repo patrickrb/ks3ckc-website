@@ -85,8 +85,8 @@ jobs:
         
       - name: Install system dependencies for Playwright
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libatk1.0-0 \
+          apt-get update
+          apt-get install -y libatk1.0-0 \
             libatk-bridge2.0-0 \
             libcups2 \
             libdbus-1-3 \
