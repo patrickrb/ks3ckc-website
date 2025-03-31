@@ -18,6 +18,7 @@ jobs:
     name: Playwright E2E Tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.43.1-jammy
     env:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       NEXT_PUBLIC_DEV_ENV_NAME: tests
@@ -44,17 +45,24 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - run: pnpm install
+      - run: pnpm test
+
+      # - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - uses: pnpm/action-setup@v3
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: false
+      # - uses: pnpm/action-setup@v3
+      #   name: Install pnpm
+      #   with:
+      #     version: 8
+      #     run_install: false
 
       - name: Get pnpm store directory
         shell: bash
