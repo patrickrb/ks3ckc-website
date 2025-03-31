@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Container,
+  Divider,
   Heading,
   SimpleGrid,
   Text,
@@ -17,6 +18,7 @@ interface Member {
   name: string;
   callsign: string;
   active: boolean;
+  misc?: string;
 }
 
 export default function MembersPage() {
@@ -26,6 +28,7 @@ export default function MembersPage() {
 
   const cardBg = useColorModeValue('white', 'gray.800');
   const cardBorder = useColorModeValue('gray.200', 'gray.700');
+  const miscTextColor = useColorModeValue('gray.600', 'gray.400');
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -86,11 +89,23 @@ export default function MembersPage() {
               transition="all 0.2s"
               _hover={{ shadow: 'md' }}
             >
-              <VStack spacing={2} align="start">
+              <VStack spacing={3} align="start">
                 <Heading size="md">{member.name}</Heading>
                 <Text fontSize="lg" color="blue.500" fontWeight="medium">
                   {member.callsign}
                 </Text>
+                {member.misc && (
+                  <>
+                    <Divider />
+                    <Text
+                      fontSize="sm"
+                      color={miscTextColor}
+                      whiteSpace="pre-line"
+                    >
+                      {member.misc}
+                    </Text>
+                  </>
+                )}
               </VStack>
             </Box>
           ))}

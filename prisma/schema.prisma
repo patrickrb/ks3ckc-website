@@ -80,4 +80,5 @@ model Member {
   name      String
   callsign  String   @unique
   active    Boolean  @default(true)
+  misc      String?  // Optional field for additional details
 }

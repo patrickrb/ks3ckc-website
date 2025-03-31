@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   try {
     const members = await prisma.member.findMany({
+      where: {
+        active: true,
+      },
       orderBy: {
         name: 'asc',
       },
@@ -22,7 +25,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, callsign } = body;
+    const { name, callsign, misc } = body;
 
     if (!name || !callsign) {
       return NextResponse.json(
@@ -35,6 +38,7 @@ export async function POST(request: Request) {
       data: {
         name,
         callsign,
+        misc,
       },
     });
 

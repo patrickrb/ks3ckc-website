@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 
 interface Member {
@@ -23,11 +24,16 @@ interface Member {
   name: string;
   callsign: string;
   active: boolean;
+  misc?: string;
 }
 
 export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([]);
-  const [newMember, setNewMember] = useState({ name: '', callsign: '' });
+  const [newMember, setNewMember] = useState({
+    name: '',
+    callsign: '',
+    misc: '',
+  });
   const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
 
@@ -43,7 +49,7 @@ export default function MembersPage() {
 
       const member = await response.json();
       setMembers([...members, member]);
-      setNewMember({ name: '', callsign: '' });
+      setNewMember({ name: '', callsign: '', misc: '' });
       toast({
         title: 'Success',
         description: 'Member added successfully',
@@ -118,34 +124,48 @@ export default function MembersPage() {
 
       <div className="mb-6 p-4 border rounded-lg">
         <h2 className="text-lg font-semibold mb-4">Add New Member</h2>
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              value={newMember.name}
-              onChange={(e) =>
-                setNewMember({ ...newMember, name: e.target.value })
-              }
-              placeholder="Enter member name"
-            />
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={newMember.name}
+                onChange={(e) =>
+                  setNewMember({ ...newMember, name: e.target.value })
+                }
+                placeholder="Enter member name"
+              />
+            </div>
+            <div className="flex-1">
+              <Label htmlFor="callsign">Callsign</Label>
+              <Input
+                id="callsign"
+                value={newMember.callsign}
+                onChange={(e) =>
+                  setNewMember({ ...newMember, callsign: e.target.value })
+                }
+                placeholder="Enter callsign"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button onClick={handleAddMember}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Member
+              </Button>
+            </div>
           </div>
-          <div className="flex-1">
-            <Label htmlFor="callsign">Callsign</Label>
-            <Input
-              id="callsign"
-              value={newMember.callsign}
+          <div>
+            <Label htmlFor="misc">Additional Details</Label>
+            <Textarea
+              id="misc"
+              value={newMember.misc}
               onChange={(e) =>
-                setNewMember({ ...newMember, callsign: e.target.value })
+                setNewMember({ ...newMember, misc: e.target.value })
               }
-              placeholder="Enter callsign"
+              placeholder="Enter any additional details about the member"
+              rows={3}
             />
-          </div>
-          <div className="flex items-end">
-            <Button onClick={handleAddMember}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Member
-            </Button>
           </div>
         </div>
       </div>
@@ -156,6 +176,7 @@ export default function MembersPage() {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Callsign</TableHead>
+              <TableHead>Details</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -165,6 +186,9 @@ export default function MembersPage() {
               <TableRow key={member.id}>
                 <TableCell>{member.name}</TableCell>
                 <TableCell>{member.callsign}</TableCell>
+                <TableCell className="max-w-xs truncate">
+                  {member.misc}
+                </TableCell>
                 <TableCell>
                   <Switch
                     checked={member.active}
