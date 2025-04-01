@@ -29,7 +29,7 @@ model User {
   language       String        @default("en")
   lastLoginAt    DateTime?
   callsign       String?       @default("")
-  dmrid          String?
+  dmrid          Int?
   isPubliclyVisible Boolean    @default(false)
   notes          String?       @db.Text
   blogs          Blogs[]
