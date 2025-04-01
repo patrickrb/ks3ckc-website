@@ -33,6 +33,12 @@
       "rules": {
         "import/no-anonymous-default-export": "off"
       }
+    },
+    {
+      "files": ["src/config/env.ts"],
+      "rules": {
+        "no-process-env": "off"
+      }
     }
   ]
 }
