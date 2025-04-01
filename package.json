@@ -24,7 +24,7 @@
     "storybook:build": "pnpm build:info && storybook build && mv ./storybook-static ./public/storybook",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "theme:generate-icons": "svgr --config-file src/components/Icons/svgr.config.js src/components/Icons/svg-sources",
-    "e2e": "dotenv -- cross-var playwright test",
+    "e2e": "dotenv -- cross-var playwright test --project=chromium",
     "e2e:ui": "dotenv -- cross-var playwright test --ui",
     "dk:init": "docker compose up -d && sleep 10 && pnpm db:init",
     "dk:start": "docker compose start",
