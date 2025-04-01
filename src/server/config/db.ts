@@ -6,19 +6,21 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const levels = {
+type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+
+const levels: Record<LogLevel, ('query' | 'error' | 'warn' | 'info')[]> = {
   trace: ['query', 'error', 'warn', 'info'],
   debug: ['error', 'warn', 'info'],
   info: ['error', 'warn', 'info'],
   warn: ['error', 'warn'],
   error: ['error'],
   fatal: ['error'],
-} satisfies Record<string, ('query' | 'error' | 'warn' | 'info')[]>;
+};
 
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: levels[env.LOGGER_LEVEL],
+    log: levels[(env.LOGGER_LEVEL ?? 'info') as LogLevel],
   });
 
 if (env.NODE_ENV !== 'production') globalForPrisma.prisma = db;

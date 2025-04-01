@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { Plus, Trash2 } from 'lucide-react';
 
@@ -61,23 +61,34 @@ export default function MembersPage() {
   }, [toast]);
 
   const handleAddMember = async () => {
+    if (!newMember.name || !newMember.callsign) {
+      toast({
+        title: 'Error',
+        description: 'Name and callsign are required',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     try {
       const response = await fetch('/api/admin/members', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(newMember),
       });
 
       if (!response.ok) throw new Error('Failed to add member');
 
-      const member = await response.json();
-      setMembers([...members, member]);
+      const addedMember = await response.json();
+      setMembers([...members, addedMember]);
       setNewMember({ name: '', callsign: '', misc: '' });
       toast({
         title: 'Success',
         description: 'Member added successfully',
       });
-    } catch (error) {
+    } catch (err) {
       toast({
         title: 'Error',
         description: 'Failed to add member',
@@ -86,31 +97,27 @@ export default function MembersPage() {
     }
   };
 
-  const handleToggleActive = async (
-    memberId: string,
-    currentActive: boolean
-  ) => {
+  const handleToggleActive = async (id: string, currentActive: boolean) => {
     try {
-      const response = await fetch(`/api/admin/members/${memberId}`, {
+      const response = await fetch(`/api/admin/members/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ active: !currentActive }),
       });
 
       if (!response.ok) throw new Error('Failed to update member');
 
+      const updatedMember = await response.json();
       setMembers(
-        members.map((member) =>
-          member.id === memberId
-            ? { ...member, active: !currentActive }
-            : member
-        )
+        members.map((member) => (member.id === id ? updatedMember : member))
       );
       toast({
         title: 'Success',
         description: 'Member status updated successfully',
       });
-    } catch (error) {
+    } catch (err) {
       toast({
         title: 'Error',
         description: 'Failed to update member status',
@@ -119,20 +126,20 @@ export default function MembersPage() {
     }
   };
 
-  const handleDeleteMember = async (memberId: string) => {
+  const handleDeleteMember = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/members/${memberId}`, {
+      const response = await fetch(`/api/admin/members/${id}`, {
         method: 'DELETE',
       });
 
       if (!response.ok) throw new Error('Failed to delete member');
 
-      setMembers(members.filter((member) => member.id !== memberId));
+      setMembers(members.filter((member) => member.id !== id));
       toast({
         title: 'Success',
         description: 'Member deleted successfully',
       });
-    } catch (error) {
+    } catch (err) {
       toast({
         title: 'Error',
         description: 'Failed to delete member',
@@ -172,7 +179,7 @@ export default function MembersPage() {
               <Input
                 id="name"
                 value={newMember.name}
-                onChange={(e) =>
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setNewMember({ ...newMember, name: e.target.value })
                 }
                 placeholder="Enter member name"
@@ -183,7 +190,7 @@ export default function MembersPage() {
               <Input
                 id="callsign"
                 value={newMember.callsign}
-                onChange={(e) =>
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setNewMember({ ...newMember, callsign: e.target.value })
                 }
                 placeholder="Enter callsign"
@@ -201,7 +208,7 @@ export default function MembersPage() {
             <Textarea
               id="misc"
               value={newMember.misc}
-              onChange={(e) =>
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                 setNewMember({ ...newMember, misc: e.target.value })
               }
               placeholder="Enter any additional details about the member"
