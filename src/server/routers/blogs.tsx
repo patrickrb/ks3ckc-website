@@ -7,14 +7,24 @@ import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 import { BlogWithAuthor } from '@/types/blog';
 
-// Helper function to ensure dmrid is properly typed as number
+// Helper function to ensure dmrid is properly typed as number and adds missing Author properties
 const processBlogWithAuthor = (blog: any): BlogWithAuthor => {
-  if (blog && blog.author && typeof blog.author.dmrid === 'string') {
+  if (blog && blog.author) {
     return {
       ...blog,
       author: {
         ...blog.author,
-        dmrid: blog.author.dmrid ? Number(blog.author.dmrid) : null,
+        dmrid:
+          typeof blog.author.dmrid === 'string'
+            ? Number(blog.author.dmrid)
+            : blog.author.dmrid || null,
+        // Add missing properties if not present
+        callsign: blog.author.callsign || null,
+        isPubliclyVisible:
+          blog.author.isPubliclyVisible !== undefined
+            ? blog.author.isPubliclyVisible
+            : false,
+        notes: blog.author.notes || null,
       },
     };
   }
@@ -22,7 +32,7 @@ const processBlogWithAuthor = (blog: any): BlogWithAuthor => {
 };
 
 // Helper function to ensure dmrid is properly typed as number in a list of blogs
-const processBlogsWithAuthor = (blogs: any[]): BlogWithAuthor[] => {
+const processBlogsWithAuthor = (blogs: BlogWithAuthor[]): BlogWithAuthor[] => {
   return blogs.map(processBlogWithAuthor);
 };
 
@@ -126,7 +136,9 @@ export const blogsRouter = createTRPCRouter({
       }
 
       // Process items to ensure dmrid is properly typed
-      const processedItems = processBlogsWithAuthor(items);
+      const processedItems = processBlogsWithAuthor(
+        items.map((item) => processBlogWithAuthor(item))
+      );
 
       return {
         items: processedItems,
