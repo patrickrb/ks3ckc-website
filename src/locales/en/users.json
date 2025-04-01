@@ -67,6 +67,25 @@
     },
     "language": {
       "label": "Language"
+    },
+    "callsign": {
+      "label": "Callsign",
+      "required": "Callsign is required",
+      "alreadyUsed": "Callsign already used"
+    },
+    "dmrid": {
+      "label": "DMIRID",
+      "required": "DMIRID is required",
+      "alreadyUsed": "DMIRID already used",
+      "invalidRange": "DMIRID must be between 0 and 16777215"
+    },
+    "isPubliclyVisible": {
+      "label": "Publicly Visible",
+      "description": "If checked, your profile will be visible to all users"
+    },
+    "notes": {
+      "label": "Notes",
+      "description": "Notes about the user"
     }
   },
   "update": {

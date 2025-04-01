@@ -21,15 +21,22 @@ model User {
   id             String        @id @default(cuid())
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  name           String?
+  name           String?       @default("")
   email          String        @unique
   accountStatus  AccountStatus @default(NOT_VERIFIED)
-  image          String?
+  image          String?       @default("")
   authorizations String[]      @default(["APP"])
   language       String        @default("en")
   lastLoginAt    DateTime?
+  callsign       String?       @default("")
+  dmrid          String?
+  isPubliclyVisible Boolean    @default(false)
+  notes          String?       @db.Text
   blogs          Blogs[]
   news           News[]
+
+  @@index([email])
+  @@index([callsign])
 }
 
 model VerificationToken {
@@ -58,9 +65,11 @@ model Blogs {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   title       String
-  content     String
+  content     String   @db.Text
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
+  
+  @@index([authorId])
 }
 
 model News {
@@ -68,7 +77,9 @@ model News {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   title       String
-  content     String
+  content     String   @db.Text
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
+  
+  @@index([authorId])
 }

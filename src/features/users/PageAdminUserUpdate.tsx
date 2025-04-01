@@ -67,12 +67,20 @@ export default function PageAdminUserUpdate() {
       name: user.data?.name ?? undefined,
       language: user.data?.language,
       authorizations: user.data?.authorizations,
+      callsign: user.data?.callsign,
+      dmrid: user.data?.dmrid != null ? user.data.dmrid.toString() : null,
+      isPubliclyVisible: user.data?.isPubliclyVisible,
+      notes: user.data?.notes,
     },
     onValidSubmit: (values) => {
       if (!user.data?.id) return;
       userUpdate.mutate({
         id: user.data.id,
         ...values,
+        callsign: values.callsign ? values.callsign.toUpperCase() : null,
+        dmrid: values.dmrid ? Number(values.dmrid) : null,
+        notes: values.notes ?? null,
+        name: values.name ?? null,
       });
     },
   });

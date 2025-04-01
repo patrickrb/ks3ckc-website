@@ -124,7 +124,8 @@ export default function PageAdminUsers() {
                         as={LinkAdmin}
                         href={`/management/users/${user.id}`}
                       >
-                        {user.name ?? user.email}
+                        {user.name ?? user.email} -{' '}
+                        {user.callsign || 'No callsign'}
                       </LinkOverlay>
                     </DataListText>
                     <DataListText color="text-dimmed">

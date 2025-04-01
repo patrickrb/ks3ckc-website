@@ -124,6 +124,12 @@ export const usersRouter = createTRPCRouter({
       zUser().required().pick({
         name: true,
         email: true,
+        language: true,
+        authorizations: true,
+        callsign: true,
+        dmrid: true,
+        isPubliclyVisible: true,
+        notes: true,
       })
     )
     .output(zUser())
@@ -222,6 +228,10 @@ export const usersRouter = createTRPCRouter({
         email: true,
         language: true,
         authorizations: true,
+        callsign: true,
+        dmrid: true,
+        isPubliclyVisible: true,
+        notes: true,
       })
     )
     .output(zUser())

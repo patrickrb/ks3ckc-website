@@ -62,6 +62,24 @@
     },
     "createdAt": {
       "ago": "تم الإنشاء <dateAgo />"
+    },
+    "callsign": {
+      "label": "Callsign",
+      "required": "Callsign is required",
+      "alreadyUsed": "Callsign already used"
+    },
+    "dmrid": {
+      "label": "DMIRID",
+      "required": "DMIRID is required",
+      "alreadyUsed": "DMIRID already used"
+    },
+    "isPubliclyVisible": {
+      "label": "Publicly Visible",
+      "description": "If checked, your profile will be visible to all users"
+    },
+    "notes": {
+      "label": "Notes",
+      "description": "Notes about the user"
     }
   },
   "update": {
