@@ -23,7 +23,7 @@ export type UserFormFields = {
   language: string;
   authorizations: UserAuthorization[];
   callsign?: string;
-  dmrid?: string;
+  dmrid?: string; // This is kept as string for the form, but will be converted to number when submitted
   isPubliclyVisible: boolean;
   notes?: string;
 };
