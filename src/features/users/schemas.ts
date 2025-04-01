@@ -21,4 +21,10 @@ export const zUser = () =>
     authorizations: z.array(zUserAuthorization()).catch(['APP']),
     accountStatus: zUserAccountStatus(),
     language: z.string().default(DEFAULT_LANGUAGE_KEY),
+    callsign: z.string().nullish(),
+    dmrid: z.number().int().nullish(),
+    isPubliclyVisible: z.boolean().default(false),
+    notes: z.string().nullish(),
+    image: z.string().nullish(),
+    lastLoginAt: z.date().nullish(),
   });

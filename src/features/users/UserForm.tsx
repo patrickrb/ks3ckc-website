@@ -4,8 +4,10 @@ import { Stack } from '@chakra-ui/react';
 import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
+import { FieldBooleanCheckbox } from '@/components/FieldBooleanCheckbox';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
+import { FieldTextarea } from '@/components/FieldTextarea';
 import {
   USER_AUTHORIZATIONS,
   UserAuthorization,
@@ -20,6 +22,10 @@ export type UserFormFields = {
   email: string;
   language: string;
   authorizations: UserAuthorization[];
+  callsign?: string;
+  dmrid?: string; // This is kept as string for the form, but will be converted to number when submitted
+  isPubliclyVisible: boolean;
+  notes?: string;
 };
 
 export const UserForm = () => {
@@ -42,6 +48,38 @@ export const UserForm = () => {
             message: t('users:data.email.invalid'),
           },
         ]}
+      />
+      <FieldInput
+        name="callsign"
+        label={t('users:data.callsign.label') || 'Callsign'}
+      />
+      <FieldInput
+        name="dmrid"
+        label={t('users:data.dmrid.label') || 'DMR ID'}
+        type="number"
+        validations={[
+          {
+            handler: (value) =>
+              !value ||
+              (Number(value) <= 2147483647 && Number(value) >= -2147483648),
+            message:
+              t('users:data.dmrid.invalidRange') ||
+              'DMR ID must be between -2147483648 and 2147483647',
+          },
+        ]}
+      />
+      <FieldBooleanCheckbox
+        name="isPubliclyVisible"
+        label={t('users:data.isPubliclyVisible.label') || 'Public Visibility'}
+        optionLabel={
+          t('users:data.isPubliclyVisible.label') ||
+          'Make user publicly visible'
+        }
+      />
+      <FieldTextarea
+        name="notes"
+        label={t('users:data.notes.label') || 'Notes'}
+        textareaProps={{ rows: 4 }}
       />
       <FieldSelect
         name="language"

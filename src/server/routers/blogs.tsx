@@ -5,6 +5,36 @@ import { z } from 'zod';
 import { zBlog } from '@/features/blogs/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
+import { BlogWithAuthor } from '@/types/blog';
+
+// Helper function to ensure dmrid is properly typed as number and adds missing Author properties
+const processBlogWithAuthor = (blog: any): BlogWithAuthor => {
+  if (blog && blog.author) {
+    return {
+      ...blog,
+      author: {
+        ...blog.author,
+        dmrid:
+          typeof blog.author.dmrid === 'string'
+            ? Number(blog.author.dmrid)
+            : blog.author.dmrid || null,
+        // Add missing properties if not present
+        callsign: blog.author.callsign || null,
+        isPubliclyVisible:
+          blog.author.isPubliclyVisible !== undefined
+            ? blog.author.isPubliclyVisible
+            : false,
+        notes: blog.author.notes || null,
+      },
+    };
+  }
+  return blog as BlogWithAuthor;
+};
+
+// Helper function to ensure dmrid is properly typed as number in a list of blogs
+const processBlogsWithAuthor = (blogs: BlogWithAuthor[]): BlogWithAuthor[] => {
+  return blogs.map(processBlogWithAuthor);
+};
 
 export const blogsRouter = createTRPCRouter({
   getById: protectedProcedure({ authorizations: ['ADMIN'] })
@@ -38,7 +68,8 @@ export const blogsRouter = createTRPCRouter({
         });
       }
 
-      return blog;
+      // Process blog to ensure dmrid is properly typed
+      return processBlogWithAuthor(blog);
     }),
 
   getAll: protectedProcedure({ authorizations: ['ADMIN'] })
@@ -104,8 +135,13 @@ export const blogsRouter = createTRPCRouter({
         nextCursor = nextItem?.id;
       }
 
+      // Process items to ensure dmrid is properly typed
+      const processedItems = processBlogsWithAuthor(
+        items.map((item) => processBlogWithAuthor(item))
+      );
+
       return {
-        items,
+        items: processedItems,
         nextCursor,
         total,
       };
@@ -131,7 +167,7 @@ export const blogsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       ctx.logger.info('Creating user');
       try {
-        return await ctx.db.blogs.create({
+        const blog = await ctx.db.blogs.create({
           data: {
             ...input,
             author: { connect: { id: ctx.user.id } },
@@ -140,6 +176,9 @@ export const blogsRouter = createTRPCRouter({
             author: true,
           },
         });
+
+        // Process blog to ensure dmrid is properly typed
+        return processBlogWithAuthor(blog);
       } catch (e) {
         throw new ExtendedTRPCError({
           cause: e,
@@ -169,13 +208,16 @@ export const blogsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       ctx.logger.info({ input }, 'Updating blog');
       try {
-        return await ctx.db.blogs.update({
+        const blog = await ctx.db.blogs.update({
           where: { id: input.id },
           data: input,
           include: {
             author: true,
           },
         });
+
+        // Process blog to ensure dmrid is properly typed
+        return processBlogWithAuthor(blog);
       } catch (e) {
         throw new ExtendedTRPCError({
           cause: e,
@@ -208,11 +250,14 @@ export const blogsRouter = createTRPCRouter({
       }
 
       ctx.logger.info({ input }, 'Removing blog');
-      return await ctx.db.blogs.delete({
+      const blog = await ctx.db.blogs.delete({
         where: { id: input.id },
         include: {
           author: true,
         },
       });
+
+      // Process blog to ensure dmrid is properly typed
+      return processBlogWithAuthor(blog);
     }),
 });
