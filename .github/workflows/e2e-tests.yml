@@ -116,7 +116,28 @@ jobs:
 
       - name: Wait for Postgres to be ready
         run: |
-          until pg_isready -h postgres -p 5432; do echo "Waiting for Postgres..."; sleep 1; done
+          npx tsx <<'EOF'
+          import { exec } from 'child_process'
+          import { promisify } from 'util'
+          const execAsync = promisify(exec)
+
+          async function waitForPostgres(retries = 20) {
+            for (let i = 0; i < retries; i++) {
+              try {
+                await execAsync('pnpm db:push --preview-feature')
+                console.log("✅ DB is ready")
+                process.exit(0)
+              } catch {
+                console.log("⏳ Waiting for DB...")
+                await new Promise((res) => setTimeout(res, 3000))
+              }
+            }
+            console.error("❌ Timed out waiting for DB.")
+            process.exit(1)
+          }
+
+          waitForPostgres()
+          EOF
 
       - name: Migrate database
         run: pnpm db:push
