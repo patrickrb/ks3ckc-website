@@ -29,12 +29,13 @@ interface Member {
 
 export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([]);
-  const [newMember, setNewMember] = useState({
+  const [newMember, setNewMember] = useState<Partial<Member>>({
     name: '',
     callsign: '',
     misc: '',
   });
-  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleAddMember = async () => {
@@ -199,13 +200,6 @@ export default function MembersPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setIsEditing(true)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
