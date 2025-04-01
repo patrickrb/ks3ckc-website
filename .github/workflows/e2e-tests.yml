@@ -114,30 +114,16 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps
 
-      - name: Wait for Postgres to be ready
+      - name: Wait for DB and migrate
         run: |
-          npx tsx <<'EOF'
-          import { exec } from 'child_process'
-          import { promisify } from 'util'
-          const execAsync = promisify(exec)
-
-          async function waitForPostgres(retries = 20) {
-            for (let i = 0; i < retries; i++) {
-              try {
-                await execAsync('pnpm db:push --preview-feature')
-                console.log("✅ DB is ready")
-                process.exit(0)
-              } catch {
-                console.log("⏳ Waiting for DB...")
-                await new Promise((res) => setTimeout(res, 3000))
-              }
-            }
-            console.error("❌ Timed out waiting for DB.")
-            process.exit(1)
-          }
-
-          waitForPostgres()
-          EOF
+          for i in {1..20}; do
+            if pnpm db:push --accept-data-loss; then
+              echo "✅ DB migration successful"
+              break
+            fi
+            echo "⏳ Waiting for DB to be ready..."
+            sleep 3
+          done
 
       - name: Migrate database
         run: pnpm db:push
