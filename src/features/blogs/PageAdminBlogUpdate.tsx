@@ -73,6 +73,10 @@ export default function PageAdminBlogUpdate() {
       userUpdate.mutate({
         id: user.data.id,
         ...values,
+        callsign: values.callsign ?? null,
+        dmrid: values.dmrid ? Number(values.dmrid) : null,
+        notes: values.notes ?? null,
+        name: values.name ?? null,
       });
     },
   });

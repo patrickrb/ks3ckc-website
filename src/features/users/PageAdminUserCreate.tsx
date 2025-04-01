@@ -47,7 +47,13 @@ export default function PageAdminUserCreate() {
 
   const form = useForm<UserFormFields>({
     onValidSubmit: (values) => {
-      createUser.mutate(values);
+      createUser.mutate({
+        ...values,
+        callsign: values.callsign?.toUpperCase() ?? null,
+        dmrid: values.dmrid ? Number(values.dmrid) : null,
+        notes: values.notes ?? null,
+        name: values.name ?? null,
+      });
     },
   });
 
