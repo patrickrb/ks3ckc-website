@@ -5,9 +5,10 @@ import { z } from 'zod';
 import { zBlog } from '@/features/blogs/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
+import { BlogWithAuthor } from '@/types/blog';
 
 // Helper function to ensure dmrid is properly typed as number
-const processBlogWithAuthor = (blog: any) => {
+const processBlogWithAuthor = (blog: any): BlogWithAuthor => {
   if (blog && blog.author && typeof blog.author.dmrid === 'string') {
     return {
       ...blog,
@@ -17,11 +18,11 @@ const processBlogWithAuthor = (blog: any) => {
       },
     };
   }
-  return blog;
+  return blog as BlogWithAuthor;
 };
 
 // Helper function to ensure dmrid is properly typed as number in a list of blogs
-const processBlogsWithAuthor = (blogs: any[]) => {
+const processBlogsWithAuthor = (blogs: any[]): BlogWithAuthor[] => {
   return blogs.map(processBlogWithAuthor);
 };
 
