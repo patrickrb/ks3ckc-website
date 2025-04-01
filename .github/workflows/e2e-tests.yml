@@ -18,7 +18,9 @@ jobs:
     name: Playwright E2E Tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.43.1-jammy
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.1-jammy
+      options: --user pwuser
     env:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       NEXT_PUBLIC_DEV_ENV_NAME: tests
