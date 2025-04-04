@@ -11,7 +11,8 @@ export const devEnvHintColorScheme =
     ? 'warning'
     : env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'success';
 
-export const isDevEnvHintVisible = !!devEnvHintName;
+export const isDevEnvHintVisible =
+  env.NEXT_PUBLIC_NODE_ENV !== 'production' && !!devEnvHintName;
 
 export const DevEnvHint = () => {
   if (!isDevEnvHintVisible) {
