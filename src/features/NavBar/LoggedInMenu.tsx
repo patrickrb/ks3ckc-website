@@ -11,6 +11,7 @@ import {
   Stack,
   StackProps,
 } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
 import { ADMIN_PATH } from '@/features/admin/constants';
@@ -21,21 +22,30 @@ export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
   const accountResponse = trpc.account.get.useQuery();
   const account = React.useMemo(() => accountResponse.data, [accountResponse]);
+  const menuButtonBg = useColorModeValue('white', 'gray.800');
+  const menuButtonColor = useColorModeValue('black', 'white');
+  const menuItemColor = useColorModeValue('gray.800', 'white');
 
   return (
     rest.direction === 'row' && (
       <Stack display={{ base: 'none', md: 'flex' }}>
         <Menu>
-          <MenuButton as={Button}>Profile</MenuButton>
+          <MenuButton as={Button} bg={menuButtonBg} color={menuButtonColor}>
+            Profile
+          </MenuButton>
           <MenuList>
             <MenuGroup>
-              <MenuItem onClick={() => router.push(`/app/account`)}>
+              <MenuItem
+                color={menuItemColor}
+                onClick={() => router.push(`/app/account`)}
+              >
                 My Account
               </MenuItem>
             </MenuGroup>
             {account?.authorizations.includes('ADMIN') && (
               <MenuGroup>
                 <MenuItem
+                  color={menuItemColor}
                   onClick={() => router.push(`${ADMIN_PATH}/management/users`)}
                 >
                   Users
@@ -45,6 +55,7 @@ export const LoggedInMenu = ({ ...rest }: StackProps) => {
             <MenuDivider />
             <MenuGroup>
               <MenuItem
+                color={menuItemColor}
                 onClick={() =>
                   router.push(`/logout?redirect=${APP_PATH}/login`)
                 }
