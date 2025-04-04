@@ -38,6 +38,10 @@ export const accountRouter = createTRPCRouter({
           email: true,
           authorizations: true,
           language: true,
+          callsign: true,
+          dmrid: true,
+          isPubliclyVisible: true,
+          notes: true,
         },
       });
 
@@ -63,13 +67,17 @@ export const accountRouter = createTRPCRouter({
     .input(
       zUserAccount().required().pick({
         name: true,
+        callsign: true,
+        dmrid: true,
+        isPubliclyVisible: true,
+        notes: true,
         language: true,
       })
     )
     .output(zUserAccount())
     .mutation(async ({ ctx, input }) => {
       try {
-        ctx.logger.info('Updating the user');
+        ctx.logger.info('Updating the user', input);
         return await ctx.db.user.update({
           where: { id: ctx.user.id },
           data: input,

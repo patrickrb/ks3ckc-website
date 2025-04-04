@@ -8,6 +8,10 @@ export const zUserAccount = () =>
     id: true,
     name: true,
     email: true,
+    callsign: true,
+    dmrid: true,
+    isPubliclyVisible: true,
+    notes: true,
     authorizations: true,
     language: true,
   });
