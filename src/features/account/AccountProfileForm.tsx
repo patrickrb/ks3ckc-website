@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Button, ButtonGroup, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
+import { FieldBooleanCheckbox } from '@/components/FieldBooleanCheckbox';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { LoaderFull } from '@/components/LoaderFull';
@@ -16,7 +17,7 @@ import {
 import { trpc } from '@/lib/trpc/client';
 
 export const AccountProfileForm = () => {
-  const { t } = useTranslation(['common', 'account']);
+  const { t } = useTranslation(['common', 'account', 'users']);
   const trpcUtils = trpc.useUtils();
   const account = trpc.account.get.useQuery(undefined, {
     refetchOnReconnect: false,
@@ -43,16 +44,40 @@ export const AccountProfileForm = () => {
   const form = useForm<{
     name: string;
     language: string;
+    callsign: string;
+    dmrid: string;
+    isPubliclyVisible: boolean;
+    notes: string;
   }>({
     initialValues: {
       name: account.data?.name ?? undefined,
-
       language: account.data?.language ?? undefined,
+      callsign: account.data?.callsign ?? undefined,
+      dmrid: account.data?.dmrid ? String(account.data.dmrid) : undefined,
+      isPubliclyVisible: account.data?.isPubliclyVisible ?? undefined,
+      notes: account.data?.notes ?? undefined,
     },
     onValidSubmit: (values) => {
-      updateAccount.mutate(values);
+      const updatedValues = {
+        ...values,
+        dmrid: values.dmrid ? Number(values.dmrid) : null, // Convert dmrid to a number
+      };
+      updateAccount.mutate(updatedValues);
     },
   });
+
+  useEffect(() => {
+    if (account.data) {
+      form.setValues({
+        name: account.data.name ?? undefined,
+        language: account.data.language ?? undefined,
+        callsign: account.data.callsign ?? undefined,
+        dmrid: account.data.dmrid ? String(account.data.dmrid) : undefined,
+        isPubliclyVisible: account.data.isPubliclyVisible ?? undefined,
+        notes: account.data.notes ?? undefined,
+      });
+    }
+  }, [account.data]);
 
   return (
     <>
@@ -76,6 +101,27 @@ export const AccountProfileForm = () => {
                     value: key,
                   }))}
                   defaultValue={DEFAULT_LANGUAGE_KEY}
+                />
+                <FieldInput
+                  name="callsign"
+                  label={t('users:data.callsign.label')}
+                />
+                <FieldInput name="dmrid" label={t('users:data.dmrid.label')} />
+                <FieldBooleanCheckbox
+                  name="isPubliclyVisible"
+                  label={
+                    t('users:data.isPubliclyVisible.label') ||
+                    'Public Visibility'
+                  }
+                  optionLabel={
+                    t('users:data.isPubliclyVisible.label') ||
+                    'Make user publicly visible'
+                  }
+                />
+                <FieldInput
+                  name="notes"
+                  label={t('users:data.notes.label')}
+                  required={false}
                 />
                 <ButtonGroup spacing={3}>
                   <Button
