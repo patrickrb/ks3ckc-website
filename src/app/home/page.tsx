@@ -19,7 +19,7 @@ import {
 import AboutUs from '@/components/AboutUs';
 import HeroComponent from '@/components/HeroComponent';
 import NewsItems from '@/components/NewsItems';
-import RecentContacts from '@/components/RecentContacts';
+// import RecentContacts from '@/components/RecentContacts';
 import UpcomingEvents from '@/components/UpcomingEvents';
 
 export default function HomePage() {
@@ -59,7 +59,7 @@ export default function HomePage() {
             <NewsItems />
           </VStack>
           <VStack spacing={4} align="stretch">
-            <RecentContacts />
+            {/* <RecentContacts /> */}
           </VStack>
           <VStack spacing={4} align="stretch">
             <UpcomingEvents />

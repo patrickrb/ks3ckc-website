@@ -27,7 +27,6 @@ export default function RecentContacts() {
       {qsoItems.isSuccess &&
         Array.isArray(qsoItems.data) &&
         qsoItems.data.map((qso: QsoItem, i: number) => {
-          console.log('rendering qso: ', qso);
           return (
             <Box key={i} bg={cardBg} p={4} borderRadius="md" mb={4}>
               <Heading as="h5" size="sm" mb={2}>
