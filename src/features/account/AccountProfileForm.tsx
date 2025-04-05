@@ -77,7 +77,7 @@ export const AccountProfileForm = () => {
         notes: account.data.notes ?? undefined,
       });
     }
-  }, [account.data]);
+  }, [account.data, form]);
 
   return (
     <>

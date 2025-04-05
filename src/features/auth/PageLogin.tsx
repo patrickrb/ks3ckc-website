@@ -25,7 +25,7 @@ export default function PageLogin() {
     data: RouterOutputs['auth']['login'],
     variables: RouterInputs['auth']['login']
   ) => {
-    const urlSearchParams = new URLSearchParams(searchParams);
+    const urlSearchParams = new URLSearchParams(searchParams.toString());
     urlSearchParams.set('email', variables.email);
     router.push(
       `${APP_PATH}/login/${data.token}?${urlSearchParams.toString()}`

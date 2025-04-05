@@ -4,7 +4,7 @@ import { Button, Flex, Heading, Stack, Text, Wrap } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuAlertCircle, LuBookOpen, LuGithub } from 'react-icons/lu';
 
-import { Logo } from '@/components/Logo';
+import { SeckKCLogo } from '@/components/Logo';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 
 export default function PageHome() {
@@ -19,7 +19,7 @@ export default function PageHome() {
           alignItems="center"
           justifyContent="center"
         >
-          <Logo />
+          <SeckKCLogo />
         </Flex>
 
         <Stack>
