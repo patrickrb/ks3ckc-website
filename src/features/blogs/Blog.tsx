@@ -17,7 +17,6 @@ export const Blog = () => {
       refetchOnWindowFocus: false,
     }
   );
-  console.log('got blog: ', blog);
   return (
     <Container>
       <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
