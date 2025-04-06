@@ -21,7 +21,6 @@ import { trpc } from '@/lib/trpc/client';
 
 export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
-  const utils = trpc.useContext();
   const { account, refreshAuth } = useAuth();
   const menuButtonBg = useColorModeValue('white', 'gray.800');
   const menuButtonColor = useColorModeValue('black', 'white');

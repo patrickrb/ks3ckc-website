@@ -52,7 +52,7 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
 
 const NavBarAuthMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
-  const { account, isLoggedIn, refreshAuth } = useAuth();
+  const { isLoggedIn, refreshAuth } = useAuth();
 
   // Listen for auth-state-change events to trigger re-renders
   useEffect(() => {

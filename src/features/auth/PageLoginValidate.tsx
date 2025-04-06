@@ -30,7 +30,7 @@ export default function PageLoginValidate() {
     onValidSubmit: (values) => validate.mutate({ ...values, token }),
   });
 
-  const customOnVerificationCodeSuccess = (data: any) => {
+  const customOnVerificationCodeSuccess = () => {
     // Refresh auth state to ensure navbar updates
     refreshAuth();
 
