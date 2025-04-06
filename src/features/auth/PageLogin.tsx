@@ -14,17 +14,22 @@ import { useTranslation } from 'react-i18next';
 import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
+import { useAuth } from '@/hooks/useAuth';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth', 'common']);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { refreshAuth } = useAuth();
 
   const handleOnSuccess = (
     data: RouterOutputs['auth']['login'],
     variables: RouterInputs['auth']['login']
   ) => {
+    // Refresh auth state to trigger navbar update
+    refreshAuth();
+
     const urlSearchParams = new URLSearchParams(searchParams.toString());
     urlSearchParams.set('email', variables.email);
     router.push(

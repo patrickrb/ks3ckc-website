@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Box,
@@ -25,8 +25,8 @@ import { LuMenu } from 'react-icons/lu';
 import { SeckKCLogo } from '@/components/Logo';
 import { LoggedInMenu } from '@/features/NavBar/LoggedInMenu';
 import { ADMIN_PATH } from '@/features/admin/constants';
+import { useAuth } from '@/hooks/useAuth';
 import { useRtl } from '@/hooks/useRtl';
-import { trpc } from '@/lib/trpc/client';
 
 export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 
@@ -52,10 +52,22 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
 
 const NavBarAuthMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
-  const accountResponse = trpc.account.get.useQuery();
-  const account = React.useMemo(() => accountResponse.data, [accountResponse]);
+  const { isLoggedIn, refreshAuth } = useAuth();
 
-  return account ? (
+  // Listen for auth-state-change events to trigger re-renders
+  useEffect(() => {
+    const handleAuthChange = () => {
+      refreshAuth();
+    };
+
+    window.addEventListener('auth-state-change', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('auth-state-change', handleAuthChange);
+    };
+  }, [refreshAuth]);
+
+  return isLoggedIn ? (
     <LoggedInMenu {...rest} />
   ) : (
     <Stack spacing="1" {...rest}>
