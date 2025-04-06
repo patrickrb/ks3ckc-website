@@ -4,7 +4,11 @@ import { z } from 'zod';
 
 import { zBlog } from '@/features/blogs/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from '@/server/config/trpc';
 import { BlogWithAuthor } from '@/types/blog';
 
 // Helper function to ensure dmrid is properly typed as number and adds missing Author properties
@@ -72,7 +76,7 @@ export const blogsRouter = createTRPCRouter({
       return processBlogWithAuthor(blog);
     }),
 
-  getAll: protectedProcedure({ authorizations: ['ADMIN'] })
+  getAll: publicProcedure()
     .meta({
       openapi: {
         method: 'GET',

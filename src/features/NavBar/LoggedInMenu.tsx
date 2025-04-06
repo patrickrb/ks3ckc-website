@@ -17,7 +17,6 @@ import { useRouter } from 'next/navigation';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { APP_PATH } from '@/features/app/constants';
 import { useAuth } from '@/hooks/useAuth';
-import { trpc } from '@/lib/trpc/client';
 
 export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
