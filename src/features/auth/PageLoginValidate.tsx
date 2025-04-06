@@ -11,6 +11,7 @@ import {
   useOnVerificationCodeError,
   useOnVerificationCodeSuccess,
 } from '@/features/auth/VerificationCodeForm';
+import { useAuth } from '@/hooks/useAuth';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
@@ -20,6 +21,7 @@ export default function PageLoginValidate() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+  const { refreshAuth } = useAuth();
 
   const token = params?.token?.toString() ?? '';
   const email = searchParams.get('email');
@@ -28,13 +30,21 @@ export default function PageLoginValidate() {
     onValidSubmit: (values) => validate.mutate({ ...values, token }),
   });
 
+  const customOnVerificationCodeSuccess = (data: any) => {
+    // Refresh auth state to ensure navbar updates
+    refreshAuth();
+
+    // Use the original success handler
+    onVerificationCodeSuccess();
+  };
+
   const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
     defaultRedirect: '/',
   });
   const onVerificationCodeError = useOnVerificationCodeError({ form });
 
   const validate = trpc.auth.loginValidate.useMutation({
-    onSuccess: onVerificationCodeSuccess,
+    onSuccess: customOnVerificationCodeSuccess,
     onError: onVerificationCodeError,
   });
 

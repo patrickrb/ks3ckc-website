@@ -16,15 +16,24 @@ import { useRouter } from 'next/navigation';
 
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { APP_PATH } from '@/features/app/constants';
+import { useAuth } from '@/hooks/useAuth';
 import { trpc } from '@/lib/trpc/client';
 
 export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
-  const accountResponse = trpc.account.get.useQuery();
-  const account = React.useMemo(() => accountResponse.data, [accountResponse]);
+  const utils = trpc.useContext();
+  const { account, refreshAuth } = useAuth();
   const menuButtonBg = useColorModeValue('white', 'gray.800');
   const menuButtonColor = useColorModeValue('black', 'white');
   const menuItemColor = useColorModeValue('gray.800', 'white');
+
+  const handleLogout = () => {
+    // Call refreshAuth to update auth state
+    refreshAuth();
+
+    // Use window.location.href instead of router.push to force a full page reload
+    window.location.href = `/logout?redirect=${APP_PATH}/login`;
+  };
 
   return (
     rest.direction === 'row' && (
@@ -54,12 +63,7 @@ export const LoggedInMenu = ({ ...rest }: StackProps) => {
             )}
             <MenuDivider />
             <MenuGroup>
-              <MenuItem
-                color={menuItemColor}
-                onClick={() =>
-                  router.push(`/logout?redirect=${APP_PATH}/login`)
-                }
-              >
+              <MenuItem color={menuItemColor} onClick={handleLogout}>
                 Logout
               </MenuItem>
             </MenuGroup>
