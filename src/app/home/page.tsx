@@ -19,7 +19,7 @@ import {
 import AboutUs from '@/components/AboutUs';
 import HeroComponent from '@/components/HeroComponent';
 import NewsItems from '@/components/NewsItems';
-// import RecentContacts from '@/components/RecentContacts';
+import RecentContacts from '@/components/RecentContacts';
 import UpcomingEvents from '@/components/UpcomingEvents';
 
 export default function HomePage() {
@@ -51,19 +51,22 @@ export default function HomePage() {
             </Link>
           </Box>
         </Flex>
-        <AboutUs />
       </Container>
       <Container maxW="container.lg">
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
+        <SimpleGrid columns={{ base: 1, md: 1, lg: 1 }} spacing={10}>
           <VStack align="start">
             <NewsItems />
           </VStack>
+          {/* commenting out until confirmed that this is working and ready
           <VStack spacing={4} align="stretch">
-            {/* <RecentContacts /> */}
+            <RecentContacts /> 
           </VStack>
+          */}
+          {/* Moved to its own page 
           <VStack spacing={4} align="stretch">
             <UpcomingEvents />
           </VStack>
+          */}
         </SimpleGrid>
       </Container>
     </Box>
