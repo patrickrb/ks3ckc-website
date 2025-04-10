@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
   Box,
@@ -15,6 +15,7 @@ import {
   Stack,
   StackProps,
   useBreakpointValue,
+  useTheme,
 } from '@chakra-ui/react';
 import { Heading } from '@react-email/components';
 import Link from 'next/link';
@@ -25,13 +26,15 @@ import { LuMenu } from 'react-icons/lu';
 import { SeckKCLogo } from '@/components/Logo';
 import { LoggedInMenu } from '@/features/NavBar/LoggedInMenu';
 import { ADMIN_PATH } from '@/features/admin/constants';
-import { useAuth } from '@/hooks/useAuth';
 import { useRtl } from '@/hooks/useRtl';
+import { trpc } from '@/lib/trpc/client';
 
 export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 
 const NavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
+  const theme = useTheme();
+  console.log('theme: ', theme);
   return (
     <Stack direction="row" spacing="1" {...rest}>
       <NavBarMainMenuItem href="/home">
@@ -40,9 +43,14 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
       <NavBarMainMenuItem href="/blog">
         {t('navbar:layout.mainMenu.blog')}
       </NavBarMainMenuItem>
+      <NavBarMainMenuItem href="/events">
+        {t('navbar:layout.mainMenu.events')}
+      </NavBarMainMenuItem>
+      {/*
       <NavBarMainMenuItem href="/contests">
         {t('navbar:layout.mainMenu.contests')}
-      </NavBarMainMenuItem>
+      </NavBarMainMenuItem> 
+      */}
       <NavBarMainMenuItem href="/about">
         {t('navbar:layout.mainMenu.about')}
       </NavBarMainMenuItem>
@@ -52,22 +60,10 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
 
 const NavBarAuthMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
-  const { isLoggedIn, refreshAuth } = useAuth();
+  const accountResponse = trpc.account.get.useQuery();
+  const account = React.useMemo(() => accountResponse.data, [accountResponse]);
 
-  // Listen for auth-state-change events to trigger re-renders
-  useEffect(() => {
-    const handleAuthChange = () => {
-      refreshAuth();
-    };
-
-    window.addEventListener('auth-state-change', handleAuthChange);
-
-    return () => {
-      window.removeEventListener('auth-state-change', handleAuthChange);
-    };
-  }, [refreshAuth]);
-
-  return isLoggedIn ? (
+  return account ? (
     <LoggedInMenu {...rest} />
   ) : (
     <Stack spacing="1" {...rest}>

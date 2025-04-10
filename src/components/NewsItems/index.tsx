@@ -36,20 +36,26 @@ export default function NewsItems() {
       content:
         'In our member spotlight series, we feature the journey of a young radio enthusiast who discovered a passion for Ham radio through KS3CKC. Read about their inspiring journey in the world of amateur radio.',
     },
+    {
+      title: 'KS3CKC centers a div using RDF and APRS',
+      date: '2025-04-07',
+      content:
+        'After hours of painstakingly attenuating antennas and debugging CSS, KS0CKC finally centered a <div> using only radio direction and APRS.',
+    },
   ];
 
   return (
     <>
-      <Heading as="h4" size="md">
+      <Heading as="h3" ms={4} size="lg">
         Latest News
       </Heading>
       {Array.isArray(newsItems) &&
-        newsItems.map((item, i) => (
+        [...newsItems].reverse().map((item, i) => (
           <Box key={i} bg={cardBg} p={4} borderRadius="md" mb={4}>
-            <Heading as="h5" size="sm" mb={2}>
+            <Heading as="h3" size="md" mb={2}>
               {item.title}
             </Heading>
-            <Text fontSize="sm" color="gray.600" mb={2}>
+            <Text fontSize="sm" color="gray.400" mb={2}>
               {item.date}
             </Text>
             <Text fontSize="sm">{item.content}</Text>
