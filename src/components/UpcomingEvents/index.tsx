@@ -4,10 +4,11 @@ export default function RecentContacts() {
   const cardBg = useColorModeValue('white', 'gray.800');
   const upcomingEvents = [
     { id: 1, name: 'DX Contest', date: 'April 30, 2024' },
+    { id: 2, name: 'Summer Field Day', date: 'June 15, 2024' },
     {
       id: 2,
       name: 'Local Meetup',
-      date: 'May 15, 2024',
+      date: 'May 15, 2025',
       details: (
         <>
           <Text fontSize="sm" mb={1}>
@@ -27,7 +28,6 @@ export default function RecentContacts() {
         </>
       ),
     },
-    { id: 3, name: 'Summer Field Day', date: 'June 15, 2024' },
   ];
 
   return (
