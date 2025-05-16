@@ -42,6 +42,18 @@ export default function NewsItems() {
       content:
         'After hours of painstakingly attenuating antennas and debugging CSS, KS0CKC finally centered a <div> using only radio direction and APRS.',
     },
+    {
+      title: 'Monthly SECKC Meetings Will Be at a New Location',
+      date: '2025-05-15',
+      content:
+        'SECKC is no longer meeting at Tall Tellis Brew Co. The next meeting will be hosted at Knuckleheads Garage. You can find more information on the events page.',
+    },
+    {
+      title: 'SECKC Sweep Micro-contest Winners!',
+      date: '2025-05-15',
+      content:
+        "From @hippieben on Discord - We have a winners! There was a tie between @adamfast and @Emma - VA2EMZ / K0UWU for the SecKC Sweep! Mini-contest. No tie breaker, you're both winners to me!  Thanks for for all those that played and contributed QSOs to others who were playing. New mini-contest will drop in a couple weeks to start on 00:00 UTC 1st of June.",
+    },
   ];
 
   return (
