@@ -1,6 +1,4 @@
-import { KeyboardEvent } from 'react';
-
-import { useEventListener } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 type UseDayPickerCalendarFocusController = {
   isCalendarFocused: boolean;
@@ -14,21 +12,28 @@ export const useDayPickerCalendarFocusController = (
 ) => {
   const { isCalendarFocused, setIsCalendarFocused, closeCalendar, onTapEnter } =
     params;
-  // Seulement lorsque le calendrier est monté
-  useEventListener('keydown', (event) => {
-    const keyboardEvent = event as unknown as KeyboardEvent;
-    if (keyboardEvent?.key?.toLowerCase() === 'arrowdown') {
-      keyboardEvent.preventDefault();
-      setIsCalendarFocused(true);
-    }
-    if (keyboardEvent?.key?.toLowerCase() === 'escape') {
-      keyboardEvent.preventDefault();
-      closeCalendar();
-    }
-    if (!isCalendarFocused && keyboardEvent?.key?.toLowerCase() === 'enter') {
-      onTapEnter();
-      keyboardEvent.preventDefault();
-      closeCalendar();
-    }
-  });
+
+  useEffect(() => {
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event?.key?.toLowerCase() === 'arrowdown') {
+        event.preventDefault();
+        setIsCalendarFocused(true);
+      }
+      if (event?.key?.toLowerCase() === 'escape') {
+        event.preventDefault();
+        closeCalendar();
+      }
+      if (!isCalendarFocused && event?.key?.toLowerCase() === 'enter') {
+        onTapEnter();
+        event.preventDefault();
+        closeCalendar();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isCalendarFocused, setIsCalendarFocused, closeCalendar, onTapEnter]);
 };
