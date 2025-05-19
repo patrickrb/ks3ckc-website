@@ -75,7 +75,7 @@ export default function PageAdminBlogs() {
             </Flex>
             <ResponsiveIconButton
               as={LinkAdmin}
-              href="/management/users/create"
+              href="/management/blogs/create"
               variant="@primary"
               size="sm"
               icon={<LuPlus />}
