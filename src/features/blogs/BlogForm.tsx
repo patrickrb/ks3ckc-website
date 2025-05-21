@@ -5,7 +5,7 @@ import { FieldProps, FormizStep } from '@formiz/core';
 import { z } from 'zod';
 
 import { FieldInput } from '@/components/FieldInput';
-import { FieldTextarea } from '@/components/FieldTextarea';
+import { FieldMarkdown } from '@/components/FieldMarkdown';
 
 export type BlogFormFields = {
   title: string;
@@ -26,14 +26,12 @@ export const BlogForm = () => {
         required="Title is required"
         placeholder="Enter blog title"
       />
-      <FieldTextarea
+      <FieldMarkdown
         name="content"
-        label="Content"
+        label="Content (Markdown)"
         required="Content is required"
-        placeholder="Write your blog content here..."
-        textareaProps={{
-          minHeight: '300px',
-        }}
+        helper="You can use Markdown to format your content"
+        placeholder="Write your blog content here using Markdown..."
       />
     </Stack>
   );

@@ -92,6 +92,8 @@
     "react-popper": "2.3.0",
     "react-select": "5.8.0",
     "react-use-measure": "2.1.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
     "sharp": "0.33.0",
     "superjson": "2.2.1",
     "trpc-openapi": "1.2.0",
