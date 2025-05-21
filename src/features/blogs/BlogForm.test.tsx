@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render, screen } from '@testing-library/react';
 import { Formiz } from '@formiz/core';
+import { render, screen } from '@testing-library/react';
 
 import { BlogForm } from './BlogForm';
 
@@ -12,7 +12,7 @@ describe('BlogForm', () => {
         <BlogForm />
       </Formiz>
     );
-    
+
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/content/i)).toBeInTheDocument();
   });

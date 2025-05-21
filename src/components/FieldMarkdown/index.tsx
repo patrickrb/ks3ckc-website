@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import {
   Box,
-  Button,
   Tab,
   TabList,
   TabPanel,
@@ -51,7 +50,7 @@ export const FieldMarkdown = <FormattedValue = Value,>(
   // A simple markdown renderer
   const renderMarkdown = (markdown: string) => {
     if (!markdown) return null;
-    
+
     const processedMarkdown = markdown
       // Headers
       .replace(/^### (.*$)/gim, '<h3>$1</h3>')
@@ -70,7 +69,12 @@ export const FieldMarkdown = <FormattedValue = Value,>(
       // Line breaks
       .replace(/\n/gim, '<br />');
 
-    return <Box className="markdown-preview" dangerouslySetInnerHTML={{ __html: processedMarkdown }} />;
+    return (
+      <Box
+        className="markdown-preview"
+        dangerouslySetInnerHTML={{ __html: processedMarkdown }}
+      />
+    );
   };
 
   return (
@@ -84,7 +88,10 @@ export const FieldMarkdown = <FormattedValue = Value,>(
           <TabPanel padding={0} paddingTop={4}>
             <Textarea
               {...textareaProps}
-              placeholder={placeholder || 'Enter markdown content... (supports **bold**, *italic*, and more)'}
+              placeholder={
+                placeholder ||
+                'Enter markdown content... (supports **bold**, *italic*, and more)'
+              }
               id={field.id}
               value={field.value ?? ''}
               onChange={(e) => {
@@ -103,21 +110,36 @@ export const FieldMarkdown = <FormattedValue = Value,>(
               fontFamily="mono"
             />
             {tabIndex === 0 && (
-              <div className="markdown-help" style={{ marginTop: '8px', fontSize: '0.8rem' }}>
+              <div
+                className="markdown-help"
+                style={{ marginTop: '8px', fontSize: '0.8rem' }}
+              >
                 <p>Markdown syntax:</p>
                 <ul style={{ marginLeft: '1rem', listStyleType: 'disc' }}>
-                  <li><code>**bold**</code> for <strong>bold</strong></li>
-                  <li><code>*italic*</code> for <em>italic</em></li>
-                  <li><code>[link](https://example.com)</code> for links</li>
-                  <li><code>![image alt](image-url.jpg)</code> for images</li>
-                  <li><code># Heading</code> for headings (# to #####)</li>
-                  <li><code>- item</code> for bullet lists</li>
+                  <li>
+                    <code>**bold**</code> for <strong>bold</strong>
+                  </li>
+                  <li>
+                    <code>*italic*</code> for <em>italic</em>
+                  </li>
+                  <li>
+                    <code>[link](https://example.com)</code> for links
+                  </li>
+                  <li>
+                    <code>![image alt](image-url.jpg)</code> for images
+                  </li>
+                  <li>
+                    <code># Heading</code> for headings (# to #####)
+                  </li>
+                  <li>
+                    <code>- item</code> for bullet lists
+                  </li>
                 </ul>
               </div>
             )}
           </TabPanel>
           <TabPanel padding={0} paddingTop={4}>
-            <Box 
+            <Box
               borderWidth="1px"
               borderRadius="md"
               p={4}

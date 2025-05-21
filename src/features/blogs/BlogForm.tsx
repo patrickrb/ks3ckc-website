@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Stack } from '@chakra-ui/react';
-import { FieldProps, FormizStep } from '@formiz/core';
 import { z } from 'zod';
 
 import { FieldInput } from '@/components/FieldInput';
