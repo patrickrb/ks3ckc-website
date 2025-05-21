@@ -33,7 +33,7 @@ export default function PageAdminBlogCreate() {
       });
     },
     onError: (error) => {
-      if (isErrorDatabaseConflict(error)) {
+      if (isErrorDatabaseConflict(error, 'title')) {
         toastError({
           title: 'A blog with this title may already exist',
         });
@@ -50,7 +50,7 @@ export default function PageAdminBlogCreate() {
       blogCreate.mutate({
         title: values.title,
         content: values.content,
-        author: { id: '' }, // This field will be ignored on the server as the author is taken from the context
+        author: { id: '', email: '', createdAt: new Date(), updatedAt: new Date() }, // This field will be ignored on the server as the author is taken from the context
       });
     },
   });
@@ -69,7 +69,7 @@ export default function PageAdminBlogCreate() {
                 isLoading={blogCreate.isLoading}
                 isDisabled={!form.isValid && form.isSubmitted}
               >
-                {t('common:actions.create')}
+                {t('common:actions.create', 'Create')}
               </Button>
             </>
           }
