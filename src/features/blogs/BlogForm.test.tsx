@@ -2,13 +2,14 @@ import React from 'react';
 
 import { Formiz } from '@formiz/core';
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import { BlogForm } from './BlogForm';
 
 describe('BlogForm', () => {
   it('renders the blog form with title and content fields', () => {
     render(
-      <Formiz>
+      <Formiz connect={jest.fn()}>
         <BlogForm />
       </Formiz>
     );
