@@ -164,16 +164,19 @@ export const blogsRouter = createTRPCRouter({
       zBlog().required().pick({
         title: true,
         content: true,
+        featuredImage: true,
         author: true,
       })
     )
     .output(zBlog())
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.info('Creating user');
+      ctx.logger.info('Creating blog');
       try {
         const blog = await ctx.db.blogs.create({
           data: {
-            ...input,
+            title: input.title,
+            content: input.content,
+            featuredImage: input.featuredImage,
             author: { connect: { id: ctx.user.id } },
           },
           include: {

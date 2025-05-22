@@ -61,13 +61,14 @@ model Repository {
 }
 
 model Blogs {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  title       String
-  content     String   @db.Text
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    String
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  title         String
+  content       String   @db.Text
+  featuredImage String?
+  author        User     @relation(fields: [authorId], references: [id])
+  authorId      String
   
   @@index([authorId])
 }
