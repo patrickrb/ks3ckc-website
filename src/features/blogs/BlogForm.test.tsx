@@ -33,6 +33,11 @@ jest.mock('@/components/FieldInput', () => ({
   FieldInput: () => <div><label htmlFor="title">Title</label><input aria-label="Title" /></div>,
 }));
 
+// Mock the FieldImageUpload component
+jest.mock('@/components/FieldImageUpload', () => ({
+  FieldImageUpload: () => <div><label htmlFor="featuredImage">Featured Image</label><input aria-label="Featured Image" type="file" /></div>,
+}));
+
 // Mock the FieldMarkdown component
 jest.mock('@/components/FieldMarkdown', () => ({
   FieldMarkdown: () => <div><label htmlFor="content">Content (Markdown)</label><textarea aria-label="Content (Markdown)" /></div>,
@@ -42,10 +47,11 @@ jest.mock('@/components/FieldMarkdown', () => ({
 import { BlogForm } from './BlogForm';
 
 describe('BlogForm', () => {
-  it('renders the blog form with title and content fields', () => {
+  it('renders the blog form with title, image, and content fields', () => {
     render(<BlogForm />);
     
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/featured image/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/content/i)).toBeInTheDocument();
   });
 });

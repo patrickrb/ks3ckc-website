@@ -50,6 +50,7 @@ export default function PageAdminBlogCreate() {
       blogCreate.mutate({
         title: values.title,
         content: values.content,
+        featuredImage: values.featuredImage,
         author: { id: '', email: '', createdAt: new Date(), updatedAt: new Date() }, // This field will be ignored on the server as the author is taken from the context
       });
     },

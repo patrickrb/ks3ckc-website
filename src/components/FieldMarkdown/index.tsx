@@ -145,6 +145,7 @@ export const FieldMarkdown = <FormattedValue = Value,>(
               p={4}
               minHeight="400px"
               bg="white"
+              color="gray.800"
             >
               {renderMarkdown(field.value?.toString() || '')}
             </Box>
