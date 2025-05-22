@@ -164,6 +164,7 @@ export const blogsRouter = createTRPCRouter({
       zBlog().required().pick({
         title: true,
         content: true,
+        featuredImage: true,
         author: true,
       })
     )
@@ -175,6 +176,7 @@ export const blogsRouter = createTRPCRouter({
           data: {
             title: input.title,
             content: input.content,
+            featuredImage: input.featuredImage,
             author: { connect: { id: ctx.user.id } },
           },
           include: {
