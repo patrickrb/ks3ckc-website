@@ -55,7 +55,7 @@ export const LoggedInMenu = ({ ...rest }: StackProps) => {
                   color={menuItemColor}
                   onClick={() => router.push(`${ADMIN_PATH}/management/users`)}
                 >
-                  Users
+                  Admin
                 </MenuItem>
               </MenuGroup>
             )}
