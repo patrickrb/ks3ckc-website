@@ -9,8 +9,7 @@ import {
   Image, 
   Box, 
   useColorModeValue,
-  Link,
-  Button
+  Link
 } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 

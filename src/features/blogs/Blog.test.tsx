@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Blog } from './Blog';
+import { trpc } from '@/lib/trpc/client';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -31,8 +32,6 @@ jest.mock('@chakra-ui/react', () => ({
   ...jest.requireActual('@chakra-ui/react'),
   useColorModeValue: jest.fn(() => 'gray.50'),
 }));
-
-const { trpc } = require('@/lib/trpc/client');
 
 describe('Blog', () => {
   const mockBlogData = {
