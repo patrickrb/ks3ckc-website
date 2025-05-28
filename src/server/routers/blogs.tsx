@@ -84,6 +84,40 @@ export const blogsRouter = createTRPCRouter({
       return processBlogWithAuthor(blog);
     }),
 
+  getByIdPublic: publicProcedure()
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/blogs/public/{id}',
+        tags: ['blogs'],
+      },
+    })
+    .input(
+      zBlog().pick({
+        id: true,
+      })
+    )
+    .output(zBlog())
+    .query(async ({ ctx, input }) => {
+      ctx.logger.info('Getting blog for public view');
+      const blog = await ctx.db.blogs.findUnique({
+        where: { id: input.id },
+        include: {
+          author: true,
+        },
+      });
+
+      if (!blog) {
+        ctx.logger.warn('Unable to find blog with the provided input');
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+        });
+      }
+
+      // Process blog to ensure dmrid is properly typed
+      return processBlogWithAuthor(blog);
+    }),
+
   getAll: publicProcedure()
     .meta({
       openapi: {
