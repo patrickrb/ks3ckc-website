@@ -32,7 +32,7 @@ export type Blog = {
   updatedAt: Date;
   title: string;
   content: string;
-  featuredImage?: string;
+  featuredImage?: string | null;
   authorId: string;
   [key: string]: unknown; // Allow for other properties
 };
@@ -50,7 +50,7 @@ export type BlogWithAuthor = Blog & {
 export type BlogCreateInput = {
   title: string;
   content: string;
-  featuredImage?: string;
+  featuredImage?: string | null;
 };
 
 /**
@@ -60,5 +60,5 @@ export type BlogUpdateInput = {
   id: string;
   title?: string;
   content?: string;
-  featuredImage?: string;
+  featuredImage?: string | null;
 };
