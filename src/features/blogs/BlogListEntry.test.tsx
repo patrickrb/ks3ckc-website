@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BlogListEntry } from './BlogListEntry';
+import type { RouterOutputs } from '@/lib/trpc/types';
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
@@ -24,16 +25,17 @@ describe('BlogListEntry', () => {
       email: 'john@example.com',
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
-      accountStatus: 'active',
+      accountStatus: 'ENABLED' as const,
       image: null,
-      authorizations: [],
+      authorizations: ['APP' as const],
       language: 'en',
       callsign: null,
       dmrid: null,
       isPubliclyVisible: true,
       notes: null,
+      lastLoginAt: null,
     },
-  };
+  } as RouterOutputs['blogs']['getAll']['items'][number];
 
   it('renders blog post with featured image when provided', () => {
     render(<BlogListEntry blog={mockBlog} />);
@@ -48,7 +50,7 @@ describe('BlogListEntry', () => {
     const blogWithoutImage = {
       ...mockBlog,
       featuredImage: null,
-    };
+    } as RouterOutputs['blogs']['getAll']['items'][number];
     
     render(<BlogListEntry blog={blogWithoutImage} />);
     
