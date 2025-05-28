@@ -27,10 +27,24 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
       // Images
       .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
-      // Lists
-      .replace(/^\- (.*$)/gim, '<li>$1</li>')
-      // Line breaks
-      .replace(/\n/gim, '<br />');
+      // Lists (wrap in ul tags)
+      .replace(/(^- .*$\n?)+/gim, (match) => {
+        const listItems = match.replace(/^- (.*$)/gim, '<li>$1</li>');
+        return `<ul>${listItems}</ul>`;
+      })
+      // Paragraphs (wrap non-empty lines that aren't headers, lists, or HTML in p tags)
+      .split('\n\n')
+      .map((paragraph) => {
+        const trimmed = paragraph.trim();
+        if (!trimmed) return '';
+        if (trimmed.startsWith('<')) return trimmed; // Already HTML
+        if (trimmed.startsWith('#')) return trimmed; // Header
+        if (trimmed.startsWith('-')) return trimmed; // List
+        return `<p>${trimmed}</p>`;
+      })
+      .join('\n')
+      // Line breaks within paragraphs
+      .replace(/\n(?!<)/g, '<br />');
 
     return (
       <Box
@@ -42,18 +56,21 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             fontWeight: 'bold',
             marginBottom: '1rem',
             marginTop: '1.5rem',
+            lineHeight: '1.2',
           },
           '& h2': {
             fontSize: 'xl',
             fontWeight: 'semibold',
             marginBottom: '0.75rem',
             marginTop: '1.25rem',
+            lineHeight: '1.3',
           },
           '& h3': {
             fontSize: 'lg',
             fontWeight: 'semibold',
             marginBottom: '0.5rem',
             marginTop: '1rem',
+            lineHeight: '1.4',
           },
           '& strong': {
             fontWeight: 'bold',
@@ -73,11 +90,18 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             height: 'auto',
             marginY: '1rem',
             borderRadius: 'md',
+            boxShadow: 'sm',
           },
           '& li': {
             marginLeft: '1.5rem',
             listStyleType: 'disc',
             marginBottom: '0.25rem',
+          },
+          '& ul': {
+            marginY: '1rem',
+          },
+          '& p': {
+            marginBottom: '1rem',
           },
         }}
         {...boxProps}

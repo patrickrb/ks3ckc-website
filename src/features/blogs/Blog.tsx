@@ -8,7 +8,9 @@ import {
   HStack, 
   Image, 
   Box, 
-  useColorModeValue 
+  useColorModeValue,
+  Link,
+  Button
 } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 
@@ -50,6 +52,13 @@ export const Blog = () => {
   return (
     <Container maxW="4xl" py="40px">
       <VStack spacing="6" alignItems="stretch">
+        {/* Back to Blogs Link */}
+        <Box>
+          <Link href="/blogs" color="blue.500" _hover={{ color: 'blue.600' }}>
+            ← Back to all blogs
+          </Link>
+        </Box>
+
         {/* Featured Image */}
         {blog.data.featuredImage && (
           <Box>
@@ -89,7 +98,7 @@ export const Blog = () => {
             />
             <VStack spacing="0" alignItems="flex-start">
               <Text fontWeight="semibold" fontSize="md">
-                {blog.data.author.name || 'Anonymous'}
+                {blog.data.author.name || 'Anonymous Author'}
               </Text>
               <Text fontSize="sm" color={authorDateColor}>
                 {new Date(blog.data.createdAt).toLocaleDateString('en-US', {
@@ -98,6 +107,11 @@ export const Blog = () => {
                   day: 'numeric',
                 })}
               </Text>
+              {blog.data.author.callsign && (
+                <Text fontSize="xs" color={authorDateColor}>
+                  Callsign: {blog.data.author.callsign}
+                </Text>
+              )}
             </VStack>
           </HStack>
         </Box>
