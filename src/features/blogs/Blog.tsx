@@ -48,7 +48,7 @@ export const Blog = () => {
         <VStack spacing="4" textAlign="center">
           <Heading size="lg" color="red.500">Blog Not Found</Heading>
           <Text>The blog post you're looking for doesn't exist or has been removed.</Text>
-          <Link href="/blogs" color="blue.500" _hover={{ color: 'blue.600' }}>
+          <Link href="/blog" color="blue.500" _hover={{ color: 'blue.600' }}>
             ← Return to all blogs
           </Link>
         </VStack>
@@ -61,7 +61,7 @@ export const Blog = () => {
       <VStack spacing="6" alignItems="stretch">
         {/* Back to Blogs Link */}
         <Box>
-          <Link href="/blogs" color="blue.500" _hover={{ color: 'blue.600' }}>
+          <Link href="/blog" color="blue.500" _hover={{ color: 'blue.600' }}>
             ← Back to all blogs
           </Link>
         </Box>
