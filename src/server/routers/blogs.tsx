@@ -16,19 +16,27 @@ const processBlogWithAuthor = (blog: any): BlogWithAuthor => {
   if (blog && blog.author) {
     return {
       ...blog,
+      // Handle nullable featuredImage field
+      featuredImage: blog.featuredImage || null,
       author: {
         ...blog.author,
+        // Handle nullable string fields - convert empty strings to null for consistency
+        name: blog.author.name || null,
+        image: blog.author.image || null,
+        callsign: blog.author.callsign || null,
+        notes: blog.author.notes || null,
+        // Handle dmrid - ensure it's a number or null
         dmrid:
           typeof blog.author.dmrid === 'string'
             ? Number(blog.author.dmrid)
             : blog.author.dmrid || null,
-        // Add missing properties if not present
-        callsign: blog.author.callsign || null,
+        // Handle boolean with default
         isPubliclyVisible:
           blog.author.isPubliclyVisible !== undefined
             ? blog.author.isPubliclyVisible
             : false,
-        notes: blog.author.notes || null,
+        // Handle date field
+        lastLoginAt: blog.author.lastLoginAt || null,
       },
     };
   }
@@ -141,7 +149,7 @@ export const blogsRouter = createTRPCRouter({
 
       // Process items to ensure dmrid is properly typed
       const processedItems = processBlogsWithAuthor(
-        items.map((item) => processBlogWithAuthor(item))
+        items.map((item: any) => processBlogWithAuthor(item))
       );
 
       return {
@@ -164,16 +172,19 @@ export const blogsRouter = createTRPCRouter({
       zBlog().required().pick({
         title: true,
         content: true,
+        featuredImage: true,
         author: true,
       })
     )
     .output(zBlog())
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.info('Creating user');
+      ctx.logger.info('Creating blog');
       try {
         const blog = await ctx.db.blogs.create({
           data: {
-            ...input,
+            title: input.title,
+            content: input.content,
+            featuredImage: input.featuredImage,
             author: { connect: { id: ctx.user.id } },
           },
           include: {

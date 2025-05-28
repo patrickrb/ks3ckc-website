@@ -9,6 +9,7 @@ export const zBlog = () =>
     updatedAt: z.date(),
     title: z.string(),
     content: z.string(),
+    featuredImage: z.string().nullish(),
     authorId: z.string(),
     author: zUser(),
   });
