@@ -36,7 +36,9 @@ export const Blog = () => {
   if (blog.isLoading) {
     return (
       <Container maxW="4xl" py="40px">
-        <Text>Loading...</Text>
+        <VStack spacing="4">
+          <Text fontSize="lg">Loading blog post...</Text>
+        </VStack>
       </Container>
     );
   }
@@ -44,7 +46,13 @@ export const Blog = () => {
   if (blog.isError || !blog.data) {
     return (
       <Container maxW="4xl" py="40px">
-        <Text>Blog not found</Text>
+        <VStack spacing="4" textAlign="center">
+          <Heading size="lg" color="red.500">Blog Not Found</Heading>
+          <Text>The blog post you're looking for doesn't exist or has been removed.</Text>
+          <Link href="/blogs" color="blue.500" _hover={{ color: 'blue.600' }}>
+            ← Return to all blogs
+          </Link>
+        </VStack>
       </Container>
     );
   }
