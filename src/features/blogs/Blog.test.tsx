@@ -10,11 +10,12 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock tRPC
+const mockUseQuery = jest.fn();
 jest.mock('@/lib/trpc/client', () => ({
   trpc: {
     blogs: {
       getByIdPublic: {
-        useQuery: jest.fn(),
+        useQuery: mockUseQuery,
       },
     },
   },
@@ -65,7 +66,7 @@ describe('Blog', () => {
   });
 
   it('renders blog post with all elements when data is loaded', () => {
-    trpc.blogs.getByIdPublic.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: mockBlogData,
       isLoading: false,
       isError: false,
@@ -91,25 +92,25 @@ describe('Blog', () => {
   });
 
   it('shows loading state', () => {
-    trpc.blogs.getByIdPublic.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: null,
       isLoading: true,
       isError: false,
     });
 
     render(<Blog />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('Loading blog post...')).toBeInTheDocument();
   });
 
   it('shows error state when blog not found', () => {
-    trpc.blogs.getByIdPublic.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: null,
       isLoading: false,
       isError: true,
     });
 
     render(<Blog />);
-    expect(screen.getByText('Blog not found')).toBeInTheDocument();
+    expect(screen.getByText('Blog Not Found')).toBeInTheDocument();
   });
 
   it('handles blog without featured image', () => {
@@ -118,7 +119,7 @@ describe('Blog', () => {
       featuredImage: null,
     };
 
-    trpc.blogs.getByIdPublic.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: blogWithoutImage,
       isLoading: false,
       isError: false,
