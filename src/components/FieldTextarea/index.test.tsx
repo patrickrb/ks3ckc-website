@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { useField } from '@formiz/core';
 import { FieldTextarea } from './index';
 
 // Mock Formiz hook
@@ -50,8 +51,6 @@ jest.mock('@chakra-ui/react', () => ({
     />
   ),
 }));
-
-import { useField } from '@formiz/core';
 
 const mockUseField = useField as jest.MockedFunction<typeof useField>;
 

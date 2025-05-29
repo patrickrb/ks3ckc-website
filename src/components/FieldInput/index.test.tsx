@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { useField } from '@formiz/core';
 import { FieldInput } from './index';
 
 // Mock Formiz hook
@@ -69,8 +70,6 @@ jest.mock('react-icons/ri', () => ({
   RiEyeCloseLine: () => <span data-testid="eye-closed-icon" />,
   RiEyeLine: () => <span data-testid="eye-open-icon" />,
 }));
-
-import { useField } from '@formiz/core';
 
 const mockUseField = useField as jest.MockedFunction<typeof useField>;
 

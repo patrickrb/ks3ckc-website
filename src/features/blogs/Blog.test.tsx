@@ -33,8 +33,16 @@ jest.mock('@/components/MarkdownRenderer', () => ({
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  ...jest.requireActual('@chakra-ui/react'),
   useColorModeValue: jest.fn(() => 'gray.50'),
+  Box: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Container: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Heading: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
+  Text: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+  VStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
+  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+  Spinner: () => <div data-testid="spinner">Loading...</div>,
 }));
 
 describe('Blog', () => {
