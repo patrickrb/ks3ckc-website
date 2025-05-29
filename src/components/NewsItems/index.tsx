@@ -78,8 +78,7 @@ export default function NewsItems() {
                 shadow: 'lg',
                 transform: 'translateY(-2px)'
               }}
-              h="fit-content"
-              minH="200px"
+              h="280px"
               display="flex"
               flexDirection="column"
             >
@@ -93,7 +92,7 @@ export default function NewsItems() {
                   day: 'numeric'
                 })}
               </Text>
-              <Text fontSize="sm" lineHeight="1.6" flex="1">
+              <Text fontSize="sm" lineHeight="1.6" flex="1" overflow="hidden">
                 {item.content}
               </Text>
             </Box>
