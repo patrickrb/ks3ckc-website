@@ -6,17 +6,20 @@ import { z } from 'zod';
 import { FieldImageUpload } from '@/components/FieldImageUpload';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldMarkdown } from '@/components/FieldMarkdown';
+import { FieldTags } from '@/components/FieldTags';
 
 export type BlogFormFields = {
   title: string;
   content: string;
   featuredImage?: string;
+  tags: string[];
 };
 
 export const BlogSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   content: z.string().min(1, 'Content is required'),
   featuredImage: z.string().optional(),
+  tags: z.array(z.string()).default([]),
 });
 
 export const BlogForm = () => {
@@ -32,6 +35,12 @@ export const BlogForm = () => {
         name="featuredImage"
         label="Featured Image"
         helper="This image will be displayed on the blog list page"
+      />
+      <FieldTags
+        name="tags"
+        label="Tags"
+        helper="Add tags to categorize your blog post. Type a tag and press Enter or comma to add it."
+        placeholder="Type a tag and press Enter"
       />
       <FieldMarkdown
         name="content"

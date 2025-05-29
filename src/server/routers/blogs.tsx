@@ -18,6 +18,8 @@ const processBlogWithAuthor = (blog: any): BlogWithAuthor => {
       ...blog,
       // Handle nullable featuredImage field
       featuredImage: blog.featuredImage || null,
+      // Handle tags field - ensure it's an array
+      tags: blog.tags || [],
       author: {
         ...blog.author,
         // Handle nullable string fields - convert empty strings to null for consistency
@@ -133,6 +135,7 @@ export const blogsRouter = createTRPCRouter({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
+          tag: z.string().optional(),
         })
         .default({})
     )
@@ -155,6 +158,11 @@ export const blogsRouter = createTRPCRouter({
             },
           },
         ],
+        ...(input.tag && {
+          tags: {
+            has: input.tag,
+          },
+        }),
       } satisfies Prisma.BlogsWhereInput;
 
       const [total, items] = await ctx.db.$transaction([
@@ -207,6 +215,7 @@ export const blogsRouter = createTRPCRouter({
         title: true,
         content: true,
         featuredImage: true,
+        tags: true,
         author: true,
       })
     )
@@ -219,6 +228,7 @@ export const blogsRouter = createTRPCRouter({
             title: input.title,
             content: input.content,
             featuredImage: input.featuredImage,
+            tags: input.tags || [],
             author: { connect: { id: ctx.user.id } },
           },
           include: {
@@ -250,6 +260,7 @@ export const blogsRouter = createTRPCRouter({
         title: true,
         content: true,
         featuredImage: true,
+        tags: true,
       })
     )
     .output(zBlog())
@@ -262,6 +273,7 @@ export const blogsRouter = createTRPCRouter({
             title: input.title,
             content: input.content,
             featuredImage: input.featuredImage,
+            tags: input.tags || [],
           },
           include: {
             author: true,

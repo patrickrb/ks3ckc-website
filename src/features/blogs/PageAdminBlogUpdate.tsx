@@ -61,6 +61,7 @@ export default function PageAdminBlogUpdate() {
       title: blog.data?.title ?? '',
       content: blog.data?.content ?? '',
       featuredImage: blog.data?.featuredImage ?? undefined,
+      tags: blog.data?.tags ?? [],
     },
     onValidSubmit: (values) => {
       if (!blog.data?.id) return;
@@ -69,6 +70,7 @@ export default function PageAdminBlogUpdate() {
         title: values.title,
         content: values.content,
         featuredImage: values.featuredImage ?? null,
+        tags: values.tags || [],
       });
     },
   });
