@@ -42,13 +42,13 @@ export default function PageAdminBlogUpdate() {
     onSuccess: async () => {
       await trpcUtils.blogs.invalidate();
       toastSuccess({
-        title: t('common:feedbacks.updateSuccess.title', { defaultValue: 'Blog updated successfully' }),
+        title: t('common:feedbacks.updateSuccess.title'),
       });
       router.back();
     },
     onError: () => {
       toastError({
-        title: t('common:feedbacks.updateError.title', { defaultValue: 'Error updating blog' }),
+        title: t('common:feedbacks.updateError.title'),
       });
     },
   });
@@ -87,7 +87,7 @@ export default function PageAdminBlogUpdate() {
                 isDisabled={!form.isValid && form.isSubmitted}
                 isLoading={blogUpdate.isLoading || blogUpdate.isSuccess}
               >
-                {t('common:actions.save', { defaultValue: 'Save' })}
+                {t('common:actions.save')}
               </Button>
             </>
           }

@@ -11,7 +11,16 @@
     "cancel": "Cancel",
     "deactivate": "Deactivate",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "save": "Save"
+  },
+  "feedbacks": {
+    "updateSuccess": {
+      "title": "Updated successfully"
+    },
+    "updateError": {
+      "title": "Error updating"
+    }
   },
   "or": "or",
   "confirmDiscardChanges": {
