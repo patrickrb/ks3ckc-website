@@ -15,10 +15,9 @@ import {
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
-import { UserForm, UserFormFields } from '@/features/users/UserForm';
-import { UserStatus } from '@/features/users/UserStatus';
 import { trpc } from '@/lib/trpc/client';
-import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
+
+import { BlogForm, BlogFormFields } from './BlogForm';
 
 export default function PageAdminBlogUpdate() {
   const { t } = useTranslation(['common', 'users']);
@@ -26,7 +25,7 @@ export default function PageAdminBlogUpdate() {
 
   const params = useParams();
   const router = useRouter();
-  const user = trpc.users.getById.useQuery(
+  const blog = trpc.blogs.getById.useQuery(
     {
       id: params?.id?.toString() ?? '',
     },
@@ -39,44 +38,37 @@ export default function PageAdminBlogUpdate() {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const userUpdate = trpc.users.updateById.useMutation({
+  const blogUpdate = trpc.blogs.updateById.useMutation({
     onSuccess: async () => {
-      await trpcUtils.users.invalidate();
+      await trpcUtils.blogs.invalidate();
       toastSuccess({
-        title: t('users:update.feedbacks.updateSuccess.title'),
+        title: t('common:feedbacks.updateSuccess.title', { defaultValue: 'Blog updated successfully' }),
       });
       router.back();
     },
-    onError: (error) => {
-      if (isErrorDatabaseConflict(error, 'email')) {
-        form.setErrors({ email: t('users:data.email.alreadyUsed') });
-        return;
-      }
+    onError: () => {
       toastError({
-        title: t('users:update.feedbacks.updateError.title'),
+        title: t('common:feedbacks.updateError.title', { defaultValue: 'Error updating blog' }),
       });
     },
   });
 
-  const isReady = !user.isFetching;
+  const isReady = !blog.isFetching;
 
-  const form = useForm<UserFormFields>({
+  const form = useForm<BlogFormFields>({
     ready: isReady,
     initialValues: {
-      email: user.data?.email,
-      name: user.data?.name ?? undefined,
-      language: user.data?.language,
-      authorizations: user.data?.authorizations,
+      title: blog.data?.title ?? '',
+      content: blog.data?.content ?? '',
+      featuredImage: blog.data?.featuredImage ?? undefined,
     },
     onValidSubmit: (values) => {
-      if (!user.data?.id) return;
-      userUpdate.mutate({
-        id: user.data.id,
-        ...values,
-        callsign: values.callsign ?? null,
-        dmrid: values.dmrid ? Number(values.dmrid) : null,
-        notes: values.notes ?? null,
-        name: values.name ?? null,
+      if (!blog.data?.id) return;
+      blogUpdate.mutate({
+        id: blog.data.id,
+        title: values.title,
+        content: values.content,
+        featuredImage: values.featuredImage ?? null,
       });
     },
   });
@@ -93,14 +85,14 @@ export default function PageAdminBlogUpdate() {
                 type="submit"
                 variant="@primary"
                 isDisabled={!form.isValid && form.isSubmitted}
-                isLoading={userUpdate.isLoading || userUpdate.isSuccess}
+                isLoading={blogUpdate.isLoading || blogUpdate.isSuccess}
               >
-                {t('users:update.action.save')}
+                {t('common:actions.save', { defaultValue: 'Save' })}
               </Button>
             </>
           }
         >
-          {user.isLoading || user.isError ? (
+          {blog.isLoading || blog.isError ? (
             <SkeletonText maxW="6rem" noOfLines={2} />
           ) : (
             <Flex
@@ -109,16 +101,15 @@ export default function PageAdminBlogUpdate() {
               rowGap={1}
               columnGap={4}
             >
-              <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
-              <UserStatus isActivated={user.data.accountStatus === 'ENABLED'} />
+              <Heading size="sm">{blog.data?.title}</Heading>
             </Flex>
           )}
         </AdminLayoutPageTopBar>
         {!isReady && <LoaderFull />}
-        {isReady && user.isError && <ErrorPage />}
-        {isReady && user.isSuccess && (
+        {isReady && blog.isError && <ErrorPage />}
+        {isReady && blog.isSuccess && (
           <AdminLayoutPageContent>
-            <UserForm />
+            <BlogForm />
           </AdminLayoutPageContent>
         )}
       </AdminLayoutPage>

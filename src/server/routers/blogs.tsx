@@ -247,10 +247,9 @@ export const blogsRouter = createTRPCRouter({
     .input(
       zBlog().required().pick({
         id: true,
-        name: true,
-        email: true,
-        language: true,
-        authorizations: true,
+        title: true,
+        content: true,
+        featuredImage: true,
       })
     )
     .output(zBlog())
@@ -259,7 +258,11 @@ export const blogsRouter = createTRPCRouter({
       try {
         const blog = await ctx.db.blogs.update({
           where: { id: input.id },
-          data: input,
+          data: {
+            title: input.title,
+            content: input.content,
+            featuredImage: input.featuredImage,
+          },
           include: {
             author: true,
           },
@@ -290,14 +293,6 @@ export const blogsRouter = createTRPCRouter({
     )
     .output(zBlog())
     .mutation(async ({ ctx, input }) => {
-      if (ctx.user.id === input.id) {
-        ctx.logger.warn('Logged user cannot delete itself');
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'You cannot remove yourself',
-        });
-      }
-
       ctx.logger.info({ input }, 'Removing blog');
       const blog = await ctx.db.blogs.delete({
         where: { id: input.id },
