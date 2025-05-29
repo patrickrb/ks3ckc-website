@@ -1,4 +1,4 @@
-import { Box, Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Heading, Text, useColorModeValue, SimpleGrid } from '@chakra-ui/react';
 
 export default function NewsItems() {
   const cardBg = useColorModeValue('white', 'gray.800');
@@ -58,21 +58,46 @@ export default function NewsItems() {
 
   return (
     <>
-      <Heading as="h3" ms={4} size="lg">
+      <Heading as="h3" size="lg" mb={6}>
         Latest News
       </Heading>
-      {Array.isArray(newsItems) &&
-        [...newsItems].reverse().map((item, i) => (
-          <Box key={i} bg={cardBg} p={4} borderRadius="md" mb={4}>
-            <Heading as="h3" size="md" mb={2}>
-              {item.title}
-            </Heading>
-            <Text fontSize="sm" color="gray.400" mb={2}>
-              {item.date}
-            </Text>
-            <Text fontSize="sm">{item.content}</Text>
-          </Box>
-        ))}
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} w="full">
+        {Array.isArray(newsItems) &&
+          [...newsItems].reverse().map((item, i) => (
+            <Box 
+              key={i} 
+              bg={cardBg} 
+              p={6} 
+              borderRadius="lg" 
+              shadow="md"
+              borderWidth="1px"
+              borderColor={useColorModeValue('gray.200', 'gray.700')}
+              transition="all 0.2s"
+              _hover={{
+                shadow: 'lg',
+                transform: 'translateY(-2px)'
+              }}
+              h="fit-content"
+              minH="200px"
+              display="flex"
+              flexDirection="column"
+            >
+              <Heading as="h4" size="md" mb={3} lineHeight="1.3">
+                {item.title}
+              </Heading>
+              <Text fontSize="sm" color="gray.500" mb={4} fontWeight="medium">
+                {new Date(item.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
+              <Text fontSize="sm" lineHeight="1.6" flex="1">
+                {item.content}
+              </Text>
+            </Box>
+          ))}
+      </SimpleGrid>
     </>
   );
 }
