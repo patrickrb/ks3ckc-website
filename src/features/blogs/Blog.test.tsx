@@ -10,16 +10,19 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock tRPC
-const mockUseQuery = jest.fn();
 jest.mock('@/lib/trpc/client', () => ({
   trpc: {
     blogs: {
       getByIdPublic: {
-        useQuery: mockUseQuery,
+        useQuery: jest.fn(),
       },
     },
   },
 }));
+
+// Get the mocked function for use in tests
+import { trpc } from '@/lib/trpc/client';
+const mockUseQuery = trpc.blogs.getByIdPublic.useQuery as jest.MockedFunction<typeof trpc.blogs.getByIdPublic.useQuery>;
 
 // Mock MarkdownRenderer
 jest.mock('@/components/MarkdownRenderer', () => ({
@@ -88,7 +91,7 @@ describe('Blog', () => {
     
     // Check if content is rendered via MarkdownRenderer
     expect(screen.getByTestId('markdown-content')).toBeInTheDocument();
-    expect(screen.getByText('# This is a test blog\n\nThis is **bold** content.')).toBeInTheDocument();
+    expect(screen.getByTestId('markdown-content')).toHaveTextContent('# This is a test blog This is **bold** content.');
   });
 
   it('shows loading state', () => {

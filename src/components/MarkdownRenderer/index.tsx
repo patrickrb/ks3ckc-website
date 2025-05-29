@@ -23,10 +23,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
       // Italic
       .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+      // Images (must come before links since they have similar syntax)
+      .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
       // Links
       .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
-      // Images
-      .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
       // Lists (wrap in ul tags)
       .replace(/(^- .*$\n?)+/gim, (match) => {
         const listItems = match.replace(/^- (.*$)/gim, '<li>$1</li>');
