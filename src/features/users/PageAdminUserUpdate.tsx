@@ -71,6 +71,7 @@ export default function PageAdminUserUpdate() {
       dmrid: user.data?.dmrid != null ? user.data.dmrid.toString() : null,
       isPubliclyVisible: user.data?.isPubliclyVisible,
       notes: user.data?.notes,
+      image: user.data?.image ?? undefined,
     },
     onValidSubmit: (values) => {
       if (!user.data?.id) return;
@@ -81,6 +82,7 @@ export default function PageAdminUserUpdate() {
         dmrid: values.dmrid ? Number(values.dmrid) : null,
         notes: values.notes ?? null,
         name: values.name ?? null,
+        image: values.image ?? null,
       });
     },
   });

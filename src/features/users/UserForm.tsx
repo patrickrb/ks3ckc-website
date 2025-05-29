@@ -5,6 +5,7 @@ import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { FieldBooleanCheckbox } from '@/components/FieldBooleanCheckbox';
+import { FieldImageUpload } from '@/components/FieldImageUpload';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { FieldTextarea } from '@/components/FieldTextarea';
@@ -26,6 +27,7 @@ export type UserFormFields = {
   dmrid?: string; // This is kept as string for the form, but will be converted to number when submitted
   isPubliclyVisible: boolean;
   notes?: string;
+  image?: string; // Avatar image stored as base64 string
 };
 
 export const UserForm = () => {
@@ -33,6 +35,11 @@ export const UserForm = () => {
 
   return (
     <Stack spacing={4}>
+      <FieldImageUpload
+        name="image"
+        label={t('users:data.image.label', 'Avatar')}
+        accept="image/*"
+      />
       <FieldInput
         name="name"
         required={t('users:data.name.required')}

@@ -130,6 +130,7 @@ export const usersRouter = createTRPCRouter({
         dmrid: true,
         isPubliclyVisible: true,
         notes: true,
+        image: true,
       })
     )
     .output(zUser())
@@ -232,6 +233,7 @@ export const usersRouter = createTRPCRouter({
         dmrid: true,
         isPubliclyVisible: true,
         notes: true,
+        image: true,
       })
     )
     .output(zUser())
