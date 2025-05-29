@@ -33,6 +33,7 @@ export type Blog = {
   title: string;
   content: string;
   featuredImage?: string | null;
+  tags: string[];
   authorId: string;
   [key: string]: unknown; // Allow for other properties
 };
@@ -51,6 +52,7 @@ export type BlogCreateInput = {
   title: string;
   content: string;
   featuredImage?: string | null;
+  tags?: string[];
 };
 
 /**
@@ -61,4 +63,5 @@ export type BlogUpdateInput = {
   title?: string;
   content?: string;
   featuredImage?: string | null;
+  tags?: string[];
 };

@@ -31,11 +31,25 @@ export type AdminBlogActionProps = Omit<MenuProps, 'children'> & {
 };
 
 const BlogTags: React.FC<IBlogTags> = (props) => {
+  // Don't render anything if there are no tags
+  if (!props.tags || props.tags.length === 0) {
+    return null;
+  }
+
   return (
     <HStack spacing={2} marginTop={props.marginTop}>
       {props.tags.map((tag) => {
         return (
-          <Tag size={'md'} variant="solid" colorScheme="orange" key={tag}>
+          <Tag 
+            size={'md'} 
+            variant="solid" 
+            colorScheme="orange" 
+            key={tag}
+            as="a"
+            href={`/blog?tag=${encodeURIComponent(tag)}`}
+            cursor="pointer"
+            _hover={{ opacity: 0.8 }}
+          >
             {tag}
           </Tag>
         );
@@ -123,7 +137,7 @@ export const BlogListEntry = ({
           justifyContent="center"
           marginTop={{ base: '3', sm: '0' }}
         >
-          <BlogTags tags={['Engineering', 'Product']} />
+          <BlogTags tags={blog.tags || []} />
           <Heading marginTop="1">
             <Link
               href={`/blog/${blog.id}`}

@@ -67,6 +67,7 @@ model Blogs {
   title         String
   content       String   @db.Text
   featuredImage String?
+  tags          String[] @default([])
   author        User     @relation(fields: [authorId], references: [id])
   authorId      String
   

@@ -19,6 +19,7 @@ describe('BlogListEntry', () => {
     updatedAt: new Date('2023-01-01'),
     authorId: 'author1',
     featuredImage: 'https://example.com/featured-image.jpg',
+    tags: ['Engineering', 'Product'],
     author: {
       id: 'author1',
       name: 'John Doe',
@@ -75,5 +76,24 @@ describe('BlogListEntry', () => {
     
     expect(screen.getByText('Test Blog Post')).toBeInTheDocument();
     expect(screen.getByText('This is a test blog post content')).toBeInTheDocument();
+  });
+
+  it('renders tags when they exist', () => {
+    render(<BlogListEntry blog={mockBlog} />);
+    
+    expect(screen.getByText('Engineering')).toBeInTheDocument();
+    expect(screen.getByText('Product')).toBeInTheDocument();
+  });
+
+  it('does not render tags section when no tags exist', () => {
+    const blogWithoutTags = {
+      ...mockBlog,
+      tags: [],
+    } as RouterOutputs['blogs']['getAll']['items'][number];
+    
+    render(<BlogListEntry blog={blogWithoutTags} />);
+    
+    expect(screen.queryByText('Engineering')).not.toBeInTheDocument();
+    expect(screen.queryByText('Product')).not.toBeInTheDocument();
   });
 });

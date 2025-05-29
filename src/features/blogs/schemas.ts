@@ -10,6 +10,7 @@ export const zBlog = () =>
     title: z.string(),
     content: z.string(),
     featuredImage: z.string().nullish(),
+    tags: z.array(z.string()).default([]),
     authorId: z.string(),
     author: zUser(),
   });
