@@ -53,6 +53,7 @@ export default function PageAdminUserCreate() {
         dmrid: values.dmrid ? Number(values.dmrid) : null,
         notes: values.notes ?? null,
         name: values.name ?? null,
+        image: values.image ?? null,
       });
     },
   });

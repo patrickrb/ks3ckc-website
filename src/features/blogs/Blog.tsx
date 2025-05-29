@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 
+import { getAvatarUrl, getAvatarFallbackName } from '@/lib/avatar';
 import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 import { trpc } from '@/lib/trpc/client';
 
@@ -97,10 +98,10 @@ export const Blog = () => {
             <Image
               borderRadius="full"
               boxSize="50px"
-              src={
-                blog.data.author.image || 
-                "https://100k-faces.glitch.me/random-image"
-              }
+              src={getAvatarUrl(
+                blog.data.author.image, 
+                getAvatarFallbackName(blog.data.author.name, blog.data.author.email)
+              )}
               alt={`Avatar of ${blog.data.author.name || 'Author'}`}
             />
             <VStack spacing="0" alignItems="flex-start">

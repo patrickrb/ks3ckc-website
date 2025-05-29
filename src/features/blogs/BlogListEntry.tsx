@@ -13,11 +13,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
+import { getAvatarUrl, getAvatarFallbackName } from '@/lib/avatar';
 import type { RouterOutputs } from '@/lib/trpc/types';
 
 interface BlogAuthorProps {
   date: Date;
   name: string;
+  email?: string;
+  image?: string | null;
 }
 
 interface IBlogTags {
@@ -64,7 +67,10 @@ export const BlogAuthor: React.FC<BlogAuthorProps> = (props) => {
       <Image
         borderRadius="full"
         boxSize="40px"
-        src="https://100k-faces.glitch.me/random-image"
+        src={getAvatarUrl(
+          props.image, 
+          getAvatarFallbackName(props.name, props.email)
+        )}
         alt={`Avatar of ${props.name}`}
       />
       <Text fontWeight="medium">{props.name}</Text>
@@ -157,6 +163,8 @@ export const BlogListEntry = ({
           </Text>
           <BlogAuthor
             name={blog.author.name || 'anonymous'}
+            email={blog.author.email}
+            image={blog.author.image}
             date={new Date(blog.createdAt)}
           />
         </Box>

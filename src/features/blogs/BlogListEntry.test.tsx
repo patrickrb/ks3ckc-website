@@ -4,6 +4,14 @@ import '@testing-library/jest-dom';
 import { BlogListEntry } from './BlogListEntry';
 import type { RouterOutputs } from '@/lib/trpc/types';
 
+// Mock avatar utilities
+jest.mock('@/lib/avatar', () => ({
+  getAvatarUrl: jest.fn((userImage, fallbackSeed) => 
+    userImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(fallbackSeed || 'default')}&background=e2e8f0&color=4a5568&size=200`
+  ),
+  getAvatarFallbackName: jest.fn((name, email) => name || email || 'User'),
+}));
+
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
   ...jest.requireActual('@chakra-ui/react'),
@@ -95,5 +103,30 @@ describe('BlogListEntry', () => {
     
     expect(screen.queryByText('Engineering')).not.toBeInTheDocument();
     expect(screen.queryByText('Product')).not.toBeInTheDocument();
+  });
+
+  it('renders author avatar using avatar utilities', () => {
+    render(<BlogListEntry blog={mockBlog} />);
+    
+    // Check if author avatar is displayed
+    const authorAvatar = screen.getByAltText('Avatar of John Doe');
+    expect(authorAvatar).toBeInTheDocument();
+    expect(authorAvatar).toHaveAttribute('src', expect.stringContaining('ui-avatars.com'));
+  });
+
+  it('handles author with custom image', () => {
+    const blogWithCustomAvatar = {
+      ...mockBlog,
+      author: {
+        ...mockBlog.author,
+        image: 'data:image/jpeg;base64,customimage',
+      },
+    } as RouterOutputs['blogs']['getAll']['items'][number];
+    
+    render(<BlogListEntry blog={blogWithCustomAvatar} />);
+    
+    const authorAvatar = screen.getByAltText('Avatar of John Doe');
+    expect(authorAvatar).toBeInTheDocument();
+    expect(authorAvatar).toHaveAttribute('src', 'data:image/jpeg;base64,customimage');
   });
 });

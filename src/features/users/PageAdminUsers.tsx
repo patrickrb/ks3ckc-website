@@ -34,6 +34,7 @@ import {
 } from '@/features/admin/AdminLayoutPage';
 import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminNav } from '@/features/management/ManagementNav';
+import { getAvatarUrl, getAvatarFallbackName } from '@/lib/avatar';
 import { UserStatus } from '@/features/users/UserStatus';
 import { trpc } from '@/lib/trpc/client';
 
@@ -102,7 +103,11 @@ export default function PageAdminUsers() {
               .map((user) => (
                 <DataListRow as={LinkBox} key={user.id} withHover>
                   <DataListCell w="auto">
-                    <Avatar size="sm" name={user.email ?? ''} />
+                    <Avatar 
+                      size="sm" 
+                      name={getAvatarFallbackName(user.name, user.email)} 
+                      src={getAvatarUrl(user.image, getAvatarFallbackName(user.name, user.email))}
+                    />
                   </DataListCell>
                   <DataListCell flex={2}>
                     <DataListText fontWeight="bold">

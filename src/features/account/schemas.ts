@@ -14,4 +14,5 @@ export const zUserAccount = () =>
     notes: true,
     authorizations: true,
     language: true,
+    image: true,
   });
