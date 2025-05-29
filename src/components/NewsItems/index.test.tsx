@@ -5,29 +5,32 @@ import NewsItems from './index';
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  Box: ({ children, bg, p, borderRadius, shadow, borderWidth, borderColor, transition, _hover, h, display, flexDirection, ...props }: any) => (
+  Box: ({ children, _bg, _p, _borderRadius, _shadow, _borderWidth, _borderColor, _transition, _hover, _h, _display, _flexDirection, ...props }: any) => (
     <div data-testid="news-item" {...props}>{children}</div>
   ),
-  Heading: ({ children, as, size, mb, lineHeight, ...props }: any) => (
+  Heading: ({ children, as, size, _mb, _lineHeight, ..._props }: any) => (
     React.createElement(as || 'h1', { 
       'data-testid': `heading-${size}`,
       // Filter out Chakra-specific props
     }, children)
   ),
-  Text: ({ children, fontSize, color, mb, fontWeight, flex, lineHeight, overflow, ...props }: any) => (
+  Text: ({ children, _fontSize, _color, _mb, _fontWeight, _flex, _lineHeight, _overflow, ..._props }: any) => (
     <p data-testid="text">{children}</p>
   ),
-  SimpleGrid: ({ children, columns, spacing, w, ...props }: any) => (
+  SimpleGrid: ({ children, _columns, _spacing, _w, ..._props }: any) => (
     <div data-testid="news-grid">{children}</div>
   ),
-  useColorModeValue: jest.fn((light, dark) => light),
+  useColorModeValue: jest.fn((light, _dark) => light),
 }));
+
+import { useColorModeValue } from '@chakra-ui/react';
+
+const mockUseColorModeValue = useColorModeValue as jest.MockedFunction<typeof useColorModeValue>;
 
 describe('NewsItems', () => {
   beforeEach(() => {
     // Reset the mock to return light theme values
-    const { useColorModeValue } = require('@chakra-ui/react');
-    useColorModeValue.mockImplementation((light: any, dark: any) => light);
+    mockUseColorModeValue.mockImplementation((light: any, _dark: any) => light);
   });
 
   it('renders the Latest News heading', () => {
@@ -92,24 +95,21 @@ describe('NewsItems', () => {
   });
 
   it('uses color mode values for styling', () => {
-    const { useColorModeValue } = require('@chakra-ui/react');
-    
     render(<NewsItems />);
     
     // Verify that useColorModeValue was called for card background and border
-    expect(useColorModeValue).toHaveBeenCalledWith('white', 'gray.800');
-    expect(useColorModeValue).toHaveBeenCalledWith('gray.200', 'gray.700');
+    expect(mockUseColorModeValue).toHaveBeenCalledWith('white', 'gray.800');
+    expect(mockUseColorModeValue).toHaveBeenCalledWith('gray.200', 'gray.700');
   });
 
   it('applies dark mode colors when in dark mode', () => {
-    const { useColorModeValue } = require('@chakra-ui/react');
-    useColorModeValue.mockImplementation((light: any, dark: any) => dark);
+    mockUseColorModeValue.mockImplementation((_light: any, dark: any) => dark);
     
     render(<NewsItems />);
     
     // Verify that dark mode values are used
-    expect(useColorModeValue).toHaveBeenCalledWith('white', 'gray.800');
-    expect(useColorModeValue).toHaveBeenCalledWith('gray.200', 'gray.700');
+    expect(mockUseColorModeValue).toHaveBeenCalledWith('white', 'gray.800');
+    expect(mockUseColorModeValue).toHaveBeenCalledWith('gray.200', 'gray.700');
   });
 
   it('contains expected number of news items', () => {

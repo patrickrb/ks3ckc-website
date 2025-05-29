@@ -51,12 +51,14 @@ jest.mock('@chakra-ui/react', () => ({
   ),
 }));
 
-const { useField } = require('@formiz/core');
+import { useField } from '@formiz/core';
+
+const mockUseField = useField as jest.MockedFunction<typeof useField>;
 
 describe('FieldTextarea', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    useField.mockReturnValue(mockField);
+    mockUseField.mockReturnValue(mockField);
   });
 
   it('renders basic textarea field', () => {
@@ -67,7 +69,7 @@ describe('FieldTextarea', () => {
   });
 
   it('displays field value', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       value: 'test textarea content',
     });
@@ -106,7 +108,7 @@ describe('FieldTextarea', () => {
   });
 
   it('passes placeholder to textarea', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         placeholder: 'Enter your text here',
@@ -120,7 +122,7 @@ describe('FieldTextarea', () => {
   });
 
   it('handles empty value gracefully', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       value: null,
     });
@@ -132,7 +134,7 @@ describe('FieldTextarea', () => {
   });
 
   it('passes through textareaProps', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         textareaProps: {
@@ -151,7 +153,7 @@ describe('FieldTextarea', () => {
 
   it('calls custom onChange handler from textareaProps', () => {
     const customOnChange = jest.fn();
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         textareaProps: {
@@ -171,7 +173,7 @@ describe('FieldTextarea', () => {
 
   it('calls custom onFocus handler from textareaProps', () => {
     const customOnFocus = jest.fn();
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         textareaProps: {
@@ -191,7 +193,7 @@ describe('FieldTextarea', () => {
 
   it('calls custom onBlur handler from textareaProps', () => {
     const customOnBlur = jest.fn();
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         textareaProps: {
@@ -210,7 +212,7 @@ describe('FieldTextarea', () => {
   });
 
   it('passes form group props correctly', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       errorMessage: 'Field is required',
       shouldDisplayError: true,
@@ -227,7 +229,7 @@ describe('FieldTextarea', () => {
   });
 
   it('renders children when provided', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         children: <div data-testid="textarea-children">Help text</div>,
@@ -244,7 +246,7 @@ describe('FieldTextarea', () => {
   });
 
   it('handles undefined textareaProps gracefully', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         textareaProps: undefined,
@@ -267,7 +269,7 @@ describe('FieldTextarea', () => {
 
   it('handles multiline content correctly', () => {
     const multilineContent = 'Line 1\nLine 2\nLine 3';
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       value: multilineContent,
     });

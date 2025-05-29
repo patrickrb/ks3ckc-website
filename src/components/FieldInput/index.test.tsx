@@ -44,7 +44,7 @@ jest.mock('@/components/FormGroup', () => ({
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  IconButton: ({ children, onClick, 'aria-label': ariaLabel, icon, ...props }: any) => (
+  IconButton: ({ _children, onClick, 'aria-label': ariaLabel, icon, ...props }: any) => (
     <button onClick={onClick} aria-label={ariaLabel} {...props}>
       {icon}
     </button>
@@ -70,12 +70,14 @@ jest.mock('react-icons/ri', () => ({
   RiEyeLine: () => <span data-testid="eye-open-icon" />,
 }));
 
-const { useField } = require('@formiz/core');
+import { useField } from '@formiz/core';
+
+const mockUseField = useField as jest.MockedFunction<typeof useField>;
 
 describe('FieldInput', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    useField.mockReturnValue(mockField);
+    mockUseField.mockReturnValue(mockField);
   });
 
   it('renders basic input field', () => {
@@ -86,7 +88,7 @@ describe('FieldInput', () => {
   });
 
   it('displays field value', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       value: 'test value',
     });
@@ -119,7 +121,7 @@ describe('FieldInput', () => {
   });
 
   it('renders password field with toggle button', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         type: 'password',
@@ -135,7 +137,7 @@ describe('FieldInput', () => {
   });
 
   it('toggles password visibility', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         type: 'password',
@@ -157,7 +159,7 @@ describe('FieldInput', () => {
   });
 
   it('shows spinner when validating', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       isValidating: true,
       isTouched: true,
@@ -170,7 +172,7 @@ describe('FieldInput', () => {
   });
 
   it('shows spinner when submitted and validating', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       isValidating: true,
       isSubmitted: true,
@@ -182,7 +184,7 @@ describe('FieldInput', () => {
   });
 
   it('does not show spinner when not validating', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       isValidating: false,
       isTouched: true,
@@ -194,7 +196,7 @@ describe('FieldInput', () => {
   });
 
   it('passes placeholder to input', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         placeholder: 'Enter text here',
@@ -208,7 +210,7 @@ describe('FieldInput', () => {
   });
 
   it('handles autoFocus prop', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         autoFocus: true,
@@ -221,7 +223,7 @@ describe('FieldInput', () => {
   });
 
   it('handles empty value gracefully', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       value: null,
     });
@@ -233,7 +235,7 @@ describe('FieldInput', () => {
   });
 
   it('passes through inputProps', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         inputProps: {
@@ -250,7 +252,7 @@ describe('FieldInput', () => {
   });
 
   it('passes form group props correctly', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       errorMessage: 'Field is required',
       shouldDisplayError: true,
@@ -265,7 +267,7 @@ describe('FieldInput', () => {
   });
 
   it('renders children when provided', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         children: <div data-testid="field-children">Extra content</div>,
@@ -282,7 +284,7 @@ describe('FieldInput', () => {
   });
 
   it('handles different input types', () => {
-    useField.mockReturnValue({
+    mockUseField.mockReturnValue({
       ...mockField,
       otherProps: {
         type: 'email',
