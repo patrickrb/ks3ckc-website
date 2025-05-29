@@ -42,6 +42,7 @@ export const accountRouter = createTRPCRouter({
           dmrid: true,
           isPubliclyVisible: true,
           notes: true,
+          image: true,
         },
       });
 
@@ -72,6 +73,7 @@ export const accountRouter = createTRPCRouter({
         isPubliclyVisible: true,
         notes: true,
         language: true,
+        image: true,
       })
     )
     .output(zUserAccount())

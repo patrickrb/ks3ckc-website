@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldBooleanCheckbox } from '@/components/FieldBooleanCheckbox';
+import { FieldImageUpload } from '@/components/FieldImageUpload';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { LoaderFull } from '@/components/LoaderFull';
@@ -48,6 +49,7 @@ export const AccountProfileForm = () => {
     dmrid: string;
     isPubliclyVisible: boolean;
     notes: string;
+    image: string;
   }>({
     initialValues: {
       name: account.data?.name ?? undefined,
@@ -56,6 +58,7 @@ export const AccountProfileForm = () => {
       dmrid: account.data?.dmrid ? String(account.data.dmrid) : undefined,
       isPubliclyVisible: account.data?.isPubliclyVisible ?? undefined,
       notes: account.data?.notes ?? undefined,
+      image: account.data?.image ?? undefined,
     },
     onValidSubmit: (values) => {
       const updatedValues = {
@@ -75,6 +78,7 @@ export const AccountProfileForm = () => {
         dmrid: account.data.dmrid ? String(account.data.dmrid) : undefined,
         isPubliclyVisible: account.data.isPubliclyVisible ?? undefined,
         notes: account.data.notes ?? undefined,
+        image: account.data.image ?? undefined,
       });
     }
   }, [account.data, form]);
@@ -88,6 +92,11 @@ export const AccountProfileForm = () => {
           <Formiz connect={form}>
             <form noValidate onSubmit={form.submit}>
               <Stack spacing={4}>
+                <FieldImageUpload
+                  name="image"
+                  label={t('account:data.image.label', 'Avatar')}
+                  accept="image/*"
+                />
                 <FieldInput
                   name="name"
                   label={t('account:data.name.label')}
