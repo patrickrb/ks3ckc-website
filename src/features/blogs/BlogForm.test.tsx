@@ -43,15 +43,21 @@ jest.mock('@/components/FieldMarkdown', () => ({
   FieldMarkdown: () => <div><label htmlFor="content">Content (Markdown)</label><textarea aria-label="Content (Markdown)" /></div>,
 }));
 
+// Mock the FieldTags component
+jest.mock('@/components/FieldTags', () => ({
+  FieldTags: () => <div><label htmlFor="tags">Tags</label><input aria-label="Tags" /></div>,
+}));
+
 // Import BlogForm after mocking
 import { BlogForm } from './BlogForm';
 
 describe('BlogForm', () => {
-  it('renders the blog form with title, image, and content fields', () => {
+  it('renders the blog form with title, image, tags, and content fields', () => {
     render(<BlogForm />);
     
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/featured image/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/tags/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/content/i)).toBeInTheDocument();
   });
 });

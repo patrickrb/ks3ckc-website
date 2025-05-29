@@ -31,6 +31,11 @@ export type AdminBlogActionProps = Omit<MenuProps, 'children'> & {
 };
 
 const BlogTags: React.FC<IBlogTags> = (props) => {
+  // Don't render anything if there are no tags
+  if (!props.tags || props.tags.length === 0) {
+    return null;
+  }
+
   return (
     <HStack spacing={2} marginTop={props.marginTop}>
       {props.tags.map((tag) => {
