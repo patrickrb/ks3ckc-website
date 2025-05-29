@@ -1,59 +1,48 @@
-<h1 align="center"><img src=".github/assets/thumbnail.png" alt="Start UI Web" /></h1>
+# KS3CKC Website
 
-[![Discord](https://img.shields.io/discord/452798408491663361)](https://go.bearstudio.fr/discord)
-
-🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
-It represents our team's up-to-date stack that we use when creating web apps for our clients.
-
-## Documentation
-
-For detailed information on how to use this project, please refer to the [documentation](https://docs.web.start-ui.com). The documentation contains all the necessary information on installation, usage, and some guides.
-
-## Demo
-
-A live read-only demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com).
+A modern club website for KS3CKC (Kansas City Amateur Radio Club) built with Next.js and TypeScript. This application provides club members and visitors with access to club information, events, and amateur radio resources.
 
 ## Technologies
 
-<div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
+This website is built with modern web technologies:
 
-[🟦 TypeScript](https://www.typescriptlang.org/), [⚛️ React](https://react.dev/), [⚫️ NextJS](https://nextjs.org/), [⚡️ Chakra UI](https://chakra-ui.com/),  [🟦 tRPC](https://trpc.io/), [▲ Prisma](https://www.prisma.io/), [🏖️ TanStack Query](https://react-query.tanstack.com/), [📕 Storybook](https://storybook.js.org/), [🎭 Playwright](https://playwright.dev/), [🐜 Formiz](https://formiz-react.com/)
-, [🌍 React i18next](https://react.i18next.com/)
+[🟦 TypeScript](https://www.typescriptlang.org/), [⚛️ React](https://react.dev/), [⚫️ NextJS](https://nextjs.org/), [⚡️ Chakra UI](https://chakra-ui.com/), [🟦 tRPC](https://trpc.io/), [▲ Prisma](https://www.prisma.io/), [🏖️ TanStack Query](https://react-query.tanstack.com/), [📕 Storybook](https://storybook.js.org/), [🎭 Playwright](https://playwright.dev/), [🐜 Formiz](https://formiz-react.com/), [🌍 React i18next](https://react.i18next.com/)
 
 
-## Requirements
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed on your development machine:
 
 - [NodeJS](https://nodejs.org/) >=18
 - [Pnpm](https://pnpm.io/)
 - [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
-## Getting Started
+### Clone and Setup
 
+1. Clone the repository
 ```bash
-pnpm create start-ui --web myApp
+git clone https://github.com/patrickrb/ks3ckc-website.git
+cd ks3ckc-website
 ```
 
-That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
-
-## Installation
-
-1. Duplicate the `.env.example` file to a new `.env` file, and update the environment variables
+2. Copy environment variables
 
 ```bash
 cp .env.example .env
 ```
 
 > [!NOTE]
-> **Quick advices for local development**
-> - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch the emails during the development.
+> **Quick advice for local development**
+> - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch emails during development.
 
-
-2. Install dependencies
+3. Install dependencies
 ```bash
 pnpm install
 ```
 
-3. Setup and start the db with docker
+4. Setup and start the database with Docker
 ```bash
 pnpm dk:init
 ```
@@ -62,7 +51,9 @@ pnpm dk:init
 >
 > Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
 
-## Development
+## Development Server
+
+Start the development environment:
 
 ```bash
 # Run the database in Docker (if not already started)
@@ -129,7 +120,7 @@ pnpm theme:generate-icons
 You can update the storage key used to detect the color mode by updating this constant in the `src/theme/config.ts` file:
 
 ```tsx
-export const COLOR_MODE_STORAGE_KEY = 'start-ui-color-mode'; // Update the key according to your needs
+export const COLOR_MODE_STORAGE_KEY = 'ks3ckc-color-mode'; // Update the key according to your needs
 ```
 
 ### E2E Tests
@@ -143,14 +134,16 @@ pnpm e2e:ui  # Open a UI which allow you to run specific tests and see test exec
 
 Tests are written in the `e2e` folder; there is also a `e2e/utils` folder which contains some utils to help writing tests.
 
-## Show hint on development environments
+## Development Environment Hints
 
-Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.
+To show environment indicators during development, set these environment variables:
 
-```
+```bash
 NEXT_PUBLIC_DEV_ENV_NAME="staging"
 NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME="teal"
 ```
+
+This will display visual indicators in your app to distinguish between different environments.
 
 ## Translations
 
@@ -172,24 +165,86 @@ Create or edit the `.vscode/settings.json` file with the following settings:
 }
 ```
 
-## Production
+## Deployment
+
+This website is deployed on [Vercel](https://vercel.com) for seamless continuous deployment.
+
+### Automatic Deployment
+
+- **Production**: Pushes to the `main` branch are automatically deployed to production
+- **Preview**: Pull requests automatically generate preview deployments
+- The application uses Vercel's built-in PostgreSQL database and environment variables
+
+### Environment Variables
+
+The following environment variables are required for production deployment:
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `AUTH_SECRET` - Authentication secret (generate with `openssl rand -base64 32`)
+- `EMAIL_SERVER` - SMTP server configuration
+- `EMAIL_FROM` - From email address
+- `CLOUDLOG_API_KEY` - (Optional) CloudLog API integration
+- `CLOUDLOG_API_URL` - (Optional) CloudLog API URL
+
+### Manual Deployment
+
+For manual deployments or other hosting providers:
 
 ```bash
 pnpm install
-pnpm storybook:build # Optional: Will expose the Storybook at `/storybook`
 pnpm build
 pnpm start
 ```
 
-### Deploy with Docker
+## Production
 
-1. Build the Docker image (replace `start-ui-web` with your project name)
-```
-docker build -t start-ui-web .
+### Local Production Build
+
+To test a production build locally:
+
+```bash
+pnpm install
+pnpm build
+pnpm start
 ```
 
-2. Run the Docker image (replace `start-ui-web` with your project name)
+### Storybook (Optional)
+
+To include Storybook in your build:
+
+```bash
+pnpm storybook:build # Will expose Storybook at `/storybook`
 ```
-docker run -p 80:3000 start-ui-web
+
+### Docker Deployment
+
+1. Build the Docker image
+```bash
+docker build -t ks3ckc-website .
 ```
-Application will be exposed on port 80 ([http://localhost](http://localhost))
+
+2. Run the Docker image
+```bash
+docker run -p 80:3000 ks3ckc-website
+```
+
+The application will be available at [http://localhost](http://localhost).
+
+## Contributing
+
+We welcome contributions to the KS3CKC website! Please see our [GitHub Actions](.github/workflows/) for automated code quality checks and testing that run on all pull requests.
+
+### Code Quality
+
+- **Linting**: ESLint and TypeScript checks run automatically
+- **Testing**: Playwright E2E tests ensure functionality
+- **Formatting**: Prettier maintains consistent code style
+
+## Authors
+
+- **Patrick Burns** - [@patrickrb](https://github.com/patrickrb)
+- **Reid Crowe** - [@Reid-n0rc](https://github.com/Reid-n0rc)
+
+## License
+
+This project is licensed under the MIT License - see the [package.json](package.json) file for details.
