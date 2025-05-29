@@ -11,7 +11,16 @@
     "deactivate": "Désactiver",
     "delete": "Supprimer",
     "edit": "Modifier",
-    "back": "Retour"
+    "back": "Retour",
+    "save": "Enregistrer"
+  },
+  "feedbacks": {
+    "updateSuccess": {
+      "title": "Mis à jour avec succès"
+    },
+    "updateError": {
+      "title": "Erreur lors de la mise à jour"
+    }
   },
   "or": "ou",
   "confirmDiscardChanges": {
