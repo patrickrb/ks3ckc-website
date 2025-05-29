@@ -5,11 +5,11 @@ import { styles } from '@/emails/styles';
 export const Footer = () => {
   return (
     <Section style={styles.footer}>
-      <Link style={styles.link} href="https://start-ui.com" target="_blank">
-        🚀 Start UI
+      <Link style={styles.link} href="https://ks3ckc.radio" target="_blank">
+        📻 KS3CKC Radio
       </Link>
       <br />
-      Opinionated UI starters
+      Kansas City Amateur Radio Club
     </Section>
   );
 };

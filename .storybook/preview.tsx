@@ -42,7 +42,7 @@ const DocumentationWrapper = ({ children, context }) => {
 
   return (
     <Box
-      id="start-ui-storybook-wrapper"
+      id="ks3ckc-storybook-wrapper"
       p="4"
       pb="8"
       bg={colorMode === 'dark' ? 'gray.900' : 'white'}
@@ -79,12 +79,12 @@ const preview: Preview = {
       dark: {
         ...themes.dark,
         brandImage: logoReversed.src,
-        brandTitle: 'Start UI',
+        brandTitle: 'KS3CKC',
       },
       light: {
         ...themes.light,
         brandImage: logo.src,
-        brandTitle: 'Start UI',
+        brandTitle: 'KS3CKC',
       },
     },
     layout: 'fullscreen',
