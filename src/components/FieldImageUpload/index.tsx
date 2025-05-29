@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   Box,
@@ -24,6 +24,11 @@ export const FieldImageUpload = (props: FieldImageUploadProps) => {
   const { inputProps = {}, children, accept = 'image/*', ...rest } = field.otherProps;
   const [previewUrl, setPreviewUrl] = useState<string | null>(field.value || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Update preview when field value changes (e.g., when form initializes with existing data)
+  useEffect(() => {
+    setPreviewUrl(field.value || null);
+  }, [field.value]);
 
   const formGroupProps = {
     ...rest,
