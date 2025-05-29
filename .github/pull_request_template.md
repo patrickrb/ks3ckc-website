@@ -11,7 +11,7 @@ closes #<issue_id>
 
 ## Documentation
 
-<!-- Please provide a link to the issue or PR of the documentation (https://docs.web.start-ui.com) if applicable -->
+<!-- Please provide a link to the issue or PR of the documentation (https://ks3ckc.radio) if applicable -->
 
 ## Checklist
 
@@ -22,7 +22,7 @@ closes #<issue_id>
  - [ ] If applicable, I updated the translations for english and french files  
       (If you cannot update the french language, just let us know in the PR description)
  - [ ] If applicable, I updated the README.md
- - [ ] If applicable, I created a PR or an issue on the [documentation repository](https://github.com/bearstudio/start-ui-web-docs/)
+ - [ ] If applicable, I created a PR or an issue on the [KS3CKC website](https://ks3ckc.radio)
  - [ ] If applicable, I’m sure that my feature or my component is mobile first and available correctly on desktop
 
 

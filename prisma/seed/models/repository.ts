@@ -7,14 +7,14 @@ export async function createRepositories() {
   const existingCount = await prisma.repository.count();
 
   if (
-    !(await prisma.repository.findUnique({ where: { name: 'Start UI [web]' } }))
+    !(await prisma.repository.findUnique({ where: { name: 'KS3CKC Website' } }))
   ) {
     await prisma.repository.create({
       data: {
-        name: 'Start UI [web]',
-        link: 'https://github.com/BearStudio/start-ui-web',
+        name: 'KS3CKC Website',
+        link: 'https://github.com/patrickrb/ks3ckc-website',
         description:
-          '🚀 Start UI [web] is an opinionated UI starter with ⚛️ React, ▲ NextJS, ⚡️ Chakra UI, ⚛️ TanStack Query & 🐜 Formiz — From the 🐻 BearStudio Team',
+          '📻 KS3CKC Website - A modern club website for Kansas City Amateur Radio Club built with Next.js, TypeScript, and Chakra UI',
       },
     });
     createdCounter += 1;
@@ -22,15 +22,15 @@ export async function createRepositories() {
 
   if (
     !(await prisma.repository.findUnique({
-      where: { name: 'Start UI [native]' },
+      where: { name: 'KS3CKC Radio' },
     }))
   ) {
     await prisma.repository.create({
       data: {
-        name: 'Start UI [native]',
-        link: 'https://github.com/BearStudio/start-ui-native',
+        name: 'KS3CKC Radio',
+        link: 'https://ks3ckc.radio',
         description:
-          "🚀 Start UI [native] is a opinionated Expo starter repository created & maintained by the BearStudio Team and other contributors. It represents our team's up-to-date stack that we use when creating React Native apps for our clients.",
+          "📻 KS3CKC Radio - Kansas City Amateur Radio Club website with club information, events, and amateur radio resources for the ham radio community.",
       },
     });
     createdCounter += 1;

@@ -27,7 +27,7 @@ export default function PageHome() {
           <Text display="block">
             {t('appHome:welcome.description')}
             <br />
-            <Text as="a" href="https://www.bearstudio.fr">
+            <Text as="a" href="https://ks3ckc.radio">
               <Trans t={t} i18nKey="appHome:welcome.author" />
             </Text>
           </Text>
@@ -36,7 +36,7 @@ export default function PageHome() {
           <Button
             size="sm"
             as="a"
-            href="https://github.com/BearStudio/start-ui-web"
+            href="https://github.com/patrickrb/ks3ckc-website"
             leftIcon={<LuGithub />}
           >
             {t('appHome:links.github')}
@@ -44,7 +44,7 @@ export default function PageHome() {
           <Button
             size="sm"
             as="a"
-            href="https://docs.web.start-ui.com"
+            href="https://ks3ckc.radio"
             leftIcon={<LuBookOpen />}
           >
             {t('appHome:links.documentation')}
@@ -52,7 +52,7 @@ export default function PageHome() {
           <Button
             size="sm"
             as="a"
-            href="https://github.com/BearStudio/start-ui/issues/new"
+            href="https://github.com/patrickrb/ks3ckc-website/issues/new"
             leftIcon={<LuAlertCircle />}
           >
             {t('appHome:links.openIssue')}
