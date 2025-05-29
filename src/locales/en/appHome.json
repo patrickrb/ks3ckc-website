@@ -1,12 +1,12 @@
 {
   "welcome": {
     "title": "Welcome to 📻 KS3CKC",
-    "description": "An opinionated UI starter with React, Chakra UI, React Query & Formiz",
-    "author": "— From the <strong>BearStudio Team</strong>"
+    "description": "Kansas City Amateur Radio Club website with club information, events, and amateur radio resources",
+    "author": "— Visit <strong>ks3ckc.radio</strong>"
   },
   "links": {
     "github": "GitHub Repository",
     "openIssue": "Open Issue",
-    "documentation": "Documentation"
+    "documentation": "Website"
   }
 }

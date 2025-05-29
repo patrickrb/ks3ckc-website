@@ -38,7 +38,7 @@ export default function PageAdminDashboard() {
               <AlertDescription display="block">
                 {t('adminDashboard:welcome.description')}
                 <br />
-                <Text as="a" href="https://www.bearstudio.fr">
+                <Text as="a" href="https://ks3ckc.radio">
                   <Trans t={t} i18nKey="adminDashboard:welcome.author" />
                 </Text>
               </AlertDescription>
@@ -48,7 +48,7 @@ export default function PageAdminDashboard() {
             <Button
               size="sm"
               as="a"
-              href="https://github.com/BearStudio/start-ui-web"
+              href="https://github.com/patrickrb/ks3ckc-website"
               leftIcon={<LuGithub />}
             >
               {t('adminDashboard:links.github')}
@@ -56,7 +56,7 @@ export default function PageAdminDashboard() {
             <Button
               size="sm"
               as="a"
-              href="https://docs.web.start-ui.com"
+              href="https://ks3ckc.radio"
               leftIcon={<LuBookOpen />}
             >
               {t('adminDashboard:links.documentation')}
@@ -64,7 +64,7 @@ export default function PageAdminDashboard() {
             <Button
               size="sm"
               as="a"
-              href="https://github.com/BearStudio/start-ui/issues/new"
+              href="https://github.com/patrickrb/ks3ckc-website/issues/new"
               leftIcon={<LuAlertCircle />}
             >
               {t('adminDashboard:links.openIssue')}

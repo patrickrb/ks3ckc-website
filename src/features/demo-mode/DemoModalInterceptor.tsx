@@ -45,28 +45,14 @@ export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
             </Text>
             <Stack>
               <Text>
-                You can test the full app starter on your own with the following
-                command:
+                You can learn more about KS3CKC and amateur radio by visiting our website:
               </Text>
-              <Code
-                as="pre"
-                display="block"
-                p={4}
-                bg="gray.800"
-                color="white"
-                borderRadius="md"
-                _dark={{
-                  bg: 'gray.700',
-                }}
-              >
-                npx create-start-ui@latest --web myApp
-              </Code>
               <Text>
-                You can also check the{' '}
-                <Link href="http://web.start-ui.com" isExternal>
-                  README.md
+                Visit{' '}
+                <Link href="https://ks3ckc.radio" isExternal>
+                  ks3ckc.radio
                 </Link>{' '}
-                for more information.
+                for more information about our club.
               </Text>
             </Stack>
             <Alert colorScheme="brand">
@@ -75,23 +61,22 @@ export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
               <AlertDescription pb={2}>
                 <Stack>
                   <Text>
-                    Don&apos;t want to do it on your own? This starter is made
-                    by the{' '}
-                    <Link href="https://bearstudio.fr/en" isExternal>
-                      BearStudio team
+                    Have questions about amateur radio or want to get involved with KS3CKC?{' '}
+                    <Link href="https://ks3ckc.radio" isExternal>
+                      Visit our website
                     </Link>
-                    , we will be happy to help you!{' '}
+                    {' '}or contact us!
                   </Text>
                   <HStack spacing={4}>
                     <Button
                       as="a"
-                      href="mailto:start-ui@bearstudio.fr"
+                      href="https://ks3ckc.radio"
                       size="sm"
                       variant="@primary"
                     >
-                      Get in touch
+                      Visit Website
                     </Button>
-                    <span>start-ui@bearstudio.fr</span>
+                    <span>ks3ckc.radio</span>
                   </HStack>
                 </Stack>
               </AlertDescription>
