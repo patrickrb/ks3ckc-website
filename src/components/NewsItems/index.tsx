@@ -2,6 +2,7 @@ import { Box, Heading, Text, useColorModeValue, SimpleGrid } from '@chakra-ui/re
 
 export default function NewsItems() {
   const cardBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   const newsItems = [
     {
@@ -71,7 +72,7 @@ export default function NewsItems() {
               borderRadius="lg" 
               shadow="md"
               borderWidth="1px"
-              borderColor={useColorModeValue('gray.200', 'gray.700')}
+              borderColor={borderColor}
               transition="all 0.2s"
               _hover={{
                 shadow: 'lg',
