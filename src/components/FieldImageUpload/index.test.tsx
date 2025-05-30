@@ -142,7 +142,7 @@ const mockFileReader = {
   onerror: null as (() => void) | null,
 };
 
-global.FileReader = jest.fn(() => mockFileReader) as any;
+global.FileReader = jest.fn(() => mockFileReader) as unknown as typeof FileReader;
 
 // Mock URL.createObjectURL
 const mockCreateObjectURL = jest.fn();
@@ -310,7 +310,9 @@ describe('FieldImageUpload', () => {
     expect(buttons.length).toBeGreaterThan(1);
     const removeButton = buttons[1];
     
-    fireEvent.click(removeButton);
+    if (removeButton) {
+      fireEvent.click(removeButton);
+    }
     
     expect(mockField.setValue).toHaveBeenCalledWith(null);
     expect(mockRef.current.value).toBe('');

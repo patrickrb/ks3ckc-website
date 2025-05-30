@@ -47,13 +47,19 @@ jest.mock('@/server/config/errors', () => ({
 }));
 
 // Create mock context
-const createMockContext = (overrides = {}) => ({
+const createMockContext = (overrides = {}): any => ({
   user: null,
   apiType: 'TRPC' as const,
   logger: {
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
+    debug: jest.fn(),
+    trace: jest.fn(),
+    fatal: jest.fn(),
+    silent: jest.fn(),
+    level: 'info' as const,
+    child: jest.fn().mockImplementation(() => createMockContext().logger),
   },
   db: {
     user: {

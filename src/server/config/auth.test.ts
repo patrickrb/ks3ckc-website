@@ -276,6 +276,14 @@ describe('Auth utilities', () => {
     it('generates code with custom length', async () => {
       mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-custom-code'));
 
+      // Mock generateCode to accept length parameter
+      const originalGenerateCode = jest.requireActual('@/server/config/auth').generateCode;
+      const mockGenerateCode = jest.fn(originalGenerateCode);
+      jest.mock('@/server/config/auth', () => ({
+        ...jest.requireActual('@/server/config/auth'),
+        generateCode: mockGenerateCode,
+      }));
+
       const result = await generateCode(8);
 
       expect(result.readable).toHaveLength(8);
@@ -292,8 +300,9 @@ describe('Auth utilities', () => {
 
     it('generates different codes on multiple calls', async () => {
       mockBcrypt.hash
-        .mockResolvedValueOnce('hashed-code-1')
-        .mockResolvedValueOnce('hashed-code-2');
+        .mockImplementation(() => Promise.resolve('hashed-code-1'))
+        .mockImplementationOnce(() => Promise.resolve('hashed-code-1'))
+        .mockImplementationOnce(() => Promise.resolve('hashed-code-2'));
 
       const result1 = await generateCode();
       const result2 = await generateCode();
