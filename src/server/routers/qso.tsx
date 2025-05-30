@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 import { env } from '@/env.mjs';
 import { zQso } from '@/features/qso/schemas';
-import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
+import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const qsoRouter = createTRPCRouter({
-  getRecent: publicProcedure()
+  getRecent: protectedProcedure()
     .input(z.void())
     .output(z.array(zQso()))
     .meta({

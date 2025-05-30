@@ -16,12 +16,22 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     NODE_ENV: zNodeEnv,
 
-    AUTH_SECRET: z.string(),
+    // Require a strong secret for authentication
+    AUTH_SECRET: z.string().min(32, "Auth secret should be at least 32 characters long"),
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
-    CLOUDLOG_API_KEY: z.string().optional(),
-    CLOUDLOG_API_URL: z.string().optional(),
+    // Make CLOUDLOG_API_KEY required if CLOUDLOG_API_URL is set 
+    CLOUDLOG_API_KEY: z.string().optional().refine(
+      (val, ctx) => {
+        if (ctx.path.CLOUDLOG_API_URL && !val) {
+          return false;
+        }
+        return true;
+      }, 
+      { message: "CLOUDLOG_API_KEY is required when CLOUDLOG_API_URL is set" }
+    ),
+    CLOUDLOG_API_URL: z.string().url().optional(),
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
       .default(process.env.NODE_ENV === 'production' ? 'error' : 'info'),
