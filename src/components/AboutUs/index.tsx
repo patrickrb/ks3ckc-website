@@ -12,28 +12,26 @@ export default function AboutUs() {
 
   return (
     <>
-      <Heading as="h2" ms={4} size="lg">
-        About Us
+      <Heading as="h1" ms={4} size="lg">
+        About KS3CKC - Kansas City Ham Radio Club
       </Heading>
       <Text fontSize="md" mx={4} mb={5}>
-        Welcome to the SecKC Amateur Radio Club of Kansas City and Surrounding
-        Cities for Amateur Radio, your local hub for all things related to ham
-        radio and hacking! As a proud part of SecKC, the world's largest hacking
-        meetup, our club brings together enthusiasts from diverse backgrounds
-        who share a passion for exploring, innovating, and breaking barriers in
-        the fields of radio communication and cybersecurity.
+        Welcome to KS3CKC, the premier Kansas City ham radio club serving amateur radio operators 
+        throughout the Kansas City metro area and surrounding cities. As part of SecKC, the world's 
+        largest hacking meetup, our ham radio club brings together amateur radio enthusiasts from 
+        diverse backgrounds who share a passion for radio communication, emergency preparedness, 
+        and innovative technology.
       </Text>
       <Box bg={cardBg} p={4} borderRadius="md" mb={4}>
         <Heading as="h3" size="md" mb={2}>
           Who We Are
         </Heading>
         <Text fontSize="md" mb={5}>
-          Founded by a group of dedicated hobbyists and professionals, the SecKC
-          Amateur Radio Club of Kansas City and Surrounding Cities for Amateur
-          Radio is a community where technology enthusiasts can come together to
-          learn, share, and collaborate. Our members range from novice tinkerers
-          to seasoned experts, all united by a common interest in the
-          fascinating world of ham radio and hacking.
+          Founded by dedicated amateur radio operators and technology professionals, KS3CKC is 
+          a thriving Kansas City ham radio club where radio enthusiasts come together to learn, 
+          share knowledge, and collaborate on exciting projects. Our members range from newly 
+          licensed technicians to seasoned extra class operators, all united by our passion for 
+          amateur radio, emergency communication, and cutting-edge radio technology.
         </Text>
         <Heading as="h3" size="md" mb={2}>
           What We Do
@@ -46,15 +44,16 @@ export default function AboutUs() {
         </Text>
         <Box m={15}>
           <UnorderedList>
-            <ListItem>Ham radio operation and techniques</ListItem>
+            <ListItem>Amateur radio operation and advanced techniques</ListItem>
             <ListItem>Building and programming radio equipment</ListItem>
-            <ListItem>Cybersecurity practices and ethical hacking</ListItem>
-            <ListItem>Signal processing and data analysis</ListItem>
-            <ListItem>Emergency communication setups</ListItem>
+            <ListItem>Emergency communication and disaster preparedness</ListItem>
+            <ListItem>Digital modes and signal processing</ListItem>
+            <ListItem>Antenna design and RF engineering</ListItem>
+            <ListItem>Cybersecurity and radio security practices</ListItem>
           </UnorderedList>
         </Box>
         <Heading as="h3" size="md" mb={2}>
-          Join Us
+          Join Our Kansas City Ham Radio Community
         </Heading>
         <Text fontSize="md" mb={5}>
           Whether you're looking to hone your skills, gain new knowledge, or

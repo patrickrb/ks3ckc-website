@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /devtools/
+
+# Sitemap location
+Sitemap: https://ks3ckc.org/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
