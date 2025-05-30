@@ -64,10 +64,18 @@ export const decodeJwt = (token: string) => {
     if (
       !jwtDecoded ||
       typeof jwtDecoded !== 'object' ||
-      !('id' in jwtDecoded)
+      !('id' in jwtDecoded) ||
+      !('exp' in jwtDecoded) // Check for expiration claim
     ) {
       return null;
     }
+    
+    // Check if token is expired (exp is in seconds, Date.now() is in milliseconds)
+    const exp = jwtDecoded.exp as number;
+    if (exp * 1000 < Date.now()) {
+      return null;
+    }
+    
     return jwtDecoded;
   } catch {
     return null;
@@ -160,7 +168,11 @@ export async function validateCode({
   }
 
   ctx.logger.info('Encoding JWT');
-  const userJwt = jwt.sign({ id: verificationToken.userId }, env.AUTH_SECRET);
+  const userJwt = jwt.sign(
+    { id: verificationToken.userId },
+    env.AUTH_SECRET,
+    { expiresIn: '30d' } // Token expires in 30 days
+  );
   if (!userJwt) {
     ctx.logger.error('Failed to encode JWT');
     throw new TRPCError({
