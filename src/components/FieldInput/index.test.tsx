@@ -11,11 +11,25 @@ const mockField = {
   setValue: jest.fn(),
   setIsTouched: jest.fn(),
   errorMessage: '',
+  errorMessages: [],
   shouldDisplayError: false,
   isRequired: false,
   isValidating: false,
   isTouched: false,
   isSubmitted: false,
+  isValid: true,
+  isPristine: true,
+  isReady: true,
+  isProcessing: false,
+  externalProcessing: {
+    start: jest.fn(),
+    end: jest.fn()
+  },
+  isExternalProcessing: false,
+  isDebouncing: false,
+  hasBeenModified: false,
+  resetKey: 0,
+  formattedValue: '',
   otherProps: {}
 };
 
