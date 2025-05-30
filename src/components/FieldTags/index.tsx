@@ -2,7 +2,6 @@ import React, { useState, KeyboardEvent } from 'react';
 
 import {
   Box,
-  HStack,
   Input,
   InputGroup,
   InputProps,

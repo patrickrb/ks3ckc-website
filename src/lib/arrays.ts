@@ -11,9 +11,9 @@ export const sortByKey =
       ? parseFloat(String(a[sortKey]))
       : String(a[sortKey]);
     const bValue = isNumber(b[sortKey])
-      ? parseFloat(String(a[sortKey]))
-      : String(a[sortKey]);
-    if (aValue < bValue) return sortOrder === 'desc' ? -1 : 1;
-    if (aValue > bValue) return sortOrder === 'desc' ? 1 : -1;
+      ? parseFloat(String(b[sortKey]))
+      : String(b[sortKey]);
+    if (aValue < bValue) return sortOrder === 'desc' ? 1 : -1;
+    if (aValue > bValue) return sortOrder === 'desc' ? -1 : 1;
     return 0;
   };

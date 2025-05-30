@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Blog } from './Blog';
-import { trpc } from '@/lib/trpc/client';
+import type { RouterOutputs } from '@/lib/trpc/types';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -10,16 +10,18 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock tRPC
-const mockUseQuery = jest.fn();
 jest.mock('@/lib/trpc/client', () => ({
   trpc: {
     blogs: {
       getByIdPublic: {
-        useQuery: mockUseQuery,
+        useQuery: jest.fn(),
       },
     },
   },
 }));
+
+// Get the mocked function for use in tests
+const mockUseQuery = jest.fn();
 
 // Mock MarkdownRenderer
 jest.mock('@/components/MarkdownRenderer', () => ({
@@ -30,12 +32,20 @@ jest.mock('@/components/MarkdownRenderer', () => ({
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  ...jest.requireActual('@chakra-ui/react'),
   useColorModeValue: jest.fn(() => 'gray.50'),
+  Box: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Container: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Heading: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
+  Text: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+  VStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
+  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+  Spinner: () => <div data-testid="spinner">Loading...</div>,
 }));
 
 describe('Blog', () => {
-  const mockBlogData = {
+  const mockBlogData: RouterOutputs['blogs']['getByIdPublic'] = {
     id: 'test-blog-id',
     title: 'Test Blog Post',
     content: '# This is a test blog\n\nThis is **bold** content.',
@@ -43,6 +53,7 @@ describe('Blog', () => {
     updatedAt: new Date('2023-01-01'),
     authorId: 'author1',
     featuredImage: 'https://example.com/featured-image.jpg',
+    tags: ['JavaScript', 'React'],
     author: {
       id: 'author1',
       name: 'John Doe',
@@ -63,6 +74,9 @@ describe('Blog', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Set up the mock for each test
+    const { trpc } = jest.requireMock('@/lib/trpc/client');
+    trpc.blogs.getByIdPublic.useQuery.mockImplementation(mockUseQuery);
   });
 
   it('renders blog post with all elements when data is loaded', () => {
@@ -70,7 +84,7 @@ describe('Blog', () => {
       data: mockBlogData,
       isLoading: false,
       isError: false,
-    });
+    } as any);
 
     render(<Blog />);
     
@@ -88,7 +102,7 @@ describe('Blog', () => {
     
     // Check if content is rendered via MarkdownRenderer
     expect(screen.getByTestId('markdown-content')).toBeInTheDocument();
-    expect(screen.getByText('# This is a test blog\n\nThis is **bold** content.')).toBeInTheDocument();
+    expect(screen.getByTestId('markdown-content')).toHaveTextContent('# This is a test blog This is **bold** content.');
   });
 
   it('shows loading state', () => {
@@ -96,7 +110,7 @@ describe('Blog', () => {
       data: null,
       isLoading: true,
       isError: false,
-    });
+    } as any);
 
     render(<Blog />);
     expect(screen.getByText('Loading blog post...')).toBeInTheDocument();
@@ -107,7 +121,7 @@ describe('Blog', () => {
       data: null,
       isLoading: false,
       isError: true,
-    });
+    } as any);
 
     render(<Blog />);
     expect(screen.getByText('Blog Not Found')).toBeInTheDocument();
@@ -123,7 +137,7 @@ describe('Blog', () => {
       data: blogWithoutImage,
       isLoading: false,
       isError: false,
-    });
+    } as any);
 
     render(<Blog />);
     

@@ -14,8 +14,15 @@ jest.mock('@/lib/avatar', () => ({
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  ...jest.requireActual('@chakra-ui/react'),
   useColorModeValue: jest.fn(() => 'gray.700'),
+  Box: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+  Heading: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
+  Text: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+  Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
+  HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  Tag: ({ children, ...props }: any) => <span {...props}>{children}</span>,
+  Avatar: ({ name, ...props }: any) => <div data-testid="avatar" {...props}>{name}</div>,
 }));
 
 describe('BlogListEntry', () => {
