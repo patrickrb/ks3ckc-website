@@ -66,7 +66,7 @@ jest.mock('@chakra-ui/react', () => ({
       {...(dangerouslySetInnerHTML ? { dangerouslySetInnerHTML } : { children })}
     />
   ),
-  Tabs: ({ children, index, onChange, variant, ...props }: any) => (
+  Tabs: ({ children, index, _onChange, variant, ...props }: any) => (
     <div data-testid="markdown-tabs" data-index={index} data-variant={variant} {...props}>
       {children}
     </div>

@@ -1,11 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { useBreakpointValue } from '@chakra-ui/react';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { Nav, NavItem, NavGroup } from './index';
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  Button: ({ children, rightIcon, textAlign, sx, opacity, ...props }: any) => (
+  Button: ({ children, rightIcon, textAlign, _sx, opacity, ...props }: any) => (
     <button 
       data-testid="nav-menu-button"
       data-text-align={textAlign}
@@ -40,7 +42,7 @@ jest.mock('@chakra-ui/react', () => ({
       {children}
     </div>
   ),
-  MenuButton: ({ children, opacity, textAlign, rightIcon, sx, ...props }: any) => (
+  MenuButton: ({ children, opacity, textAlign, rightIcon, _sx, ...props }: any) => (
     <button 
       data-testid="nav-menu-button"
       data-opacity={opacity}
@@ -135,9 +137,6 @@ jest.mock('@/hooks/useIsHydrated', () => ({
 jest.mock('react-icons/lu', () => ({
   LuChevronDown: () => <span data-testid="chevron-down">↓</span>,
 }));
-
-const { useBreakpointValue } = require('@chakra-ui/react');
-const { useIsHydrated } = require('@/hooks/useIsHydrated');
 
 describe('Nav', () => {
   beforeEach(() => {

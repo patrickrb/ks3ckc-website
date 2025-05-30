@@ -1,12 +1,19 @@
-import { createTRPCMsw } from 'msw-trpc';
-import { z } from 'zod';
-
-import { createTRPCContext } from '@/server/config/trpc';
+import { cookies } from 'next/headers';
+import { sendEmail } from '@/server/config/email';
+import { validateCode } from '@/server/config/auth';
 import { authRouter } from '@/server/routers/auth';
 
 // Mock dependencies
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(),
+}));
+
 jest.mock('@/server/config/email', () => ({
   sendEmail: jest.fn(),
+}));
+
+jest.mock('@/server/config/auth', () => ({
+  validateCode: jest.fn(),
 }));
 
 jest.mock('@/emails/templates/login-code', () => {
@@ -164,7 +171,7 @@ describe('authRouter', () => {
         delete: jest.fn(),
       };
       
-      require('next/headers').cookies.mockReturnValue(mockCookies);
+      (cookies as jest.Mock).mockReturnValue(mockCookies);
       
       const caller = authRouter.createCaller(mockContext);
       
@@ -180,7 +187,7 @@ describe('authRouter', () => {
         delete: jest.fn(),
       };
       
-      require('next/headers').cookies.mockReturnValue(mockCookies);
+      (cookies as jest.Mock).mockReturnValue(mockCookies);
       
       const caller = authRouter.createCaller(mockContext);
       
@@ -212,7 +219,7 @@ describe('authRouter', () => {
       mockContext.db.user.create.mockResolvedValue(mockUser);
       mockContext.db.verificationToken.create.mockResolvedValue(mockToken);
 
-      const { sendEmail } = require('@/server/config/email');
+      (sendEmail as jest.Mock)
       sendEmail.mockResolvedValue(true);
 
       const caller = authRouter.createCaller(mockContext);
@@ -307,7 +314,7 @@ describe('authRouter', () => {
       };
 
       // Mock the validateCode function
-      const { validateCode } = require('@/server/config/auth');
+      (validateCode as jest.Mock)
       validateCode.mockResolvedValue({
         verificationToken: mockToken,
         userJwt: 'jwt-token',
@@ -321,7 +328,7 @@ describe('authRouter', () => {
       const mockCookies = {
         set: jest.fn(),
       };
-      require('next/headers').cookies.mockReturnValue(mockCookies);
+      (cookies as jest.Mock).mockReturnValue(mockCookies);
 
       const caller = authRouter.createCaller(mockContext);
       
@@ -336,7 +343,7 @@ describe('authRouter', () => {
     });
 
     it('handles invalid verification code', async () => {
-      const { validateCode } = require('@/server/config/auth');
+      (validateCode as jest.Mock)
       validateCode.mockRejectedValue(new Error('Invalid code'));
 
       const caller = authRouter.createCaller(mockContext);
@@ -387,7 +394,7 @@ describe('authRouter', () => {
       mockContext.db.user.create.mockResolvedValue(mockUser);
       mockContext.db.verificationToken.create.mockResolvedValue(mockToken);
 
-      const { sendEmail } = require('@/server/config/email');
+      (sendEmail as jest.Mock)
       sendEmail.mockResolvedValue(true);
 
       const caller = authRouter.createCaller(mockContext);
@@ -404,7 +411,7 @@ describe('authRouter', () => {
       expect(authResult.isAuthenticated).toBe(false);
 
       // Step 3: Validate email
-      const { validateCode } = require('@/server/config/auth');
+      (validateCode as jest.Mock)
       validateCode.mockResolvedValue({
         verificationToken: mockToken,
         userJwt: 'jwt-token',

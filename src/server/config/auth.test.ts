@@ -72,12 +72,6 @@ describe('Auth utilities', () => {
     });
 
     it('extracts token from Authorization header', async () => {
-      const mockUser = {
-        id: 'user-1',
-        email: 'test@example.com',
-        accountStatus: 'ENABLED',
-      };
-
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue('Bearer valid-jwt-token'),
       } as any);
@@ -87,13 +81,6 @@ describe('Auth utilities', () => {
       } as any);
 
       mockJwt.verify.mockReturnValue({ userId: 'user-1' } as any);
-      
-      // Mock database call
-      const mockDb = {
-        user: {
-          findUnique: jest.fn().mockResolvedValue(mockUser),
-        },
-      };
       
       // Note: This test would need the actual database context to work fully
       // For now, we're testing the token extraction logic

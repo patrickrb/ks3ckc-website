@@ -88,10 +88,10 @@ jest.mock('@chakra-ui/react', () => ({
     </div>
   ),
   Image: ({ src, alt, maxHeight, borderRadius, ...props }: any) => (
-    <img 
+    <div 
       data-testid="image-preview"
-      src={src}
-      alt={alt}
+      data-src={src}
+      data-alt={alt}
       data-max-height={maxHeight}
       data-border-radius={borderRadius}
       {...props}
