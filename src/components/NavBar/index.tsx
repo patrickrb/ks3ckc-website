@@ -51,6 +51,9 @@ const NavBarMainMenu = ({ ...rest }: StackProps) => {
         {t('navbar:layout.mainMenu.contests')}
       </NavBarMainMenuItem> 
       */}
+      <NavBarMainMenuItem href="/members">
+        {t('navbar:layout.mainMenu.members')}
+      </NavBarMainMenuItem>
       <NavBarMainMenuItem href="/about">
         {t('navbar:layout.mainMenu.about')}
       </NavBarMainMenuItem>

@@ -4,9 +4,95 @@ import { z } from 'zod';
 
 import { zUser } from '@/features/users/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/config/trpc';
 
 export const usersRouter = createTRPCRouter({
+  getPublicMembers: publicProcedure()
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/users/public',
+        protect: false,
+        tags: ['users'],
+      },
+    })
+    .input(
+      z
+        .object({
+          cursor: z.string().cuid().optional(),
+          limit: z.number().min(1).max(100).default(20),
+          searchTerm: z.string().optional(),
+        })
+        .default({})
+    )
+    .output(
+      z.object({
+        items: z.array(zUser().pick({
+          id: true,
+          name: true,
+          callsign: true, 
+          dmrid: true,
+          notes: true,
+        })),
+        nextCursor: z.string().cuid().optional(),
+        total: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      ctx.logger.info('Getting public members from database');
+
+      const where = {
+        isPubliclyVisible: true,
+        accountStatus: 'ENABLED',
+        OR: [
+          {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+          {
+            callsign: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      } satisfies Prisma.UserWhereInput;
+
+      const [total, items] = await ctx.db.$transaction([
+        ctx.db.user.count({
+          where,
+        }),
+        ctx.db.user.findMany({
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
+          orderBy: {
+            name: 'asc',
+          },
+          where,
+          select: {
+            id: true,
+            name: true,
+            callsign: true,
+            dmrid: true,
+            notes: true,
+          },
+        }),
+      ]);
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+        total,
+      };
+    }),
   getById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
