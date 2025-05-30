@@ -412,7 +412,7 @@ describe('authRouter', () => {
         name: 'Test User',
       });
       
-      expect(registerResult.verificationToken).toBe('verification-token');
+      expect(registerResult.token).toBe('verification-token');
 
       // Step 2: Check auth (should be false)
       let authResult = await caller.checkAuthenticated();
