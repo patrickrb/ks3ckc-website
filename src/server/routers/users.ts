@@ -41,10 +41,14 @@ export const usersRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting public members from database');
 
-      const where = {
+      const where: Prisma.UserWhereInput = {
         isPubliclyVisible: true,
         accountStatus: 'ENABLED',
-        OR: [
+      };
+
+      // Add search conditions only if searchTerm is provided
+      if (input.searchTerm) {
+        where.OR = [
           {
             name: {
               contains: input.searchTerm,
@@ -57,8 +61,8 @@ export const usersRouter = createTRPCRouter({
               mode: 'insensitive',
             },
           },
-        ],
-      } satisfies Prisma.UserWhereInput;
+        ];
+      }
 
       const [total, items] = await ctx.db.$transaction([
         ctx.db.user.count({
