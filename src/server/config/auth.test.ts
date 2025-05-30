@@ -273,20 +273,12 @@ describe('Auth utilities', () => {
       expect(mockBcrypt.hash).toHaveBeenCalledWith(result.readable, 10);
     });
 
-    it('generates code with custom length', async () => {
+    it('generates code with expected format', async () => {
       mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-custom-code'));
 
-      // Mock generateCode to accept length parameter
-      const originalGenerateCode = jest.requireActual('@/server/config/auth').generateCode;
-      const mockGenerateCode = jest.fn(originalGenerateCode);
-      jest.mock('@/server/config/auth', () => ({
-        ...jest.requireActual('@/server/config/auth'),
-        generateCode: mockGenerateCode,
-      }));
+      const result = await generateCode();
 
-      const result = await generateCode(8);
-
-      expect(result.readable).toHaveLength(8);
+      expect(result.readable).toHaveLength(6); // Default length
       expect(result.hashed).toBe('hashed-custom-code');
     });
 

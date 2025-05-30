@@ -225,8 +225,9 @@ describe('authRouter', () => {
       mockContext.db.user.create.mockResolvedValue(mockUser);
       mockContext.db.verificationToken.create.mockResolvedValue(mockToken);
 
-      (sendEmail as jest.Mock)
-      sendEmail.mockResolvedValue(true);
+      // Mock sendEmail implementation
+      mockSendEmail.mockImplementation(() => Promise.resolve(true));
+      const mockSendEmail = sendEmail as jest.Mock;
 
       const caller = authRouter.createCaller(mockContext);
       
@@ -320,11 +321,11 @@ describe('authRouter', () => {
       };
 
       // Mock the validateCode function
-      (validateCode as jest.Mock)
-      validateCode.mockResolvedValue({
+      const mockValidateCode = validateCode as jest.Mock;
+      mockValidateCode.mockImplementation(() => Promise.resolve({
         verificationToken: mockToken,
-        userJwt: 'jwt-token',
-      });
+        userJwt: "jwt-token",
+      }));
 
       mockContext.db.user.update.mockResolvedValue({
         ...mockUser,
@@ -349,8 +350,9 @@ describe('authRouter', () => {
     });
 
     it('handles invalid verification code', async () => {
-      (validateCode as jest.Mock)
-      validateCode.mockRejectedValue(new Error('Invalid code'));
+      // Mock validateCode to throw error
+      const mockValidateCode = validateCode as jest.Mock;
+      mockValidateCode.mockImplementation(() => Promise.reject(new Error("Invalid code")));
 
       const caller = authRouter.createCaller(mockContext);
       
@@ -399,9 +401,9 @@ describe('authRouter', () => {
       mockContext.db.user.findUnique.mockResolvedValue(null);
       mockContext.db.user.create.mockResolvedValue(mockUser);
       mockContext.db.verificationToken.create.mockResolvedValue(mockToken);
-
-      (sendEmail as jest.Mock)
-      sendEmail.mockResolvedValue(true);
+      // Mock sendEmail implementation
+      mockSendEmail.mockImplementation(() => Promise.resolve(true));
+      const mockSendEmail = sendEmail as jest.Mock;
 
       const caller = authRouter.createCaller(mockContext);
       
@@ -417,11 +419,11 @@ describe('authRouter', () => {
       expect(authResult.isAuthenticated).toBe(false);
 
       // Step 3: Validate email
-      (validateCode as jest.Mock)
-      validateCode.mockResolvedValue({
+      const mockValidateCode = validateCode as jest.Mock;
+      mockValidateCode.mockImplementation(() => Promise.resolve({
         verificationToken: mockToken,
         userJwt: 'jwt-token',
-      });
+      }));
 
       mockContext.db.user.update.mockResolvedValue({
         ...mockUser,
