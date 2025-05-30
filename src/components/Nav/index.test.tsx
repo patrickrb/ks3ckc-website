@@ -228,7 +228,7 @@ describe('Nav', () => {
 
   it('passes through additional props', () => {
     render(
-      <Nav data-custom="value" className="custom-nav">
+      <Nav data-custom="value">
         <NavItem>Home</NavItem>
       </Nav>
     );

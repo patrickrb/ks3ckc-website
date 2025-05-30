@@ -137,8 +137,9 @@ const mockUseField = useField as jest.MockedFunction<typeof useField>;
 // Mock FileReader
 const mockFileReader = {
   readAsDataURL: jest.fn(),
-  result: null,
-  onload: null,
+  result: null as string | null,
+  onload: null as (() => void) | null,
+  onerror: null as (() => void) | null,
 };
 
 global.FileReader = jest.fn(() => mockFileReader) as any;
@@ -307,7 +308,9 @@ describe('FieldImageUpload', () => {
     const buttons = screen.getAllByTestId('image-upload-button');
     const removeButton = buttons[1];
     
-    fireEvent.click(removeButton);
+    if (removeButton) {
+      fireEvent.click(removeButton);
+    }
     
     expect(mockField.setValue).toHaveBeenCalledWith(null);
     expect(mockRef.current.value).toBe('');
