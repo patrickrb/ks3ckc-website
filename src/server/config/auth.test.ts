@@ -17,8 +17,8 @@ jest.mock('jsonwebtoken');
 jest.mock('next/headers');
 jest.mock('@/env.mjs', () => ({
   env: {
-    NEXTAUTH_SECRET: 'test-secret',
-    DEMO_MODE: false,
+    AUTH_SECRET: 'test-secret',
+    NEXT_PUBLIC_IS_DEMO: false,
   },
 }));
 
@@ -35,6 +35,12 @@ const createMockContext = (overrides = {}) => ({
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
+    debug: jest.fn(),
+    trace: jest.fn(),
+    fatal: jest.fn(),
+    silent: jest.fn(),
+    level: 'info',
+    child: () => createMockContext().logger,
   },
   db: {
     verificationToken: {
@@ -147,8 +153,8 @@ describe('Auth utilities', () => {
     it('validates code successfully', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(true as any);
-      mockJwt.sign.mockReturnValue('generated-jwt' as any);
+      mockBcrypt.compare.mockResolvedValue(true);
+      mockJwt.sign.mockReturnValue('generated-jwt');
 
       const result = await validateCode({
         ctx: mockContext,
@@ -167,7 +173,7 @@ describe('Auth utilities', () => {
       expect(mockBcrypt.compare).toHaveBeenCalledWith('123456', 'hashed-code');
       expect(mockJwt.sign).toHaveBeenCalledWith(
         { userId: 'user-1' },
-        env.NEXTAUTH_SECRET,
+        env.AUTH_SECRET,
         { expiresIn: '30d' }
       );
     });
@@ -188,7 +194,7 @@ describe('Auth utilities', () => {
     it('throws error when code is invalid', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(false as any);
+      mockBcrypt.compare.mockResolvedValue(false);
 
       await expect(validateCode({
         ctx: mockContext,
@@ -225,8 +231,8 @@ describe('Auth utilities', () => {
     it('cleans up expired tokens before validation', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 2 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(true as any);
-      mockJwt.sign.mockReturnValue('generated-jwt' as any);
+      mockBcrypt.compare.mockResolvedValue(true);
+      mockJwt.sign.mockReturnValue('generated-jwt');
 
       await validateCode({
         ctx: mockContext,
@@ -243,7 +249,7 @@ describe('Auth utilities', () => {
     it('handles database errors gracefully', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(false as any);
+      mockBcrypt.compare.mockResolvedValue(false);
       mockContext.db.verificationToken.update.mockRejectedValue(new Error('Database error'));
 
       await expect(validateCode({
@@ -361,8 +367,8 @@ describe('Auth utilities', () => {
       // Step 3: Validate code
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(storedToken);
-      mockBcrypt.compare.mockResolvedValue(true as any);
-      mockJwt.sign.mockReturnValue('final-jwt-token' as any);
+      mockBcrypt.compare.mockResolvedValue(true);
+      mockJwt.sign.mockReturnValue('final-jwt-token');
 
       const validationResult = await validateCode({
         ctx: mockContext,
@@ -399,7 +405,7 @@ describe('Auth utilities', () => {
       // First attempt - wrong code
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(tokenWithAttempts);
-      mockBcrypt.compare.mockResolvedValue(false as any);
+      mockBcrypt.compare.mockResolvedValue(false);
 
       await expect(validateCode({
         ctx: mockContext,
@@ -415,8 +421,8 @@ describe('Auth utilities', () => {
       // Second attempt - correct code
       const updatedToken = { ...tokenWithAttempts, attempts: 2 };
       mockContext.db.verificationToken.findUnique.mockResolvedValue(updatedToken);
-      mockBcrypt.compare.mockResolvedValue(true as any);
-      mockJwt.sign.mockReturnValue('success-jwt' as any);
+      mockBcrypt.compare.mockResolvedValue(true);
+      mockJwt.sign.mockReturnValue('success-jwt');
 
       const result = await validateCode({
         ctx: mockContext,
