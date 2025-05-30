@@ -6,6 +6,7 @@ import { Box, Container, Heading, Stack, Tag, Text, Link as ChakraLink } from '@
 import { useQueryState } from 'nuqs';
 
 import { BlogListEntry } from '@/features/blogs/BlogListEntry';
+import { BlogListSkeleton } from '@/features/blogs/BlogListSkeleton';
 import { trpc } from '@/lib/trpc/client';
 
 const ArticleList = () => {
@@ -33,17 +34,28 @@ const ArticleList = () => {
           </ChakraLink>
         </Box>
       )}
-      {blogs.data?.pages.map((page, i) => (
-        <Stack spacing={5} key={i}>
-          {page.items.map((blog, index) => (
-            <BlogListEntry
-              key={blog.id}
-              blog={blog}
+      {blogs.isLoading ? (
+        <Stack spacing={5}>
+          {[...Array(3)].map((_, index) => (
+            <BlogListSkeleton
+              key={index}
               layoutDirection={index % 2 === 0 ? 'normal' : 'reverse'}
             />
           ))}
         </Stack>
-      ))}
+      ) : (
+        blogs.data?.pages.map((page, i) => (
+          <Stack spacing={5} key={i}>
+            {page.items.map((blog, index) => (
+              <BlogListEntry
+                key={blog.id}
+                blog={blog}
+                layoutDirection={index % 2 === 0 ? 'normal' : 'reverse'}
+              />
+            ))}
+          </Stack>
+        ))
+      )}
     </Container>
   );
 };
