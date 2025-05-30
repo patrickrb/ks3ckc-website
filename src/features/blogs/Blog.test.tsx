@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Blog } from './Blog';
-import { trpc } from '@/lib/trpc/client';
+import type { RouterOutputs } from '@/lib/trpc/types';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -21,8 +21,7 @@ jest.mock('@/lib/trpc/client', () => ({
 }));
 
 // Get the mocked function for use in tests
-import { trpc } from '@/lib/trpc/client';
-const mockUseQuery = trpc.blogs.getByIdPublic.useQuery as jest.MockedFunction<typeof trpc.blogs.getByIdPublic.useQuery>;
+const mockUseQuery = jest.fn();
 
 // Mock MarkdownRenderer
 jest.mock('@/components/MarkdownRenderer', () => ({
@@ -46,7 +45,7 @@ jest.mock('@chakra-ui/react', () => ({
 }));
 
 describe('Blog', () => {
-  const mockBlogData = {
+  const mockBlogData: RouterOutputs['blogs']['getByIdPublic'] = {
     id: 'test-blog-id',
     title: 'Test Blog Post',
     content: '# This is a test blog\n\nThis is **bold** content.',
@@ -54,6 +53,7 @@ describe('Blog', () => {
     updatedAt: new Date('2023-01-01'),
     authorId: 'author1',
     featuredImage: 'https://example.com/featured-image.jpg',
+    tags: ['JavaScript', 'React'],
     author: {
       id: 'author1',
       name: 'John Doe',
@@ -74,6 +74,9 @@ describe('Blog', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Set up the mock for each test
+    const { trpc } = jest.requireMock('@/lib/trpc/client');
+    trpc.blogs.getByIdPublic.useQuery.mockImplementation(mockUseQuery);
   });
 
   it('renders blog post with all elements when data is loaded', () => {
@@ -81,7 +84,7 @@ describe('Blog', () => {
       data: mockBlogData,
       isLoading: false,
       isError: false,
-    });
+    } as any);
 
     render(<Blog />);
     
@@ -107,7 +110,7 @@ describe('Blog', () => {
       data: null,
       isLoading: true,
       isError: false,
-    });
+    } as any);
 
     render(<Blog />);
     expect(screen.getByText('Loading blog post...')).toBeInTheDocument();
@@ -118,7 +121,7 @@ describe('Blog', () => {
       data: null,
       isLoading: false,
       isError: true,
-    });
+    } as any);
 
     render(<Blog />);
     expect(screen.getByText('Blog Not Found')).toBeInTheDocument();
@@ -134,7 +137,7 @@ describe('Blog', () => {
       data: blogWithoutImage,
       isLoading: false,
       isError: false,
-    });
+    } as any);
 
     render(<Blog />);
     
