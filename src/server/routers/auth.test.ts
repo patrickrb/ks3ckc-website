@@ -226,8 +226,8 @@ describe('authRouter', () => {
       mockContext.db.verificationToken.create.mockResolvedValue(mockToken);
 
       // Mock sendEmail implementation
-      mockSendEmail.mockImplementation(() => Promise.resolve(true));
       const mockSendEmail = sendEmail as jest.Mock;
+      mockSendEmail.mockImplementation(() => Promise.resolve(true));
 
       const caller = authRouter.createCaller(mockContext);
       
@@ -298,7 +298,7 @@ describe('authRouter', () => {
     });
   });
 
-  describe('validateEmail', () => {
+  describe('registerValidate', () => {
     const validInput = {
       token: 'verification-token',
       code: '123456',
@@ -339,9 +339,9 @@ describe('authRouter', () => {
 
       const caller = authRouter.createCaller(mockContext);
       
-      const result = await caller.validateEmail(validInput);
+      const result = await caller.registerValidate(validInput);
       
-      expect(result).toEqual({ success: true });
+      expect(result).toEqual({ token: "jwt-token" });
       expect(mockContext.db.user.update).toHaveBeenCalledWith({
         where: { id: 'user-1' },
         data: { accountStatus: 'ENABLED' },
@@ -356,7 +356,7 @@ describe('authRouter', () => {
 
       const caller = authRouter.createCaller(mockContext);
       
-      await expect(caller.validateEmail(validInput)).rejects.toThrow('Invalid code');
+      await expect(caller.registerValidate(validInput)).rejects.toThrow('Invalid code');
     });
 
     it('validates input token format', async () => {
@@ -367,7 +367,7 @@ describe('authRouter', () => {
 
       const caller = authRouter.createCaller(mockContext);
       
-      await expect(caller.validateEmail(invalidInput)).rejects.toThrow();
+      await expect(caller.registerValidate(invalidInput)).rejects.toThrow();
     });
 
     it('validates input code format', async () => {
@@ -378,7 +378,7 @@ describe('authRouter', () => {
 
       const caller = authRouter.createCaller(mockContext);
       
-      await expect(caller.validateEmail(invalidInput)).rejects.toThrow();
+      await expect(caller.registerValidate(invalidInput)).rejects.toThrow();
     });
   });
 
@@ -402,8 +402,8 @@ describe('authRouter', () => {
       mockContext.db.user.create.mockResolvedValue(mockUser);
       mockContext.db.verificationToken.create.mockResolvedValue(mockToken);
       // Mock sendEmail implementation
-      mockSendEmail.mockImplementation(() => Promise.resolve(true));
       const mockSendEmail = sendEmail as jest.Mock;
+      mockSendEmail.mockImplementation(() => Promise.resolve(true));
 
       const caller = authRouter.createCaller(mockContext);
       
@@ -430,7 +430,7 @@ describe('authRouter', () => {
         accountStatus: 'ENABLED',
       });
 
-      await caller.validateEmail({
+      await caller.registerValidate({
         token: 'verification-token',
         code: '123456',
       });
