@@ -186,10 +186,12 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(z.void())
-    .output(z.void())
+    .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx }) => {
       ctx.logger.info('Delete auth cookie');
-      cookies().delete('auth');
+      cookies().delete(AUTH_COOKIE_NAME);
+      ctx.logger.info('User has been logged out');
+      return { success: true };
     }),
 
   register: publicProcedure()

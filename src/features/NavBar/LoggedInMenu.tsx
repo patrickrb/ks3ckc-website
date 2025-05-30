@@ -22,15 +22,12 @@ import { useAuth } from '@/hooks/useAuth';
 
 export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
-  const { account, refreshAuth } = useAuth();
+  const { account } = useAuth();
   const menuButtonBg = useColorModeValue('white', 'gray.800');
   const menuButtonColor = useColorModeValue('black', 'white');
   const menuItemColor = useColorModeValue('gray.800', 'white');
 
   const handleLogout = () => {
-    // Call refreshAuth to update auth state
-    refreshAuth();
-
     // Use window.location.href instead of router.push to force a full page reload
     window.location.href = `/logout?redirect=${APP_PATH}/login`;
   };
