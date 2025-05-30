@@ -434,4 +434,55 @@ describe('Auth utilities', () => {
       expect(result.userJwt).toBe('success-jwt');
     });
   });
+  
+  describe('JWT token handling', () => {
+    it('sets expiration time when creating JWT', async () => {
+      // Mock implementation for test
+      const mockToken = {
+        token: 'test-token',
+        userId: 'user-123',
+        code: 'hashed-code',
+        attempts: 0,
+        lastAttemptAt: new Date(Date.now() - 60000), // 1 minute ago
+        expires: new Date(Date.now() + 10 * 60 * 1000),
+      };
+      
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
+      mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
+      
+      // Check that jwt.sign is called with the expiresIn option
+      await validateCode({
+        ctx: mockContext,
+        code: '123456',
+        token: 'test-token',
+      });
+      
+      expect(mockJwt.sign).toHaveBeenCalledWith(
+        { id: 'user-123' },
+        env.AUTH_SECRET,
+        { expiresIn: '30d' }
+      );
+    });
+    
+    it('rejects expired tokens', async () => {
+      // Setup headers with a token
+      mockHeaders.mockReturnValue({
+        get: jest.fn().mockReturnValue('Bearer expired-token'),
+      } as any);
+      
+      mockCookies.mockReturnValue({
+        get: jest.fn().mockReturnValue(undefined),
+      } as any);
+      
+      // Mock verify to return an expired token
+      mockJwt.verify.mockImplementation(() => ({
+        id: 'user-123',
+        exp: Math.floor(Date.now() / 1000) - 3600 // 1 hour in the past
+      }));
+      
+      const result = await getServerAuthSession();
+      expect(result).toBeNull();
+    });
+  });
 });
