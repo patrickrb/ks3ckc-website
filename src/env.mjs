@@ -21,16 +21,8 @@ export const env = createEnv({
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
-    // Make CLOUDLOG_API_KEY required if CLOUDLOG_API_URL is set 
-    CLOUDLOG_API_KEY: z.string().optional().refine(
-      (val, ctx) => {
-        if (ctx.path.CLOUDLOG_API_URL && !val) {
-          return false;
-        }
-        return true;
-      }, 
-      { message: "CLOUDLOG_API_KEY is required when CLOUDLOG_API_URL is set" }
-    ),
+    // API credentials
+    CLOUDLOG_API_KEY: z.string().optional(),
     CLOUDLOG_API_URL: z.string().url().optional(),
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
