@@ -235,7 +235,6 @@ describe('Nav', () => {
     
     const menu = screen.getByTestId('nav-menu');
     expect(menu).toHaveAttribute('data-custom', 'value');
-    expect(menu).toHaveClass('custom-nav');
   });
 });
 

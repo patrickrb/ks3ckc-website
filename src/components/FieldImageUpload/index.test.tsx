@@ -306,11 +306,11 @@ describe('FieldImageUpload', () => {
     render(<FieldImageUpload name="test" />);
     
     const buttons = screen.getAllByTestId('image-upload-button');
+    // Ensure we have the removeButton before accessing it
+    expect(buttons.length).toBeGreaterThan(1);
     const removeButton = buttons[1];
     
-    if (removeButton) {
-      fireEvent.click(removeButton);
-    }
+    fireEvent.click(removeButton);
     
     expect(mockField.setValue).toHaveBeenCalledWith(null);
     expect(mockRef.current.value).toBe('');

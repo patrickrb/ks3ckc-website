@@ -28,7 +28,7 @@ const mockCookies = cookies as jest.MockedFunction<typeof cookies>;
 const mockHeaders = headers as jest.MockedFunction<typeof headers>;
 
 // Create mock context
-const createMockContext = (overrides = {}) => ({
+const createMockContext = (overrides = {}): any => ({
   user: null,
   apiType: 'TRPC' as const,
   logger: {
@@ -39,8 +39,8 @@ const createMockContext = (overrides = {}) => ({
     trace: jest.fn(),
     fatal: jest.fn(),
     silent: jest.fn(),
-    level: 'info',
-    child: () => createMockContext().logger,
+    level: 'info' as const,
+    child: jest.fn().mockImplementation(() => createMockContext().logger),
   },
   db: {
     verificationToken: {
@@ -88,7 +88,7 @@ describe('Auth utilities', () => {
         get: jest.fn().mockReturnValue(undefined),
       } as any);
 
-      mockJwt.verify.mockReturnValue({ userId: 'user-1' } as any);
+      mockJwt.verify.mockImplementation(() => ({ userId: 'user-1' }));
       
       // Note: This test would need the actual database context to work fully
       // For now, we're testing the token extraction logic
@@ -104,7 +104,7 @@ describe('Auth utilities', () => {
         get: jest.fn().mockReturnValue({ value: 'cookie-jwt-token' }),
       } as any);
 
-      mockJwt.verify.mockReturnValue({ userId: 'user-1' } as any);
+      mockJwt.verify.mockImplementation(() => ({ userId: 'user-1' }));
 
       await getServerAuthSession();
       
@@ -153,8 +153,8 @@ describe('Auth utilities', () => {
     it('validates code successfully', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(true);
-      mockJwt.sign.mockReturnValue('generated-jwt');
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
+      mockJwt.sign.mockImplementation(() => 'generated-jwt');
 
       const result = await validateCode({
         ctx: mockContext,
@@ -194,7 +194,7 @@ describe('Auth utilities', () => {
     it('throws error when code is invalid', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(false);
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(false));
 
       await expect(validateCode({
         ctx: mockContext,
@@ -231,8 +231,8 @@ describe('Auth utilities', () => {
     it('cleans up expired tokens before validation', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 2 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(true);
-      mockJwt.sign.mockReturnValue('generated-jwt');
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
+      mockJwt.sign.mockImplementation(() => 'generated-jwt');
 
       await validateCode({
         ctx: mockContext,
@@ -249,7 +249,7 @@ describe('Auth utilities', () => {
     it('handles database errors gracefully', async () => {
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
-      mockBcrypt.compare.mockResolvedValue(false);
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(false));
       mockContext.db.verificationToken.update.mockRejectedValue(new Error('Database error'));
 
       await expect(validateCode({
@@ -264,30 +264,30 @@ describe('Auth utilities', () => {
 
   describe('generateCode', () => {
     it('generates code with default length', async () => {
-      mockBcrypt.hash.mockResolvedValue('hashed-code');
+      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-code'));
 
       const result = await generateCode();
 
-      expect(result.code).toHaveLength(6); // Default length
-      expect(result.hashedCode).toBe('hashed-code');
-      expect(mockBcrypt.hash).toHaveBeenCalledWith(result.code, 10);
+      expect(result.readable).toHaveLength(6); // Default length
+      expect(result.hashed).toBe('hashed-code');
+      expect(mockBcrypt.hash).toHaveBeenCalledWith(result.readable, 10);
     });
 
     it('generates code with custom length', async () => {
-      mockBcrypt.hash.mockResolvedValue('hashed-custom-code');
+      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-custom-code'));
 
       const result = await generateCode(8);
 
-      expect(result.code).toHaveLength(8);
-      expect(result.hashedCode).toBe('hashed-custom-code');
+      expect(result.readable).toHaveLength(8);
+      expect(result.hashed).toBe('hashed-custom-code');
     });
 
     it('generates numeric code only', async () => {
-      mockBcrypt.hash.mockResolvedValue('hashed-numeric-code');
+      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-numeric-code'));
 
       const result = await generateCode();
 
-      expect(result.code).toMatch(/^\d+$/); // Only digits
+      expect(result.readable).toMatch(/^\d+$/); // Only digits
     });
 
     it('generates different codes on multiple calls', async () => {
@@ -298,7 +298,7 @@ describe('Auth utilities', () => {
       const result1 = await generateCode();
       const result2 = await generateCode();
 
-      expect(result1.code).not.toBe(result2.code);
+      expect(result1.readable).not.toBe(result2.readable);
     });
   });
 
@@ -348,17 +348,17 @@ describe('Auth utilities', () => {
   describe('Authentication flow integration', () => {
     it('complete authentication flow', async () => {
       // Step 1: Generate code
-      mockBcrypt.hash.mockResolvedValue('hashed-123456');
+      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-123456'));
       
       const codeResult = await generateCode();
-      expect(codeResult.code).toHaveLength(6);
-      expect(codeResult.hashedCode).toBe('hashed-123456');
+      expect(codeResult.readable).toHaveLength(6);
+      expect(codeResult.hashed).toBe('hashed-123456');
 
       // Step 2: Store token in database (simulated)
       const storedToken = {
         token: 'verification-token',
         userId: 'user-1',
-        code: codeResult.hashedCode,
+        code: codeResult.hashed,
         attempts: 0,
         lastAttemptAt: new Date(),
         expires: new Date(Date.now() + 10 * 60 * 1000),
@@ -367,12 +367,12 @@ describe('Auth utilities', () => {
       // Step 3: Validate code
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(storedToken);
-      mockBcrypt.compare.mockResolvedValue(true);
-      mockJwt.sign.mockReturnValue('final-jwt-token');
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
+      mockJwt.sign.mockImplementation(() => 'final-jwt-token');
 
       const validationResult = await validateCode({
         ctx: mockContext,
-        code: codeResult.code,
+        code: codeResult.readable,
         token: 'verification-token',
       });
 
@@ -405,7 +405,7 @@ describe('Auth utilities', () => {
       // First attempt - wrong code
       mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(tokenWithAttempts);
-      mockBcrypt.compare.mockResolvedValue(false);
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(false));
 
       await expect(validateCode({
         ctx: mockContext,
@@ -421,8 +421,8 @@ describe('Auth utilities', () => {
       // Second attempt - correct code
       const updatedToken = { ...tokenWithAttempts, attempts: 2 };
       mockContext.db.verificationToken.findUnique.mockResolvedValue(updatedToken);
-      mockBcrypt.compare.mockResolvedValue(true);
-      mockJwt.sign.mockReturnValue('success-jwt');
+      mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
+      mockJwt.sign.mockImplementation(() => 'success-jwt');
 
       const result = await validateCode({
         ctx: mockContext,
