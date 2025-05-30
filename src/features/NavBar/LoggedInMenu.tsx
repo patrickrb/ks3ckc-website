@@ -22,54 +22,69 @@ import { useAuth } from '@/hooks/useAuth';
 
 export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
-  const { account, refreshAuth } = useAuth();
+  const { account } = useAuth();
   const menuButtonBg = useColorModeValue('white', 'gray.800');
   const menuButtonColor = useColorModeValue('black', 'white');
   const menuItemColor = useColorModeValue('gray.800', 'white');
 
   const handleLogout = () => {
-    // Call refreshAuth to update auth state
-    refreshAuth();
-
     // Use window.location.href instead of router.push to force a full page reload
     window.location.href = `/logout?redirect=${APP_PATH}/login`;
   };
 
-  return (
-    rest.direction === 'row' && (
-      <Stack display={{ base: 'none', md: 'flex' }}>
-        <Menu>
-          <MenuButton as={Button} bg={menuButtonBg} color={menuButtonColor}>
-            Profile
-          </MenuButton>
-          <MenuList>
+  return rest.direction === 'row' ? (
+    <Stack display={{ base: 'none', md: 'flex' }}>
+      <Menu>
+        <MenuButton as={Button} bg={menuButtonBg} color={menuButtonColor}>
+          Profile
+        </MenuButton>
+        <MenuList>
+          <MenuGroup>
+            <MenuItem
+              color={menuItemColor}
+              onClick={() => router.push(`/app/account`)}
+            >
+              My Account
+            </MenuItem>
+          </MenuGroup>
+          {account?.authorizations.includes('ADMIN') && (
             <MenuGroup>
               <MenuItem
                 color={menuItemColor}
-                onClick={() => router.push(`/app/account`)}
+                onClick={() => router.push(`${ADMIN_PATH}/management/users`)}
               >
-                My Account
+                Admin
               </MenuItem>
             </MenuGroup>
-            {account?.authorizations.includes('ADMIN') && (
-              <MenuGroup>
-                <MenuItem
-                  color={menuItemColor}
-                  onClick={() => router.push(`${ADMIN_PATH}/management/users`)}
-                >
-                  Admin
-                </MenuItem>
-              </MenuGroup>
-            )}
-            <MenuDivider />
-            <MenuGroup>
-              <MenuItem color={menuItemColor} onClick={handleLogout}>
-                Logout
-              </MenuItem>
-            </MenuGroup>
-          </MenuList>
-        </Menu>
-      </Stack>
-    )
+          )}
+          <MenuDivider />
+          <MenuGroup>
+            <MenuItem color={menuItemColor} onClick={handleLogout}>
+              Logout
+            </MenuItem>
+          </MenuGroup>
+        </MenuList>
+      </Menu>
+    </Stack>
+  ) : (
+    <Stack spacing="1" direction="column">
+      <MenuItem
+        color={menuItemColor}
+        onClick={() => router.push(`/app/account`)}
+      >
+        My Account
+      </MenuItem>
+      {account?.authorizations.includes('ADMIN') && (
+        <MenuItem
+          color={menuItemColor}
+          onClick={() => router.push(`${ADMIN_PATH}/management/users`)}
+        >
+          Admin
+        </MenuItem>
+      )}
+      <MenuItem color={menuItemColor} onClick={handleLogout}>
+        Logout
+      </MenuItem>
+    </Stack>
   );
 };
