@@ -28,6 +28,7 @@ export const Document = ({ children }: { children: ReactNode }) => {
           name="viewport"
           content="width=device-width,initial-scale=1,viewport-fit=cover"
         />
+        <link rel="canonical" href="https://ks3ckc.org" />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
@@ -61,6 +62,50 @@ export const Document = ({ children }: { children: ReactNode }) => {
           content={theme.colors.gray?.['800']}
         />
         <meta name="theme-color" content={theme.colors.gray?.['800']} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'KS3CKC - Kansas City Amateur Radio Club',
+              alternateName: 'SecKC Amateur Radio Club',
+              url: 'https://ks3ckc.org',
+              logo: 'https://ks3ckc.org/logos/ks3ckc-logo.png',
+              description:
+                'Premier ham radio club in Kansas City offering amateur radio training, emergency communication, technical workshops, and community events.',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Kansas City',
+                addressRegion: 'MO',
+                addressCountry: 'US',
+              },
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'General Information',
+                email: 'info@ks3ckc.org',
+              },
+              sameAs: [
+                'https://groups.io/g/SecKCARC/',
+                'https://discord.gg/seckc',
+                'https://seckc.org',
+              ],
+              memberOf: {
+                '@type': 'Organization',
+                name: 'SecKC',
+                url: 'https://seckc.org',
+              },
+              keywords: [
+                'ham radio',
+                'amateur radio',
+                'Kansas City',
+                'emergency communication',
+                'radio training',
+                'KS3CKC',
+              ],
+            }),
+          }}
+        />
       </head>
       <body>
         {/* https://github.com/chakra-ui/chakra-ui/issues/7040 */}
