@@ -1,9 +1,9 @@
 -- Migration script to populate News table with hardcoded news data
--- Run this after setting up the database
+-- Run this after setting up the database and ensuring an admin user exists
 
 INSERT INTO "News" (id, "createdAt", "updatedAt", title, content, "authorId")
 SELECT 
-    'news_' || generate_random_uuid(),
+    'news_' || substring(md5(random()::text), 1, 8) || substring(md5(random()::text), 1, 16),
     CASE 
         WHEN title = 'KS3CKC Achieves New Milestone in Long-Distance Communication' THEN '2024-03-01T00:00:00.000Z'::timestamp
         WHEN title = 'Upcoming Workshop: Advanced Techniques in Radio Frequency Optimization' THEN '2024-04-15T00:00:00.000Z'::timestamp
@@ -13,11 +13,11 @@ SELECT
         WHEN title = 'KS3CKC centers a div using RDF and APRS' THEN '2025-04-07T00:00:00.000Z'::timestamp
         WHEN title = 'Monthly SECKC Meetings Will Be at a New Location' THEN '2025-05-15T00:00:00.000Z'::timestamp
         WHEN title = 'SECKC Sweep Micro-contest Winners!' THEN '2025-05-15T12:00:00.000Z'::timestamp
-    END,
-    NOW(),
+    END as "createdAt",
+    NOW() as "updatedAt",
     title,
     content,
-    (SELECT id FROM "User" WHERE email = 'admin@admin.com' LIMIT 1)
+    (SELECT id FROM "User" WHERE email = 'admin@admin.com' LIMIT 1) as "authorId"
 FROM (VALUES 
     ('KS3CKC Achieves New Milestone in Long-Distance Communication', 'The KS3CKC Ham Radio Club recently set a new record in long-distance communication, reaching an amateur radio operator in a remote location over 8,000 miles away. This achievement showcases the club''s commitment to advancing radio communication technologies.'),
     ('Upcoming Workshop: Advanced Techniques in Radio Frequency Optimization', 'Join us for an in-depth workshop on advanced radio frequency optimization techniques. The workshop, led by expert members of KS3CKC, will cover new strategies for enhancing signal strength and clarity.'),
@@ -31,3 +31,13 @@ FROM (VALUES
 WHERE NOT EXISTS (
     SELECT 1 FROM "News" WHERE title = news_data.title
 );
+
+-- Verify the migration worked
+SELECT 
+    id, 
+    title, 
+    LEFT(content, 50) || '...' as content_preview,
+    "createdAt",
+    "authorId"
+FROM "News" 
+ORDER BY "createdAt" DESC;

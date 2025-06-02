@@ -9,9 +9,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from '@/server/config/trpc';
+import { NewsWithAuthor } from '@/types/news';
 
 // Helper function to ensure author properties are properly typed
-const processNewsWithAuthor = (news: any) => {
+const processNewsWithAuthor = (news: any): NewsWithAuthor => {
   if (news && news.author) {
     return {
       ...news,
@@ -37,11 +38,11 @@ const processNewsWithAuthor = (news: any) => {
       },
     };
   }
-  return news;
+  return news as NewsWithAuthor;
 };
 
 // Helper function to process a list of news entries
-const processNewsListWithAuthor = (newsList: any[]) => {
+const processNewsListWithAuthor = (newsList: any[]): NewsWithAuthor[] => {
   return newsList.map(processNewsWithAuthor);
 };
 
