@@ -5,6 +5,7 @@ import React from 'react';
 import { Box, Container, Heading, Stack, Tag, Text, Link as ChakraLink, Button } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
 
+import { env } from '@/env.mjs';
 import { BlogListEntry } from '@/features/blogs/BlogListEntry';
 import { BlogListSkeleton } from '@/features/blogs/BlogListSkeleton';
 import { trpc } from '@/lib/trpc/client';
@@ -33,7 +34,7 @@ const ArticleList = () => {
       <Heading as="h1">Blog entries</Heading>
       
       {/* Debug button to test loading state */}
-      {process.env.NODE_ENV === 'development' && (
+      {env.NEXT_PUBLIC_NODE_ENV === 'development' && (
         <Button 
           onClick={() => blogs.refetch()} 
           size="sm" 
