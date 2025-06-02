@@ -3,12 +3,7 @@ import React from 'react';
 import {
   Button,
   ButtonGroup,
-  FormControl,
-  FormLabel,
   HStack,
-  Input,
-  Switch,
-  Textarea,
   VStack,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
@@ -16,9 +11,9 @@ import { isEmail, isMaxLength, isMinLength, isRequired } from '@formiz/validatio
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import { FieldBooleanCheckbox } from '@/components/FieldBooleanCheckbox';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldTextarea } from '@/components/FieldTextarea';
-import { FieldSelect } from '@/components/FieldSelect';
 
 import { EventFormFields } from './schemas';
 
@@ -144,16 +139,12 @@ export const EventForm = ({
             rows={4}
           />
 
-          <FormControl display="flex" alignItems="center">
-            <FormLabel htmlFor="isActive" mb="0">
-              {t('events:form.isActive.label')}
-            </FormLabel>
-            <Switch
-              id="isActive"
-              name="isActive"
-              defaultChecked={defaultValues.isActive !== false}
-            />
-          </FormControl>
+          <FieldBooleanCheckbox
+            name="isActive"
+            label={t('events:form.isActive.label')}
+            defaultValue={defaultValues.isActive !== false}
+            optionLabel={t('events:form.isActive.label')}
+          />
 
           <ButtonGroup justifyContent="space-between" w="full">
             <Button

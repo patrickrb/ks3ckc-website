@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-import { createTRPCRouter, publicProcedure, userProcedure } from '@/server/config/trpc';
-import { userIsAdminOrSelfWithAuthorizations } from '@/features/users';
+import { createTRPCRouter, publicProcedure, protectedProcedure } from '@/server/config/trpc';
 
 // Event input validation schema
 export const zEventFormSchema = () =>
@@ -72,23 +71,13 @@ export const eventsRouter = createTRPCRouter({
   }),
 
   // Admin/Contributor - Get all events (including inactive)
-  getAll: userProcedure
+  getAll: protectedProcedure({ authorizations: ['ADMIN', 'CONTRIBUTOR'] })
     .input(
       z.object({
         includeInactive: z.boolean().default(false),
       })
     )
     .query(async ({ ctx, input }) => {
-      // Check if user has permission to manage events
-      const hasPermission = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN', 'CONTRIBUTOR'],
-      });
-      
-      if (!hasPermission) {
-        throw new Error('Unauthorized');
-      }
-
       const whereClause = input.includeInactive ? {} : { isActive: true };
 
       return ctx.db.event.findMany({
@@ -109,18 +98,9 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   // Admin/Contributor - Get single event by ID
-  getById: userProcedure
+  getById: protectedProcedure({ authorizations: ['ADMIN', 'CONTRIBUTOR'] })
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const hasPermission = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN', 'CONTRIBUTOR'],
-      });
-      
-      if (!hasPermission) {
-        throw new Error('Unauthorized');
-      }
-
       const event = await ctx.db.event.findUnique({
         where: {
           id: input.id,
@@ -144,18 +124,9 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   // Admin/Contributor - Create new event
-  create: userProcedure
+  create: protectedProcedure({ authorizations: ['ADMIN', 'CONTRIBUTOR'] })
     .input(zEventFormSchema())
     .mutation(async ({ ctx, input }) => {
-      const hasPermission = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN', 'CONTRIBUTOR'],
-      });
-      
-      if (!hasPermission) {
-        throw new Error('Unauthorized');
-      }
-
       return ctx.db.event.create({
         data: {
           ...input,
@@ -174,7 +145,7 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   // Admin/Contributor - Update existing event
-  update: userProcedure
+  update: protectedProcedure({ authorizations: ['ADMIN', 'CONTRIBUTOR'] })
     .input(
       z.object({
         id: z.string(),
@@ -182,15 +153,6 @@ export const eventsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const hasPermission = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN', 'CONTRIBUTOR'],
-      });
-      
-      if (!hasPermission) {
-        throw new Error('Unauthorized');
-      }
-
       // Check if event exists
       const existingEvent = await ctx.db.event.findUnique({
         where: { id: input.id },
@@ -202,11 +164,7 @@ export const eventsRouter = createTRPCRouter({
       }
 
       // Only allow editing own events unless user is admin
-      const isAdmin = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN'],
-      });
-
+      const isAdmin = ctx.user.authorizations.includes('ADMIN');
       if (!isAdmin && existingEvent.authorId !== ctx.user.id) {
         throw new Error('You can only edit your own events');
       }
@@ -229,18 +187,9 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   // Admin - Delete event (only admins can delete)
-  delete: userProcedure
+  delete: protectedProcedure({ authorizations: ['ADMIN'] })
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const isAdmin = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN'],
-      });
-      
-      if (!isAdmin) {
-        throw new Error('Only admins can delete events');
-      }
-
       // Check if event exists
       const existingEvent = await ctx.db.event.findUnique({
         where: { id: input.id },
@@ -259,18 +208,9 @@ export const eventsRouter = createTRPCRouter({
     }),
 
   // Admin/Contributor - Toggle event active status
-  toggleActive: userProcedure
+  toggleActive: protectedProcedure({ authorizations: ['ADMIN', 'CONTRIBUTOR'] })
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const hasPermission = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN', 'CONTRIBUTOR'],
-      });
-      
-      if (!hasPermission) {
-        throw new Error('Unauthorized');
-      }
-
       const existingEvent = await ctx.db.event.findUnique({
         where: { id: input.id },
         select: { id: true, isActive: true, authorId: true },
@@ -281,11 +221,7 @@ export const eventsRouter = createTRPCRouter({
       }
 
       // Only allow toggling own events unless user is admin
-      const isAdmin = userIsAdminOrSelfWithAuthorizations({
-        user: ctx.user,
-        authorizations: ['ADMIN'],
-      });
-
+      const isAdmin = ctx.user.authorizations.includes('ADMIN');
       if (!isAdmin && existingEvent.authorId !== ctx.user.id) {
         throw new Error('You can only toggle your own events');
       }

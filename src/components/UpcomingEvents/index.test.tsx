@@ -16,6 +16,36 @@ jest.mock('@chakra-ui/react', () => ({
   useColorModeValue: (light: any, dark: any) => light,
 }));
 
+// Mock tRPC
+jest.mock('@/lib/trpc/client', () => ({
+  api: {
+    events: {
+      getUpcoming: {
+        useQuery: () => ({
+          data: [
+            {
+              id: '1',
+              name: 'Test Event',
+              date: new Date('2025-06-10'),
+              location: 'Test Location',
+              isActive: true,
+            }
+          ],
+          isLoading: false,
+          isError: false,
+        }),
+      },
+      getPast: {
+        useQuery: () => ({
+          data: [],
+          isLoading: false,
+          isError: false,
+        }),
+      },
+    },
+  },
+}));
+
 describe('UpcomingEvents', () => {
   it('renders without crashing', () => {
     expect(() => {
@@ -27,6 +57,13 @@ describe('UpcomingEvents', () => {
     render(<UpcomingEvents />);
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
   });
+
+  it('displays events from the database', () => {
+    render(<UpcomingEvents />);
+    expect(screen.getByText('Test Event')).toBeInTheDocument();
+    expect(screen.getByText('Test Location')).toBeInTheDocument();
+  });
+});
 
   it('renders Google Maps iframes for events with locations', () => {
     render(<UpcomingEvents />);
