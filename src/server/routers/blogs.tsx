@@ -201,7 +201,7 @@ export const blogsRouter = createTRPCRouter({
       };
     }),
 
-  create: protectedProcedure({ authorizations: ['ADMIN'] })
+  create: protectedProcedure({ authorizations: ['CONTRIBUTOR', 'ADMIN'] })
     .meta({
       openapi: {
         method: 'POST',
@@ -245,7 +245,7 @@ export const blogsRouter = createTRPCRouter({
       }
     }),
 
-  updateById: protectedProcedure({ authorizations: ['ADMIN'] })
+  updateById: protectedProcedure({ authorizations: ['CONTRIBUTOR', 'ADMIN'] })
     .meta({
       openapi: {
         method: 'PUT',

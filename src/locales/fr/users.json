@@ -56,7 +56,8 @@
       "label": "Autorisations",
       "options": {
         "ADMIN": "Administrateur",
-        "APP": "Application"
+        "APP": "Application",
+        "CONTRIBUTOR": "Contributeur"
       },
       "required": "Au moins une autorisation est requise"
     },

@@ -51,6 +51,7 @@
       "required": "At least one authorization is required",
       "options": {
         "APP": "App",
+        "CONTRIBUTOR": "Contributor",
         "ADMIN": "Admin"
       }
     },
