@@ -1,6 +1,21 @@
--- Migration script to populate News table with hardcoded news data
+-- Migration script to create News table and populate with hardcoded news data
 -- Run this after setting up the database and ensuring an admin user exists
 
+-- Create News table if it doesn't exist
+CREATE TABLE IF NOT EXISTS "News" (
+    id TEXT NOT NULL PRIMARY KEY,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    "authorId" TEXT NOT NULL,
+    CONSTRAINT "News_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- Create index on authorId if it doesn't exist
+CREATE INDEX IF NOT EXISTS "News_authorId_idx" ON "News"("authorId");
+
+-- Insert hardcoded news data
 INSERT INTO "News" (id, "createdAt", "updatedAt", title, content, "authorId")
 SELECT 
     'news_' || substring(md5(random()::text), 1, 8) || substring(md5(random()::text), 1, 16),
