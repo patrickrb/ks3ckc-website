@@ -9,10 +9,12 @@
     "back": "Back",
     "activate": "Activate",
     "cancel": "Cancel",
+    "create": "Create",
     "deactivate": "Deactivate",
     "delete": "Delete",
     "edit": "Edit",
-    "save": "Save"
+    "save": "Save",
+    "update": "Update"
   },
   "feedbacks": {
     "updateSuccess": {

@@ -35,5 +35,5 @@
     ".next/types/**/*.ts",
     "scripts/.openapi.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "prisma/seed"]
 }
