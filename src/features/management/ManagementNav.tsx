@@ -2,7 +2,7 @@ import React from 'react';
 
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuFileEdit, LuUsers } from 'react-icons/lu';
+import { LuCalendar, LuFileEdit, LuUsers } from 'react-icons/lu';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
 import { LinkAdmin } from '@/features/admin/LinkAdmin';
@@ -30,6 +30,14 @@ export const AdminNav = () => {
           icon={LuFileEdit}
         >
           Blogs
+        </NavItem>
+        <NavItem
+          as={LinkAdmin}
+          href="/management/events"
+          isActive={isActive(`${ADMIN_PATH}/management/events`)}
+          icon={LuCalendar}
+        >
+          Events
         </NavItem>
       </NavGroup>
     </Nav>

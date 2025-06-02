@@ -3,6 +3,7 @@ import { createUsers } from 'prisma/seed/models/user';
 import { prisma } from 'prisma/seed/utils';
 
 import { createBlogEntries } from './models/blog';
+import { createEventEntries } from './models/events';
 import { createNewsEntries } from './models/news';
 
 async function main() {
@@ -10,6 +11,7 @@ async function main() {
   await createUsers();
   await createBlogEntries();
   await createNewsEntries();
+  await createEventEntries();
 }
 
 main()
