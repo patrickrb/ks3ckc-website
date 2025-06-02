@@ -1,5 +1,28 @@
 -- SQL Migration Script: Migrate Hardcoded Events to Database
--- Run this script after the Prisma schema has been deployed to add the hardcoded events
+-- Run this script to create the Event table and populate it with hardcoded events
+
+-- Create the Event table if it doesn't exist
+CREATE TABLE IF NOT EXISTS "Event" (
+  "id" TEXT NOT NULL PRIMARY KEY,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL,
+  "name" TEXT NOT NULL,
+  "date" TIMESTAMP(3) NOT NULL,
+  "startTime" TEXT,
+  "endTime" TEXT,
+  "location" TEXT,
+  "address" TEXT,
+  "mapUrl" TEXT,
+  "embedMapUrl" TEXT,
+  "description" TEXT,
+  "isActive" BOOLEAN NOT NULL DEFAULT true,
+  "authorId" TEXT NOT NULL,
+  CONSTRAINT "Event_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS "Event_authorId_idx" ON "Event"("authorId");
+CREATE INDEX IF NOT EXISTS "Event_date_idx" ON "Event"("date");
 
 -- First, ensure we have an admin user to associate events with
 -- This script assumes there's an admin user with email 'admin@admin.com'
