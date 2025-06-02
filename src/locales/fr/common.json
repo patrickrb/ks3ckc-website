@@ -8,11 +8,13 @@
   "actions": {
     "activate": "Activer",
     "cancel": "Annuler",
+    "create": "Créer",
     "deactivate": "Désactiver",
     "delete": "Supprimer",
     "edit": "Modifier",
     "back": "Retour",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "update": "Mettre à jour"
   },
   "feedbacks": {
     "updateSuccess": {

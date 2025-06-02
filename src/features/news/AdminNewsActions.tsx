@@ -26,7 +26,7 @@ export const AdminNewsActions = ({ newsItem }: AdminNewsActionsProps) => {
 
   const newsRemove = trpc.news.removeById.useMutation({
     onSuccess: () => {
-      trpcUtils.news.getAllForAdmin.invalidate();
+      trpcUtils.news.getAllForAdmin?.invalidate();
     },
     onError: () => {
       toastError({

@@ -30,7 +30,7 @@ export const NewsForm = () => {
         label="Content"
         required="Content is required"
         placeholder="Write your news content here..."
-        rows={6}
+        textareaProps={{ rows: 6 }}
       />
     </Stack>
   );

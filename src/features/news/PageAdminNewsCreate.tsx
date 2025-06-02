@@ -1,17 +1,18 @@
 import React from 'react';
 
-import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
+import { Button, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminBackButton } from '@/features/admin/AdminBackButton';
+import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
+  AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
-import { AdminBackButton } from '@/features/admin/AdminBackButton';
-import { AdminNav } from '@/features/management/ManagementNav';
 import { trpc } from '@/lib/trpc/client';
 
 import { NewsForm, NewsFormFields, NewsSchema } from './NewsForm';
@@ -19,7 +20,6 @@ import { NewsForm, NewsFormFields, NewsSchema } from './NewsForm';
 export default function PageAdminNewsCreate() {
   const { t } = useTranslation(['common']);
   const router = useRouter();
-  const form = useForm<NewsFormFields>({ subscribe: false });
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -27,51 +27,49 @@ export default function PageAdminNewsCreate() {
   const createNews = trpc.news.create.useMutation({
     onSuccess: () => {
       toastSuccess({
-        title: t('common:feedbacks.createSuccess.title'),
+        title: t('common:feedbacks.updateSuccess.title'),
       });
       router.back();
     },
     onError: () => {
       toastError({
-        title: t('common:feedbacks.createError.title'),
+        title: t('common:feedbacks.updateError.title'),
       });
     },
   });
 
-  const submitCreateNews = async (values: NewsFormFields) => {
-    const validatedData = NewsSchema.parse(values);
-    await createNews.mutateAsync(validatedData);
-  };
+  const form = useForm<NewsFormFields>({
+    onValidSubmit: async (values) => {
+      const validatedData = NewsSchema.parse(values);
+      await createNews.mutateAsync(validatedData);
+    },
+  });
 
   return (
-    <AdminLayoutPage nav={<AdminNav />}>
-      <AdminLayoutPageContent>
-        <AdminBackButton withConfirm={form.isValid && form.values}>
-          {t('common:actions.cancel')}
-        </AdminBackButton>
-        <Heading size="md" mb="4">
-          Create News Entry
-        </Heading>
-        <Formiz
-          id="create-news-form"
-          onValidSubmit={submitCreateNews}
-          connect={form}
-        >
-          <form noValidate onSubmit={form.submit}>
-            <NewsForm />
-            <ButtonGroup mt={4} w="full">
+    <Formiz connect={form} autoForm>
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={!form.isPristine} />
               <Button
                 type="submit"
                 variant="@primary"
-                isLoading={createNews.isLoading}
-                isDisabled={!form.isValid}
+                isLoading={createNews.isLoading || createNews.isSuccess}
+                isDisabled={!form.isValid && form.isSubmitted}
               >
                 {t('common:actions.create')}
               </Button>
-            </ButtonGroup>
-          </form>
-        </Formiz>
-      </AdminLayoutPageContent>
-    </AdminLayoutPage>
+            </>
+          }
+        >
+          <Heading size="sm">Create News Entry</Heading>
+        </AdminLayoutPageTopBar>
+        <AdminLayoutPageContent>
+          <NewsForm />
+        </AdminLayoutPageContent>
+      </AdminLayoutPage>
+    </Formiz>
   );
 }

@@ -108,15 +108,14 @@ export default function PageAdminNews() {
                   </DataListCell>
                   <DataListCell>
                     <Text fontSize="sm" color="text-dimmed">
+                      {newsItem.author?.name || newsItem.author?.email || 'Unknown'}
+                    </Text>
+                    <Text fontSize="xs" color="text-dimmed">
                       <Trans
                         t={t}
-                        i18nKey="users:data.createdBy"
-                        values={{
-                          name: newsItem.author?.name || newsItem.author?.email || 'Unknown',
-                          date: newsItem.createdAt,
-                        }}
+                        i18nKey="users:data.createdAt.ago"
                         components={{
-                          DateAgo: <DateAgo date={newsItem.createdAt} />,
+                          dateAgo: <DateAgo date={newsItem.createdAt} />,
                         }}
                       />
                     </Text>
@@ -128,7 +127,7 @@ export default function PageAdminNews() {
               ))}
             {news.hasNextPage && (
               <DataListRow>
-                <DataListCell colSpan={3}>
+                <DataListCell w="auto">
                   <Button
                     size="sm"
                     variant="ghost"
@@ -137,6 +136,12 @@ export default function PageAdminNews() {
                   >
                     Load more
                   </Button>
+                </DataListCell>
+                <DataListCell>
+                  {/* Optional: Add load more info here like other admin pages */}
+                </DataListCell>
+                <DataListCell>
+                  {/* Empty cell to maintain layout */}
                 </DataListCell>
               </DataListRow>
             )}
