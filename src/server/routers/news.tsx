@@ -47,7 +47,7 @@ const processNewsListWithAuthor = (newsList: any[]): NewsWithAuthor[] => {
 };
 
 export const newsRouter = createTRPCRouter({
-  getAll: publicProcedure
+  getAll: publicProcedure()
     .meta({
       openapi: {
         method: 'GET',
