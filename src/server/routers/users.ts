@@ -33,6 +33,7 @@ export const usersRouter = createTRPCRouter({
           callsign: true, 
           dmrid: true,
           notes: true,
+          image: true,
         })),
         nextCursor: z.string().cuid().optional(),
         total: z.number(),
@@ -81,6 +82,7 @@ export const usersRouter = createTRPCRouter({
             callsign: true,
             dmrid: true,
             notes: true,
+            image: true,
           },
         }),
       ]);
