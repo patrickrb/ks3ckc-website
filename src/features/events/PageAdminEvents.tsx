@@ -15,25 +15,6 @@ import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuPlus, LuCalendar } from 'react-icons/lu';
 
-interface Event {
-  id: string;
-  name: string;
-  date: Date;
-  startTime?: string;
-  endTime?: string;
-  location?: string;
-  address?: string;
-  mapUrl?: string;
-  embedMapUrl?: string;
-  description?: string;
-  isActive: boolean;
-  createdAt: Date;
-  author: {
-    name?: string;
-    callsign?: string;
-  };
-}
-
 import {
   DataList,
   DataListCell,
@@ -115,7 +96,7 @@ export default function PageAdminEvents() {
                 </Text>
               </DataListEmptyState>
             )}
-            {events.data?.map((event: Event) => (
+            {events.data?.map((event) => (
               <DataListRow as={LinkBox} key={event.id} withHover>
                 <DataListCell>
                   <HStack maxW="full">
