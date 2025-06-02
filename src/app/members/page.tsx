@@ -3,6 +3,7 @@
 import React from 'react';
 
 import {
+  Avatar,
   Box,
   Card,
   CardBody,
@@ -20,6 +21,7 @@ import {
 
 import { SlideIn } from '@/components/SlideIn';
 import { Viewport } from '@/components/Viewport';
+import { getAvatarUrl, getAvatarFallbackName } from '@/lib/avatar';
 import { trpc } from '@/lib/trpc/client';
 
 export default function MembersPage() {
@@ -53,14 +55,21 @@ export default function MembersPage() {
                   <Card key={member.id} bg={cardBg} shadow="md" borderRadius="lg">
                     <CardBody>
                       <Stack spacing={3}>
-                        <Flex align="center">
-                          <Heading size="md">{member.name}</Heading>
-                          <Spacer />
-                          {member.callsign && (
-                            <Text fontWeight="bold" color="blue.500">
-                              {member.callsign}
-                            </Text>
-                          )}
+                        <Flex align="center" mb={2}>
+                          <Avatar 
+                            size="md" 
+                            name={getAvatarFallbackName(member.name, null)} 
+                            src={getAvatarUrl(member.image, getAvatarFallbackName(member.name, null))}
+                            mr={3}
+                          />
+                          <Box flex={1}>
+                            <Heading size="md">{member.name}</Heading>
+                            {member.callsign && (
+                              <Text fontWeight="bold" color="blue.500" fontSize="sm">
+                                {member.callsign}
+                              </Text>
+                            )}
+                          </Box>
                         </Flex>
                         
                         {member.dmrid && (
