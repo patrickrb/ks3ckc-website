@@ -41,6 +41,7 @@ export const AdminNav = () => {
           Events
         </NavItem>
         <NavItem
+          as={LinkAdmin}
           href="/management/news"
           isActive={isActive(`${ADMIN_PATH}/management/news`)}
           icon={LuNewspaper}
