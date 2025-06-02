@@ -10,7 +10,7 @@ import {
 } from '@/features/admin/AdminLayoutPage';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminNav } from '@/features/management/ManagementNav';
-import { api } from '@/lib/trpc/client';
+import { trpc } from '@/lib/trpc/client';
 
 import { EventForm } from './EventForm';
 import { EventFormFields } from './schemas';
@@ -19,7 +19,7 @@ export default function PageAdminEventCreate() {
   const { t } = useTranslation(['common', 'events']);
   const router = useRouter();
 
-  const createEvent = api.events.create.useMutation({
+  const createEvent = trpc.events.create.useMutation({
     onSuccess: () => {
       router.push('/admin/management/events');
     },
@@ -37,9 +37,7 @@ export default function PageAdminEventCreate() {
     <AdminLayoutPage>
       <AdminLayoutPageContent>
         <Stack spacing={4}>
-          <AdminBackButton href="/admin/management/events">
-            {t('events:management.backToEvents', { defaultValue: 'Back to Events' })}
-          </AdminBackButton>
+          <AdminBackButton />
 
           <Heading size="md">
             {t('events:management.create.title', { defaultValue: 'Create Event' })}

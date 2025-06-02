@@ -1,15 +1,29 @@
 import { Box, Heading, Link, Text, useColorModeValue } from '@chakra-ui/react';
-import { api } from '@/lib/trpc/client';
+import { trpc } from '@/lib/trpc/client';
+
+interface Event {
+  id: string;
+  name: string;
+  date: Date;
+  startTime?: string;
+  endTime?: string;
+  location?: string;
+  address?: string;
+  mapUrl?: string;
+  embedMapUrl?: string;
+  description?: string;
+  isActive: boolean;
+}
 
 export default function UpcomingEvents() {
   const cardBg = useColorModeValue('white', 'gray.800');
   const mutedText = useColorModeValue('gray.500', 'gray.400');
 
   // Fetch upcoming and past events from the database
-  const { data: upcomingEvents = [], isLoading: isLoadingUpcoming } = api.events.getUpcoming.useQuery();
-  const { data: pastEvents = [], isLoading: isLoadingPast } = api.events.getPast.useQuery();
+  const { data: upcomingEvents = [], isLoading: isLoadingUpcoming } = trpc.events.getUpcoming.useQuery();
+  const { data: pastEvents = [], isLoading: isLoadingPast } = trpc.events.getPast.useQuery();
 
-  const renderEventDetails = (event: any) => {
+  const renderEventDetails = (event: Event) => {
     if (!event.startTime && !event.location && !event.description) {
       return null;
     }
@@ -64,7 +78,7 @@ export default function UpcomingEvents() {
         Upcoming Events
       </Heading>
       {upcomingEvents.length > 0 ? (
-        upcomingEvents.map((event) => (
+        upcomingEvents.map((event: Event) => (
           <Box key={event.id} bg={cardBg} p={4} borderRadius="md" mb={4}>
             <Heading as="h3" size="md" mb={2}>
               {event.name}
@@ -89,7 +103,7 @@ export default function UpcomingEvents() {
           <Heading as="h2" size="lg" ms={2} mb={4} mt={8}>
             Past Events
           </Heading>
-          {pastEvents.map((event) => (
+          {pastEvents.map((event: Event) => (
             <Box
               key={event.id}
               bg={cardBg}

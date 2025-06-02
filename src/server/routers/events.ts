@@ -19,7 +19,17 @@ export const zEventFormSchema = () =>
 
 export const eventsRouter = createTRPCRouter({
   // Public - Get all active upcoming events
-  getUpcoming: publicProcedure.query(async ({ ctx }) => {
+  getUpcoming: publicProcedure()
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/events/upcoming',
+        tags: ['events'],
+      },
+    })
+    .input(z.void())
+    .output(z.array(z.any()))
+    .query(async ({ ctx }) => {
     const now = new Date();
     
     return ctx.db.event.findMany({
@@ -45,7 +55,17 @@ export const eventsRouter = createTRPCRouter({
   }),
 
   // Public - Get all active past events
-  getPast: publicProcedure.query(async ({ ctx }) => {
+  getPast: publicProcedure()
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/events/past',
+        tags: ['events'],
+      },
+    })
+    .input(z.void())
+    .output(z.array(z.any()))
+    .query(async ({ ctx }) => {
     const now = new Date();
     
     return ctx.db.event.findMany({

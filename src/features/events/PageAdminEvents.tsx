@@ -15,6 +15,25 @@ import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuPlus, LuCalendar } from 'react-icons/lu';
 
+interface Event {
+  id: string;
+  name: string;
+  date: Date;
+  startTime?: string;
+  endTime?: string;
+  location?: string;
+  address?: string;
+  mapUrl?: string;
+  embedMapUrl?: string;
+  description?: string;
+  isActive: boolean;
+  createdAt: Date;
+  author: {
+    name?: string;
+    callsign?: string;
+  };
+}
+
 import {
   DataList,
   DataListCell,
@@ -33,7 +52,7 @@ import {
 } from '@/features/admin/AdminLayoutPage';
 import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminNav } from '@/features/management/ManagementNav';
-import { api } from '@/lib/trpc/client';
+import { trpc } from '@/lib/trpc/client';
 
 // import { AdminEventActions } from './AdminEventActions';
 
@@ -41,7 +60,7 @@ export default function PageAdminEvents() {
   const { t } = useTranslation(['common', 'events']);
   const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
 
-  const events = api.events.getAll.useQuery(
+  const events = trpc.events.getAll.useQuery(
     { includeInactive: true },
     {
       staleTime: 0,
@@ -96,7 +115,7 @@ export default function PageAdminEvents() {
                 </Text>
               </DataListEmptyState>
             )}
-            {events.data?.map((event) => (
+            {events.data?.map((event: Event) => (
               <DataListRow as={LinkBox} key={event.id} withHover>
                 <DataListCell>
                   <HStack maxW="full">
@@ -104,32 +123,32 @@ export default function PageAdminEvents() {
                       as={LinkAdmin}
                       href={`/admin/management/events/${event.id}`}
                     >
-                      <DataListText
-                        title={event.name}
-                        subtitle={
-                          <HStack spacing={2}>
-                            <Text fontSize="sm" color="gray.500">
-                              {new Date(event.date).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
+                      <DataListText fontWeight="bold">
+                        {event.name}
+                      </DataListText>
+                      <DataListText color="text-dimmed">
+                        <HStack spacing={2}>
+                          <Text fontSize="sm">
+                            {new Date(event.date).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </Text>
+                          {!event.isActive && (
+                            <Badge colorScheme="gray" size="sm">
+                              {t('events:status.inactive', { defaultValue: 'Inactive' })}
+                            </Badge>
+                          )}
+                          {event.location && (
+                            <Text fontSize="sm">
+                              📍 {event.location}
                             </Text>
-                            {!event.isActive && (
-                              <Badge colorScheme="gray" size="sm">
-                                {t('events:status.inactive', { defaultValue: 'Inactive' })}
-                              </Badge>
-                            )}
-                            {event.location && (
-                              <Text fontSize="sm" color="gray.500">
-                                📍 {event.location}
-                              </Text>
-                            )}
-                          </HStack>
-                        }
-                      />
+                          )}
+                        </HStack>
+                      </DataListText>
                     </LinkOverlay>
                   </HStack>
                 </DataListCell>
@@ -139,7 +158,7 @@ export default function PageAdminEvents() {
                     {event.author.name || event.author.callsign}
                   </Text>
                 </DataListCell>
-                <DataListCell w="auto" isNumeric>
+                <DataListCell w="auto">
                   <DateAgo date={event.createdAt} />
                 </DataListCell>
                 {/* <DataListCell>

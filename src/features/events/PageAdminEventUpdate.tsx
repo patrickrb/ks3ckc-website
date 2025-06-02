@@ -10,7 +10,7 @@ import {
 } from '@/features/admin/AdminLayoutPage';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminNav } from '@/features/management/ManagementNav';
-import { api } from '@/lib/trpc/client';
+import { trpc } from '@/lib/trpc/client';
 
 import { EventForm } from './EventForm';
 import { EventFormFields } from './schemas';
@@ -27,11 +27,11 @@ export default function PageAdminEventUpdate({
   const { t } = useTranslation(['common', 'events']);
   const router = useRouter();
 
-  const { data: event, isLoading } = api.events.getById.useQuery({
+  const { data: event, isLoading } = trpc.events.getById.useQuery({
     id: params.id,
   });
 
-  const updateEvent = api.events.update.useMutation({
+  const updateEvent = trpc.events.update.useMutation({
     onSuccess: () => {
       router.push('/admin/management/events');
     },
@@ -53,9 +53,7 @@ export default function PageAdminEventUpdate({
       <AdminLayoutPage>
         <AdminLayoutPageContent>
           <Stack spacing={4}>
-            <AdminBackButton href="/admin/management/events">
-              {t('events:management.backToEvents', { defaultValue: 'Back to Events' })}
-            </AdminBackButton>
+            <AdminBackButton />
             <Heading size="md">
               {t('common:loading', { defaultValue: 'Loading...' })}
             </Heading>
@@ -70,9 +68,7 @@ export default function PageAdminEventUpdate({
       <AdminLayoutPage>
         <AdminLayoutPageContent>
           <Stack spacing={4}>
-            <AdminBackButton href="/admin/management/events">
-              {t('events:management.backToEvents', { defaultValue: 'Back to Events' })}
-            </AdminBackButton>
+            <AdminBackButton />
             <Heading size="md">
               {t('events:errors.notFound', { defaultValue: 'Event not found' })}
             </Heading>
@@ -86,9 +82,7 @@ export default function PageAdminEventUpdate({
     <AdminLayoutPage>
       <AdminLayoutPageContent>
         <Stack spacing={4}>
-          <AdminBackButton href="/admin/management/events">
-            {t('events:management.backToEvents', { defaultValue: 'Back to Events' })}
-          </AdminBackButton>
+          <AdminBackButton />
 
           <Heading size="md">
             {t('events:management.update.title', { defaultValue: 'Edit Event' })}: {event.name}

@@ -33,7 +33,6 @@ export const EventForm = ({
   const { t } = useTranslation(['common', 'events']);
 
   const form = useForm({
-    subscribe: false,
     onValidSubmit: (values) => {
       onSubmit({
         ...values,
@@ -59,15 +58,15 @@ export const EventForm = ({
             required={t('events:form.name.required')}
             validations={[
               {
-                rule: isRequired(),
+                handler: isRequired(),
                 message: t('events:form.name.required'),
               },
               {
-                rule: isMinLength(2),
+                handler: isMinLength(2),
                 message: t('events:form.name.tooShort'),
               },
               {
-                rule: isMaxLength(100),
+                handler: isMaxLength(100),
                 message: t('events:form.name.tooLong'),
               },
             ]}
@@ -81,7 +80,7 @@ export const EventForm = ({
             required={t('events:form.date.required')}
             validations={[
               {
-                rule: isRequired(),
+                handler: isRequired(),
                 message: t('events:form.date.required'),
               },
             ]}
@@ -136,7 +135,7 @@ export const EventForm = ({
             label={t('events:form.description.label')}
             placeholder={t('events:form.description.placeholder')}
             defaultValue={defaultValues.description}
-            rows={4}
+            textareaProps={{ rows: 4 }}
           />
 
           <FieldBooleanCheckbox
@@ -158,7 +157,6 @@ export const EventForm = ({
               type="submit"
               colorScheme="brand"
               isLoading={isLoading}
-              loadingText={t('common:loading')}
             >
               {t('common:actions.save')}
             </Button>

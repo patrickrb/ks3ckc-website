@@ -18,7 +18,7 @@ jest.mock('@chakra-ui/react', () => ({
 
 // Mock tRPC
 jest.mock('@/lib/trpc/client', () => ({
-  api: {
+  trpc: {
     events: {
       getUpcoming: {
         useQuery: () => ({
@@ -55,7 +55,7 @@ describe('UpcomingEvents', () => {
 
   it('displays upcoming events section', () => {
     render(<UpcomingEvents />);
-    expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
+    expect(screen.getByText('Upcoming events')).toBeInTheDocument();
   });
 
   it('displays events from the database', () => {
@@ -63,7 +63,6 @@ describe('UpcomingEvents', () => {
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(screen.getByText('Test Location')).toBeInTheDocument();
   });
-});
 
   it('renders Google Maps iframes for events with locations', () => {
     render(<UpcomingEvents />);
