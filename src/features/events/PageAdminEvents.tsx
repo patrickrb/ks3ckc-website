@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Badge,
   Button,
   Flex,
   HStack,
@@ -9,11 +10,10 @@ import {
   LinkOverlay,
   Stack,
   Text,
-  Badge,
 } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
-import { LuPlus, LuCalendar } from 'react-icons/lu';
+import { LuCalendar, LuPlus } from 'react-icons/lu';
 
 import {
   DataList,
@@ -49,13 +49,15 @@ export default function PageAdminEvents() {
   );
 
   return (
-    <AdminLayoutPage>
+    <AdminLayoutPage containerMaxWidth="container.xl" nav={<AdminNav />}>
       <AdminLayoutPageContent>
         <Stack spacing={4}>
           <HStack spacing={4} w="full">
             <Flex flex="1" direction={{ base: 'column', md: 'row' }} rowGap={2}>
               <Heading flex="1" size="md">
-                {t('events:management.title', { defaultValue: 'Events Management' })}
+                {t('events:management.title', {
+                  defaultValue: 'Events Management',
+                })}
               </Heading>
             </Flex>
             <ResponsiveIconButton
@@ -65,11 +67,11 @@ export default function PageAdminEvents() {
               size="sm"
               colorScheme="brand"
             >
-              {t('events:management.actions.create', { defaultValue: 'Create Event' })}
+              {t('events:management.actions.create', {
+                defaultValue: 'Create Event',
+              })}
             </ResponsiveIconButton>
           </HStack>
-
-          <AdminNav />
 
           {/* <SearchInput
             value={searchTerm}
@@ -81,7 +83,9 @@ export default function PageAdminEvents() {
             {events.isLoading && <DataListLoadingState />}
             {events.isError && (
               <DataListErrorState
-                title={t('events:feedbacks.loadingEventError.title', { defaultValue: 'Failed to load events' })}
+                title={t('events:feedbacks.loadingEventError.title', {
+                  defaultValue: 'Failed to load events',
+                })}
                 retry={() => events.refetch()}
               />
             )}
@@ -120,13 +124,13 @@ export default function PageAdminEvents() {
                           </Text>
                           {!event.isActive && (
                             <Badge colorScheme="gray" size="sm">
-                              {t('events:status.inactive', { defaultValue: 'Inactive' })}
+                              {t('events:status.inactive', {
+                                defaultValue: 'Inactive',
+                              })}
                             </Badge>
                           )}
                           {event.location && (
-                            <Text fontSize="sm">
-                              📍 {event.location}
-                            </Text>
+                            <Text fontSize="sm">📍 {event.location}</Text>
                           )}
                         </HStack>
                       </DataListText>
@@ -135,7 +139,9 @@ export default function PageAdminEvents() {
                 </DataListCell>
                 <DataListCell w="auto">
                   <Text fontSize="sm" color="gray.500">
-                    {t('events:management.createdBy', { defaultValue: 'Created by' })}{' '}
+                    {t('events:management.createdBy', {
+                      defaultValue: 'Created by',
+                    })}{' '}
                     {event.author.name || event.author.callsign}
                   </Text>
                 </DataListCell>
