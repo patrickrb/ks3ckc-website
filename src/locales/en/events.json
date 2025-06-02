@@ -71,6 +71,14 @@
   "feedbacks": {
     "loadingEventError": {
       "title": "Failed to load events"
+    },
+    "deleteEventError": {
+      "title": "Error deleting event",
+      "description": "Failed to delete event {{name}}"
     }
+  },
+  "deleteModal": {
+    "title": "Delete Event",
+    "message": "Are you sure you want to delete the event \"{{name}}\"? This action cannot be undone."
   }
 }

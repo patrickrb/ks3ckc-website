@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   Badge,
-  Button,
   Flex,
   HStack,
   Heading,
@@ -13,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
-import { LuCalendar, LuPlus } from 'react-icons/lu';
+import { LuPlus } from 'react-icons/lu';
 
 import {
   DataList,
@@ -26,7 +25,6 @@ import {
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
-import { SearchInput } from '@/components/SearchInput';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -35,11 +33,11 @@ import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminNav } from '@/features/management/ManagementNav';
 import { trpc } from '@/lib/trpc/client';
 
-// import { AdminEventActions } from './AdminEventActions';
+import { AdminEventActions } from './AdminEventActions';
 
 export default function PageAdminEvents() {
   const { t } = useTranslation(['common', 'events']);
-  const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
+  const [searchTerm] = useQueryState('s', { defaultValue: '' });
 
   const events = trpc.events.getAll.useQuery(
     { includeInactive: true },
@@ -72,12 +70,6 @@ export default function PageAdminEvents() {
               })}
             </ResponsiveIconButton>
           </HStack>
-
-          {/* <SearchInput
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder={t('events:management.search.placeholder', { defaultValue: 'Search events...' })}
-          /> */}
 
           <DataList>
             {events.isLoading && <DataListLoadingState />}
@@ -148,9 +140,9 @@ export default function PageAdminEvents() {
                 <DataListCell w="auto">
                   <DateAgo date={event.createdAt} />
                 </DataListCell>
-                {/* <DataListCell>
+                <DataListCell>
                   <AdminEventActions event={event} />
-                </DataListCell> */}
+                </DataListCell>
               </DataListRow>
             ))}
           </DataList>

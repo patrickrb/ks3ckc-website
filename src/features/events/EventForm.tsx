@@ -1,13 +1,8 @@
 import React from 'react';
 
-import {
-  Button,
-  ButtonGroup,
-  HStack,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, ButtonGroup, HStack, VStack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { isEmail, isMaxLength, isMinLength, isRequired } from '@formiz/validations';
+import { isMaxLength, isMinLength, isRequired } from '@formiz/validations';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -146,18 +141,10 @@ export const EventForm = ({
           />
 
           <ButtonGroup justifyContent="space-between" w="full">
-            <Button
-              variant="ghost"
-              onClick={onCancel}
-              disabled={isLoading}
-            >
+            <Button variant="ghost" onClick={onCancel} disabled={isLoading}>
               {t('common:actions.cancel')}
             </Button>
-            <Button
-              type="submit"
-              colorScheme="brand"
-              isLoading={isLoading}
-            >
+            <Button type="submit" colorScheme="brand" isLoading={isLoading}>
               {t('common:actions.save')}
             </Button>
           </ButtonGroup>
