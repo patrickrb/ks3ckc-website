@@ -56,7 +56,8 @@
       "label": "Uidhinishaji",
       "options": {
         "ADMIN": "Msimamizi",
-        "APP": "Programu"
+        "APP": "Programu",
+        "CONTRIBUTOR": "Mchangiaji"
       },
       "required": "Angalau idhini moja inahitajika"
     },
