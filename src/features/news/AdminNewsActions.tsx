@@ -7,7 +7,7 @@ import { LuMoreHorizontal, LuPenTool, LuTrash2 } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useToastError } from '@/components/Toast';
 import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { trpc } from '@/lib/trpc/client';
 
@@ -21,15 +21,11 @@ export type AdminNewsActionsProps = {
 export const AdminNewsActions = ({ newsItem }: AdminNewsActionsProps) => {
   const { t } = useTranslation(['common', 'users']);
   const router = useRouter();
-  const toastSuccess = useToastSuccess();
   const toastError = useToastError();
   const trpcUtils = trpc.useUtils();
 
   const newsRemove = trpc.news.removeById.useMutation({
     onSuccess: () => {
-      toastSuccess({
-        title: t('users:feedbacks.deleteUserSuccess.title'),
-      });
       trpcUtils.news.getAllForAdmin.invalidate();
     },
     onError: () => {
