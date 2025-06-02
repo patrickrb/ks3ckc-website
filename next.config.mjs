@@ -53,7 +53,7 @@ const config = withPWA({
           // Content Security Policy - adjust as needed based on your application's requirements
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://*; img-src 'self' data: https://*; style-src 'self' 'unsafe-inline'; font-src 'self' data:;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://*; img-src 'self' data: https://*; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://www.google.com;",
           },
           // Strict Transport Security (only in production)
           ...(process.env.NODE_ENV === 'production'
