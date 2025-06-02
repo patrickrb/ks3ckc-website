@@ -1,5 +1,4 @@
 import { Box, Heading, Link, Text, useColorModeValue } from '@chakra-ui/react';
-import { date } from 'zod';
 
 export default function RecentContacts() {
   const cardBg = useColorModeValue('white', 'gray.800');
