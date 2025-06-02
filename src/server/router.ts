@@ -3,6 +3,7 @@ import { accountRouter } from '@/server/routers/account';
 import { authRouter } from '@/server/routers/auth';
 import { blogsRouter } from '@/server/routers/blogs';
 import { eventsRouter } from '@/server/routers/events';
+import { newsRouter } from '@/server/routers/news';
 import { qsoRouter } from '@/server/routers/qso';
 import { repositoriesRouter } from '@/server/routers/repositories';
 import { usersRouter } from '@/server/routers/users';
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   qso: qsoRouter,
   blogs: blogsRouter,
   events: eventsRouter,
+  news: newsRouter,
 });
 
 // export type definition of API
