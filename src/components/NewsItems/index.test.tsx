@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import NewsItems from './index';
 
-// Mock the tRPC hook
+// Mock tRPC
 jest.mock('@/lib/trpc/client', () => ({
   trpc: {
     news: {
@@ -13,6 +13,9 @@ jest.mock('@/lib/trpc/client', () => ({
     },
   },
 }));
+
+// Get the mocked function for use in tests
+const mockUseQuery = jest.fn();
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
@@ -33,10 +36,6 @@ jest.mock('@chakra-ui/react', () => ({
   ),
   useColorModeValue: jest.fn((light, _dark) => light),
 }));
-
-import { trpc } from '@/lib/trpc/client';
-
-const mockTrpc = trpc as jest.Mocked<typeof trpc>;
 
 const mockNewsData = {
   items: [
@@ -72,10 +71,13 @@ const mockNewsData = {
 describe('NewsItems', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Set up the mock for each test
+    const { trpc } = jest.requireMock('@/lib/trpc/client');
+    trpc.news.getAll.useQuery.mockImplementation(mockUseQuery);
   });
 
   it('renders the Latest News heading', () => {
-    mockTrpc.news.getAll.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: mockNewsData,
       isLoading: false,
       error: null,
@@ -89,7 +91,7 @@ describe('NewsItems', () => {
   });
 
   it('renders news items in a grid layout', () => {
-    mockTrpc.news.getAll.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: mockNewsData,
       isLoading: false,
       error: null,
@@ -101,7 +103,7 @@ describe('NewsItems', () => {
   });
 
   it('renders news items from database', () => {
-    mockTrpc.news.getAll.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: mockNewsData,
       isLoading: false,
       error: null,
@@ -118,7 +120,7 @@ describe('NewsItems', () => {
   });
 
   it('shows loading state', () => {
-    mockTrpc.news.getAll.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: undefined,
       isLoading: true,
       error: null,
@@ -132,7 +134,7 @@ describe('NewsItems', () => {
   });
 
   it('shows error state', () => {
-    mockTrpc.news.getAll.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: undefined,
       isLoading: false,
       error: new Error('Failed to load'),
@@ -144,7 +146,7 @@ describe('NewsItems', () => {
   });
 
   it('handles empty news data', () => {
-    mockTrpc.news.getAll.useQuery.mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: { items: [] },
       isLoading: false,
       error: null,
