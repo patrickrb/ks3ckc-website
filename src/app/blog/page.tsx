@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Box, Container, Heading, Stack, Tag, Text, Link as ChakraLink } from '@chakra-ui/react';
+import { Box, Container, Heading, Stack, Tag, Text, Link as ChakraLink, Button } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
 
 import { BlogListEntry } from '@/features/blogs/BlogListEntry';
@@ -16,11 +16,35 @@ const ArticleList = () => {
     { searchTerm, tag: tag || undefined },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      staleTime: 0, // Force fresh data to ensure loading state is visible
+      cacheTime: 0, // Don't cache results to ensure loading state shows
+      refetchOnMount: true, // Always refetch when component mounts
     }
   );
+
+  // Debug logging to verify loading state
+  console.log('Blog loading state:', { 
+    isLoading: blogs.isLoading, 
+    isFetching: blogs.isFetching,
+    hasData: !!blogs.data 
+  });
   return (
     <Container maxW={'7xl'} p="12">
       <Heading as="h1">Blog entries</Heading>
+      
+      {/* Debug button to test loading state */}
+      {process.env.NODE_ENV === 'development' && (
+        <Button 
+          onClick={() => blogs.refetch()} 
+          size="sm" 
+          colorScheme="blue" 
+          mt={2}
+          isLoading={blogs.isLoading || blogs.isFetching}
+        >
+          {blogs.isLoading || blogs.isFetching ? 'Loading...' : 'Refetch Posts (Test Loading)'}
+        </Button>
+      )}
+      
       {tag && (
         <Box mt={4}>
           <Text fontSize="sm" color="gray.600" mb={2}>
@@ -34,8 +58,8 @@ const ArticleList = () => {
           </ChakraLink>
         </Box>
       )}
-      {blogs.isLoading ? (
-        <Stack spacing={5}>
+      {blogs.isLoading || blogs.isFetching ? (
+        <Stack spacing={5} mt={8}>
           {[...Array(3)].map((_, index) => (
             <BlogListSkeleton
               key={index}
