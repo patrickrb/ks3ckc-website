@@ -1,10 +1,12 @@
 import React from 'react';
 
-import { Button, Heading } from '@chakra-ui/react';
+import { Button, Heading, SkeletonText } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { ErrorPage } from '@/components/ErrorPage';
+import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
@@ -18,23 +20,21 @@ import { trpc } from '@/lib/trpc/client';
 import { EventForm } from './EventForm';
 import { EventFormFields } from './schemas';
 
-type PageAdminEventUpdateProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default function PageAdminEventUpdate({
-  params,
-}: PageAdminEventUpdateProps) {
+export default function PageAdminEventUpdate() {
   const { t } = useTranslation(['common', 'events']);
+  const params = useParams();
   const router = useRouter();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { data: event, isLoading } = trpc.events.getById.useQuery({
-    id: params.id,
+  const {
+    data: event,
+    isLoading,
+    isError,
+    isSuccess,
+  } = trpc.events.getById.useQuery({
+    id: params?.id?.toString() ?? '',
   });
 
   const updateEvent = trpc.events.update.useMutation({
@@ -51,10 +51,26 @@ export default function PageAdminEventUpdate({
     },
   });
 
+  const isReady = !isLoading;
+
   const form = useForm<EventFormFields>({
+    ready: isReady,
+    initialValues: {
+      name: event?.name ?? '',
+      date: event?.date ?? new Date(),
+      startTime: event?.startTime ?? '',
+      endTime: event?.endTime ?? '',
+      location: event?.location ?? '',
+      address: event?.address ?? '',
+      mapUrl: event?.mapUrl ?? '',
+      embedMapUrl: event?.embedMapUrl ?? '',
+      description: event?.description ?? '',
+      isActive: event?.isActive ?? true,
+    },
     onValidSubmit: async (values) => {
+      if (!event?.id) return;
       await updateEvent.mutateAsync({
-        id: params.id,
+        id: event.id,
         data: {
           ...values,
           date: new Date(values.date),
@@ -62,32 +78,6 @@ export default function PageAdminEventUpdate({
       });
     },
   });
-
-  if (isLoading) {
-    return (
-      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar leftActions={<AdminBackButton />}>
-          <Heading size="sm">
-            {t('common:loading', { defaultValue: 'Loading...' })}
-          </Heading>
-        </AdminLayoutPageTopBar>
-        <AdminLayoutPageContent />
-      </AdminLayoutPage>
-    );
-  }
-
-  if (!event) {
-    return (
-      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar leftActions={<AdminBackButton />}>
-          <Heading size="sm">
-            {t('events:errors.notFound', { defaultValue: 'Event not found' })}
-          </Heading>
-        </AdminLayoutPageTopBar>
-        <AdminLayoutPageContent />
-      </AdminLayoutPage>
-    );
-  }
 
   return (
     <Formiz connect={form} autoForm>
@@ -108,29 +98,37 @@ export default function PageAdminEventUpdate({
             </>
           }
         >
-          <Heading size="sm">
-            {t('events:management.update.title', {
-              defaultValue: 'Edit Event',
-            })}
-            : {event.name}
-          </Heading>
+          {isLoading || isError ? (
+            <SkeletonText maxW="6rem" noOfLines={2} />
+          ) : (
+            <Heading size="sm">
+              {t('events:management.update.title', {
+                defaultValue: 'Edit Event',
+              })}
+              {event?.name && `: ${event.name}`}
+            </Heading>
+          )}
         </AdminLayoutPageTopBar>
-        <AdminLayoutPageContent>
-          <EventForm
-            defaultValues={{
-              name: event.name,
-              date: event.date,
-              startTime: event.startTime || '',
-              endTime: event.endTime || '',
-              location: event.location || '',
-              address: event.address || '',
-              mapUrl: event.mapUrl || '',
-              embedMapUrl: event.embedMapUrl || '',
-              description: event.description || '',
-              isActive: event.isActive,
-            }}
-          />
-        </AdminLayoutPageContent>
+        {!isReady && <LoaderFull />}
+        {isReady && isError && <ErrorPage />}
+        {isReady && isSuccess && (
+          <AdminLayoutPageContent>
+            <EventForm
+              defaultValues={{
+                name: event?.name ?? '',
+                date: event?.date ?? new Date(),
+                startTime: event?.startTime ?? '',
+                endTime: event?.endTime ?? '',
+                location: event?.location ?? '',
+                address: event?.address ?? '',
+                mapUrl: event?.mapUrl ?? '',
+                embedMapUrl: event?.embedMapUrl ?? '',
+                description: event?.description ?? '',
+                isActive: event?.isActive ?? true,
+              }}
+            />
+          </AdminLayoutPageContent>
+        )}
       </AdminLayoutPage>
     </Formiz>
   );
