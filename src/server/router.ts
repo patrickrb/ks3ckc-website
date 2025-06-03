@@ -2,6 +2,7 @@ import { createTRPCRouter } from '@/server/config/trpc';
 import { accountRouter } from '@/server/routers/account';
 import { authRouter } from '@/server/routers/auth';
 import { blogsRouter } from '@/server/routers/blogs';
+import { eventsRouter } from '@/server/routers/events';
 import { newsRouter } from '@/server/routers/news';
 import { qsoRouter } from '@/server/routers/qso';
 import { repositoriesRouter } from '@/server/routers/repositories';
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   users: usersRouter,
   qso: qsoRouter,
   blogs: blogsRouter,
+  events: eventsRouter,
   news: newsRouter,
 });
 

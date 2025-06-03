@@ -34,6 +34,7 @@ model User {
   notes          String?       @db.Text
   blogs          Blogs[]
   news           News[]
+  events         Event[]
 
   @@index([email])
   @@index([callsign])
@@ -84,4 +85,25 @@ model News {
   authorId    String
   
   @@index([authorId])
+}
+
+model Event {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  name          String
+  date          DateTime
+  startTime     String?
+  endTime       String?
+  location      String?
+  address       String?
+  mapUrl        String?
+  embedMapUrl   String?
+  description   String?   @db.Text
+  isActive      Boolean   @default(true)
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      String
+  
+  @@index([authorId])
+  @@index([date])
 }

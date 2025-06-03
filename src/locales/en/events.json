@@ -1,0 +1,84 @@
+{
+  "form": {
+    "name": {
+      "label": "Event Name",
+      "placeholder": "Enter event name",
+      "required": "Event name is required",
+      "tooShort": "Event name must be at least 2 characters",
+      "tooLong": "Event name must be less than 100 characters"
+    },
+    "date": {
+      "label": "Event Date & Time",
+      "required": "Event date is required"
+    },
+    "startTime": {
+      "label": "Start Time",
+      "placeholder": "e.g., 5:00 PM"
+    },
+    "endTime": {
+      "label": "End Time",
+      "placeholder": "e.g., 9:00 PM"
+    },
+    "location": {
+      "label": "Location",
+      "placeholder": "e.g., Knuckleheads Garage"
+    },
+    "address": {
+      "label": "Address",
+      "placeholder": "e.g., 701 N Montgall Ave, Kansas City, MO 64120"
+    },
+    "mapUrl": {
+      "label": "Map URL",
+      "placeholder": "https://maps.app.goo.gl/..."
+    },
+    "embedMapUrl": {
+      "label": "Embed Map URL",
+      "placeholder": "https://www.google.com/maps/embed?..."
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Event description and details"
+    },
+    "isActive": {
+      "label": "Active"
+    }
+  },
+  "management": {
+    "title": "Events Management",
+    "search": {
+      "placeholder": "Search events..."
+    },
+    "actions": {
+      "create": "Create Event"
+    },
+    "empty": "No events found",
+    "createdBy": "Created by",
+    "backToEvents": "Back to Events",
+    "create": {
+      "title": "Create Event"
+    },
+    "update": {
+      "title": "Edit Event"
+    }
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "errors": {
+    "notFound": "Event not found"
+  },
+  "feedbacks": {
+    "loadingEventError": {
+      "title": "Failed to load events"
+    },
+    "deleteEventError": {
+      "title": "Error deleting event",
+      "description": "Failed to delete event {{name}}"
+    }
+  },
+  "deleteModal": {
+    "title": "Delete Event",
+    "message": "Are you sure you want to delete the event \"{{name}}\"? This action cannot be undone."
+  }
+}

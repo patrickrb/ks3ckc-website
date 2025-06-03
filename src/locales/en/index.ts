@@ -7,6 +7,7 @@ import auth from './auth.json';
 import common from './common.json';
 import components from './components.json';
 import emails from './emails.json';
+import events from './events.json';
 import management from './management.json';
 import navbar from './navbar.json';
 import repositories from './repositories.json';
@@ -22,6 +23,7 @@ export default {
   common,
   components,
   emails,
+  events,
   management,
   navbar,
   repositories,
