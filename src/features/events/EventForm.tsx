@@ -20,7 +20,7 @@ export const EventForm = ({ defaultValues = {} }: EventFormProps) => {
 
   const formatDateForInput = (date: Date | string | undefined) => {
     if (!date) return '';
-    return dayjs(date).format('YYYY-MM-DDTHH:mm');
+    return dayjs(date).format('YYYY-MM-DD');
   };
 
   return (
@@ -49,7 +49,7 @@ export const EventForm = ({ defaultValues = {} }: EventFormProps) => {
 
       <FieldInput
         name="date"
-        type="datetime-local"
+        type="date"
         label={t('events:form.date.label')}
         defaultValue={formatDateForInput(defaultValues.date)}
         required={t('events:form.date.required')}
@@ -64,6 +64,7 @@ export const EventForm = ({ defaultValues = {} }: EventFormProps) => {
       <HStack spacing={4}>
         <FieldInput
           name="startTime"
+          type="time"
           label={t('events:form.startTime.label')}
           placeholder={t('events:form.startTime.placeholder')}
           defaultValue={defaultValues.startTime}
@@ -71,6 +72,7 @@ export const EventForm = ({ defaultValues = {} }: EventFormProps) => {
 
         <FieldInput
           name="endTime"
+          type="time"
           label={t('events:form.endTime.label')}
           placeholder={t('events:form.endTime.placeholder')}
           defaultValue={defaultValues.endTime}
