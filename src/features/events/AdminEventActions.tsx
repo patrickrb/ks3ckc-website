@@ -70,7 +70,7 @@ export const AdminEventActions = ({
           {canEdit && (
             <MenuItem
               as={LinkAdmin}
-              href={`/admin/management/events/${event.id}`}
+              href={`/management/events/${event.id}`}
               icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
             >
               {t('common:actions.edit')}

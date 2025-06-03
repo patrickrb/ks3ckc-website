@@ -60,7 +60,7 @@ export default function PageAdminEvents() {
             </Flex>
             <ResponsiveIconButton
               as={LinkAdmin}
-              href="/admin/management/events/create"
+              href="/management/events/create"
               icon={<LuPlus />}
               size="sm"
               colorScheme="brand"
@@ -98,7 +98,7 @@ export default function PageAdminEvents() {
                   <HStack maxW="full">
                     <LinkOverlay
                       as={LinkAdmin}
-                      href={`/admin/management/events/${event.id}`}
+                      href={`/management/events/${event.id}`}
                     >
                       <DataListText fontWeight="bold">
                         {event.name}
