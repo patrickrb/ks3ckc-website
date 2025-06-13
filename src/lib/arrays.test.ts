@@ -10,27 +10,35 @@ describe('array utilities', () => {
 
     it('should sort by string values in ascending order by default', () => {
       const sorted = testData.sort(sortByKey('name'));
-      expect(sorted.map(item => item.name)).toEqual(['Alice', 'Bob', 'Charlie']);
+      expect(sorted.map((item) => item.name)).toEqual([
+        'Alice',
+        'Bob',
+        'Charlie',
+      ]);
     });
 
     it('should sort by string values in descending order', () => {
       const sorted = testData.sort(sortByKey('name', 'desc'));
-      expect(sorted.map(item => item.name)).toEqual(['Charlie', 'Bob', 'Alice']);
+      expect(sorted.map((item) => item.name)).toEqual([
+        'Charlie',
+        'Bob',
+        'Alice',
+      ]);
     });
 
     it('should sort by numeric values in ascending order', () => {
       const sorted = testData.sort(sortByKey('age'));
-      expect(sorted.map(item => item.age)).toEqual([20, 25, 30]);
+      expect(sorted.map((item) => item.age)).toEqual([20, 25, 30]);
     });
 
     it('should sort by numeric values in descending order', () => {
       const sorted = testData.sort(sortByKey('age', 'desc'));
-      expect(sorted.map(item => item.age)).toEqual([30, 25, 20]);
+      expect(sorted.map((item) => item.age)).toEqual([30, 25, 20]);
     });
 
     it('should sort by float values correctly', () => {
       const sorted = testData.sort(sortByKey('score'));
-      expect(sorted.map(item => item.score)).toEqual([78.3, 85.5, 92.0]);
+      expect(sorted.map((item) => item.score)).toEqual([78.3, 85.5, 92.0]);
     });
 
     it('should handle empty sort key', () => {
@@ -53,17 +61,13 @@ describe('array utilities', () => {
         { value: 20 },
       ];
       const sorted = mixedData.sort(sortByKey('value'));
-      expect(sorted.map(item => item.value)).toEqual(['2', 5, '10', 20]);
+      expect(sorted.map((item) => item.value)).toEqual(['2', 5, '10', 20]);
     });
 
     it('should handle string values that look like numbers', () => {
-      const stringNumberData = [
-        { id: '100' },
-        { id: '20' },
-        { id: '3' },
-      ];
+      const stringNumberData = [{ id: '100' }, { id: '20' }, { id: '3' }];
       const sorted = stringNumberData.sort(sortByKey('id'));
-      expect(sorted.map(item => item.id)).toEqual(['3', '20', '100']);
+      expect(sorted.map((item) => item.id)).toEqual(['3', '20', '100']);
     });
 
     it('should handle null and undefined values', () => {

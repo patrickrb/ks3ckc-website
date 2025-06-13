@@ -106,7 +106,9 @@ export const newsRouter = createTRPCRouter({
       };
     }),
 
-  getAllForAdmin: protectedProcedure({ authorizations: ['CONTRIBUTOR', 'ADMIN'] })
+  getAllForAdmin: protectedProcedure({
+    authorizations: ['CONTRIBUTOR', 'ADMIN'],
+  })
     .meta({
       openapi: {
         method: 'GET',

@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+
 import NewsItems from './index';
 
 // Mock tRPC
@@ -20,19 +22,28 @@ const mockUseQuery = jest.fn();
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
   Box: ({ children, ...props }: any) => (
-    <div data-testid="news-item" {...props}>{children}</div>
+    <div data-testid="news-item" {...props}>
+      {children}
+    </div>
   ),
-  Heading: ({ children, as, size, ...props }: any) => (
-    React.createElement(as || 'h1', { 
-      'data-testid': `heading-${size}`,
-      ...props
-    }, children)
-  ),
+  Heading: ({ children, as, size, ...props }: any) =>
+    React.createElement(
+      as || 'h1',
+      {
+        'data-testid': `heading-${size}`,
+        ...props,
+      },
+      children
+    ),
   Text: ({ children, ...props }: any) => (
-    <p data-testid="text" {...props}>{children}</p>
+    <p data-testid="text" {...props}>
+      {children}
+    </p>
   ),
   SimpleGrid: ({ children, ...props }: any) => (
-    <div data-testid="news-grid" {...props}>{children}</div>
+    <div data-testid="news-grid" {...props}>
+      {children}
+    </div>
   ),
   useColorModeValue: jest.fn((light, _dark) => light),
 }));
@@ -84,7 +95,7 @@ describe('NewsItems', () => {
     } as any);
 
     render(<NewsItems />);
-    
+
     const heading = screen.getByTestId('heading-lg');
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent('Latest News');
@@ -98,7 +109,7 @@ describe('NewsItems', () => {
     } as any);
 
     render(<NewsItems />);
-    
+
     expect(screen.getByTestId('news-grid')).toBeInTheDocument();
   });
 
@@ -110,10 +121,10 @@ describe('NewsItems', () => {
     } as any);
 
     render(<NewsItems />);
-    
+
     const newsItems = screen.getAllByTestId('news-item');
     expect(newsItems.length).toBe(2);
-    
+
     // Check that news titles are rendered
     expect(screen.getByText('Test News 1')).toBeInTheDocument();
     expect(screen.getByText('Test News 2')).toBeInTheDocument();
@@ -127,7 +138,7 @@ describe('NewsItems', () => {
     } as any);
 
     render(<NewsItems />);
-    
+
     // Should show loading skeleton
     const newsItems = screen.getAllByTestId('news-item');
     expect(newsItems.length).toBe(8); // 8 skeleton items
@@ -141,8 +152,10 @@ describe('NewsItems', () => {
     } as any);
 
     render(<NewsItems />);
-    
-    expect(screen.getByText('Error loading news. Please try again later.')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Error loading news. Please try again later.')
+    ).toBeInTheDocument();
   });
 
   it('handles empty news data', () => {
@@ -153,7 +166,7 @@ describe('NewsItems', () => {
     } as any);
 
     render(<NewsItems />);
-    
+
     // Should show heading but no news items
     expect(screen.getByTestId('heading-lg')).toBeInTheDocument();
     expect(screen.queryByTestId('news-item')).not.toBeInTheDocument();

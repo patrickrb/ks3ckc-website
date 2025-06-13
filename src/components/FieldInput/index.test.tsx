@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+
 import { useField } from '@formiz/core';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import { FieldInput } from './index';
 
 // Mock Formiz hook
@@ -23,14 +25,14 @@ const mockField = {
   isProcessing: false,
   externalProcessing: {
     start: jest.fn(),
-    end: jest.fn()
+    end: jest.fn(),
   },
   isExternalProcessing: false,
   isDebouncing: false,
   hasBeenModified: false,
   resetKey: 0,
   formattedValue: '',
-  otherProps: {}
+  otherProps: {},
 };
 
 jest.mock('@formiz/core', () => ({
@@ -39,12 +41,19 @@ jest.mock('@formiz/core', () => ({
 
 // Mock FormGroup component
 jest.mock('@/components/FormGroup', () => ({
-  FormGroup: ({ children, errorMessage, id, isRequired, showError, ...props }: any) => {
+  FormGroup: ({
+    children,
+    errorMessage,
+    id,
+    isRequired,
+    showError,
+    ...props
+  }: any) => {
     // Filter out React DOM warning props
     const { ...domProps } = props;
     return (
-      <div 
-        data-testid="form-group" 
+      <div
+        data-testid="form-group"
         data-error-message={errorMessage}
         data-id={id}
         data-is-required={isRequired}
@@ -59,7 +68,13 @@ jest.mock('@/components/FormGroup', () => ({
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  IconButton: ({ _children, onClick, 'aria-label': ariaLabel, icon, ...props }: any) => (
+  IconButton: ({
+    _children,
+    onClick,
+    'aria-label': ariaLabel,
+    icon,
+    ...props
+  }: any) => (
     <button onClick={onClick} aria-label={ariaLabel} {...props}>
       {icon}
     </button>
@@ -74,8 +89,12 @@ jest.mock('@chakra-ui/react', () => ({
     />
   ),
   InputGroup: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-  InputLeftElement: ({ children }: any) => <div data-testid="left-element">{children}</div>,
-  InputRightElement: ({ children }: any) => <div data-testid="right-element">{children}</div>,
+  InputLeftElement: ({ children }: any) => (
+    <div data-testid="left-element">{children}</div>
+  ),
+  InputRightElement: ({ children }: any) => (
+    <div data-testid="right-element">{children}</div>
+  ),
   Spinner: (props: any) => <div data-testid="spinner" {...props} />,
 }));
 
@@ -95,7 +114,7 @@ describe('FieldInput', () => {
 
   it('renders basic input field', () => {
     render(<FieldInput name="test" />);
-    
+
     expect(screen.getByTestId('field-input')).toBeInTheDocument();
     expect(screen.getByTestId('form-group')).toBeInTheDocument();
   });
@@ -107,28 +126,28 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" />);
-    
+
     const input = screen.getByTestId('field-input');
     expect(input).toHaveValue('test value');
   });
 
   it('handles value changes', () => {
     render(<FieldInput name="test" />);
-    
+
     const input = screen.getByTestId('field-input');
     fireEvent.change(input, { target: { value: 'new value' } });
-    
+
     expect(mockField.setValue).toHaveBeenCalledWith('new value');
   });
 
   it('handles focus and blur events', () => {
     render(<FieldInput name="test" />);
-    
+
     const input = screen.getByTestId('field-input');
-    
+
     fireEvent.focus(input);
     expect(mockField.setIsTouched).toHaveBeenCalledWith(false);
-    
+
     fireEvent.blur(input);
     expect(mockField.setIsTouched).toHaveBeenCalledWith(true);
   });
@@ -142,8 +161,11 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="password" type="password" />);
-    
-    expect(screen.getByTestId('field-input')).toHaveAttribute('type', 'password');
+
+    expect(screen.getByTestId('field-input')).toHaveAttribute(
+      'type',
+      'password'
+    );
     expect(screen.getByTestId('left-element')).toBeInTheDocument();
     expect(screen.getByLabelText('Show password')).toBeInTheDocument();
     expect(screen.getByTestId('eye-closed-icon')).toBeInTheDocument();
@@ -158,14 +180,14 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="password" type="password" />);
-    
+
     const input = screen.getByTestId('field-input');
     const toggleButton = screen.getByLabelText('Show password');
-    
+
     expect(input).toHaveAttribute('type', 'password');
-    
+
     fireEvent.click(toggleButton);
-    
+
     expect(input).toHaveAttribute('type', 'text');
     expect(screen.getByLabelText('Hide password')).toBeInTheDocument();
     expect(screen.getByTestId('eye-open-icon')).toBeInTheDocument();
@@ -179,7 +201,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" />);
-    
+
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
     expect(screen.getByTestId('right-element')).toBeInTheDocument();
   });
@@ -192,7 +214,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" />);
-    
+
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
@@ -204,7 +226,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" />);
-    
+
     expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
   });
 
@@ -217,7 +239,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" placeholder="Enter text here" />);
-    
+
     const input = screen.getByTestId('field-input');
     expect(input).toHaveAttribute('placeholder', 'Enter text here');
   });
@@ -242,7 +264,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" />);
-    
+
     const input = screen.getByTestId('field-input');
     expect(input).toHaveValue('');
   });
@@ -259,7 +281,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" />);
-    
+
     const input = screen.getByTestId('custom-input');
     expect(input).toBeInTheDocument();
   });
@@ -273,7 +295,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" label="Test Field" />);
-    
+
     const formGroup = screen.getByTestId('form-group');
     expect(formGroup).toHaveAttribute('data-id', 'test-field');
     expect(formGroup).toHaveAttribute('data-is-required', 'true');
@@ -292,7 +314,7 @@ describe('FieldInput', () => {
         <div data-testid="field-children">Extra content</div>
       </FieldInput>
     );
-    
+
     expect(screen.getByTestId('field-children')).toBeInTheDocument();
   });
 
@@ -305,7 +327,7 @@ describe('FieldInput', () => {
     });
 
     render(<FieldInput name="test" type="email" />);
-    
+
     const input = screen.getByTestId('field-input');
     expect(input).toHaveAttribute('type', 'email');
   });

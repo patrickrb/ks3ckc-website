@@ -1,4 +1,5 @@
 import { TRPCClientError } from '@trpc/client';
+
 import { isErrorDatabaseConflict } from './errors';
 
 describe('tRPC error utilities', () => {
@@ -9,11 +10,11 @@ describe('tRPC error utilities', () => {
         data: {
           code: 'CONFLICT',
           prismaError: {
-            target: ['email', 'username']
-          }
-        }
+            target: ['email', 'username'],
+          },
+        },
       } as TRPCClientError<any>;
-      
+
       // Make it an instance of TRPCClientError
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -26,9 +27,9 @@ describe('tRPC error utilities', () => {
         data: {
           code: 'CONFLICT',
           prismaError: {
-            target: ['email', 'username']
-          }
-        }
+            target: ['email', 'username'],
+          },
+        },
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -45,9 +46,9 @@ describe('tRPC error utilities', () => {
         data: {
           code: 'NOT_FOUND',
           prismaError: {
-            target: ['email']
-          }
-        }
+            target: ['email'],
+          },
+        },
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -56,7 +57,7 @@ describe('tRPC error utilities', () => {
 
     it('should return false when data is missing', () => {
       const error = {
-        data: undefined
+        data: undefined,
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -66,8 +67,8 @@ describe('tRPC error utilities', () => {
     it('should return false when prismaError is missing', () => {
       const error = {
         data: {
-          code: 'CONFLICT'
-        }
+          code: 'CONFLICT',
+        },
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -79,9 +80,9 @@ describe('tRPC error utilities', () => {
         data: {
           code: 'CONFLICT',
           prismaError: {
-            target: 'email'
-          }
-        }
+            target: 'email',
+          },
+        },
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -93,9 +94,9 @@ describe('tRPC error utilities', () => {
         data: {
           code: 'CONFLICT',
           prismaError: {
-            target: ['email', 123, null]
-          }
-        }
+            target: ['email', 123, null],
+          },
+        },
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 
@@ -116,9 +117,9 @@ describe('tRPC error utilities', () => {
         data: {
           code: 'CONFLICT',
           prismaError: {
-            target: []
-          }
-        }
+            target: [],
+          },
+        },
       } as TRPCClientError<any>;
       Object.setPrototypeOf(error, TRPCClientError.prototype);
 

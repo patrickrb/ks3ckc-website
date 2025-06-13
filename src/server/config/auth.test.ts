@@ -3,12 +3,12 @@ import jwt from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
 
 import { env } from '@/env.mjs';
-import { 
-  getServerAuthSession, 
-  validateCode, 
-  deleteUsedCode, 
+import {
+  AUTH_COOKIE_NAME,
+  deleteUsedCode,
   generateCode,
-  AUTH_COOKIE_NAME 
+  getServerAuthSession,
+  validateCode,
 } from '@/server/config/auth';
 
 // Mock dependencies
@@ -69,13 +69,13 @@ describe('Auth utilities', () => {
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue(null),
       } as any);
-      
+
       mockCookies.mockReturnValue({
         get: jest.fn().mockReturnValue(undefined),
       } as any);
 
       const result = await getServerAuthSession();
-      
+
       expect(result).toBeNull();
     });
 
@@ -83,13 +83,13 @@ describe('Auth utilities', () => {
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue('Bearer valid-jwt-token'),
       } as any);
-      
+
       mockCookies.mockReturnValue({
         get: jest.fn().mockReturnValue(undefined),
       } as any);
 
       mockJwt.verify.mockImplementation(() => ({ userId: 'user-1' }));
-      
+
       // Note: This test would need the actual database context to work fully
       // For now, we're testing the token extraction logic
       expect(mockHeaders().get).toHaveBeenCalledWith('Authorization');
@@ -99,7 +99,7 @@ describe('Auth utilities', () => {
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue(null),
       } as any);
-      
+
       mockCookies.mockReturnValue({
         get: jest.fn().mockReturnValue({ value: 'cookie-jwt-token' }),
       } as any);
@@ -107,7 +107,7 @@ describe('Auth utilities', () => {
       mockJwt.verify.mockImplementation(() => ({ userId: 'user-1' }));
 
       await getServerAuthSession();
-      
+
       expect(mockCookies().get).toHaveBeenCalledWith(AUTH_COOKIE_NAME);
     });
 
@@ -115,13 +115,13 @@ describe('Auth utilities', () => {
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue('Bearer invalid-token'),
       } as any);
-      
+
       mockJwt.verify.mockImplementation(() => {
         throw new Error('Invalid token');
       });
 
       const result = await getServerAuthSession();
-      
+
       expect(result).toBeNull();
     });
 
@@ -129,13 +129,13 @@ describe('Auth utilities', () => {
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue('InvalidHeader'),
       } as any);
-      
+
       mockCookies.mockReturnValue({
         get: jest.fn().mockReturnValue(undefined),
       } as any);
 
       const result = await getServerAuthSession();
-      
+
       expect(result).toBeNull();
     });
   });
@@ -151,7 +151,9 @@ describe('Auth utilities', () => {
     };
 
     it('validates code successfully', async () => {
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
       mockJwt.sign.mockImplementation(() => 'generated-jwt');
@@ -179,28 +181,38 @@ describe('Auth utilities', () => {
     });
 
     it('throws error when token does not exist', async () => {
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(null);
 
-      await expect(validateCode({
-        ctx: mockContext,
-        code: '123456',
-        token: 'non-existent-token',
-      })).rejects.toThrow();
+      await expect(
+        validateCode({
+          ctx: mockContext,
+          code: '123456',
+          token: 'non-existent-token',
+        })
+      ).rejects.toThrow();
 
-      expect(mockContext.logger.warn).toHaveBeenCalledWith('Verification token does not exist');
+      expect(mockContext.logger.warn).toHaveBeenCalledWith(
+        'Verification token does not exist'
+      );
     });
 
     it('throws error when code is invalid', async () => {
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(false));
 
-      await expect(validateCode({
-        ctx: mockContext,
-        code: 'wrong-code',
-        token: 'test-token',
-      })).rejects.toThrow();
+      await expect(
+        validateCode({
+          ctx: mockContext,
+          code: 'wrong-code',
+          token: 'test-token',
+        })
+      ).rejects.toThrow();
 
       expect(mockContext.logger.warn).toHaveBeenCalledWith('Invalid code');
       expect(mockContext.db.verificationToken.update).toHaveBeenCalledWith({
@@ -216,20 +228,30 @@ describe('Auth utilities', () => {
         lastAttemptAt: new Date(), // Recent attempt
       };
 
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
-      mockContext.db.verificationToken.findUnique.mockResolvedValue(recentToken);
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
+      mockContext.db.verificationToken.findUnique.mockResolvedValue(
+        recentToken
+      );
 
-      await expect(validateCode({
-        ctx: mockContext,
-        code: '123456',
-        token: 'test-token',
-      })).rejects.toThrow();
+      await expect(
+        validateCode({
+          ctx: mockContext,
+          code: '123456',
+          token: 'test-token',
+        })
+      ).rejects.toThrow();
 
-      expect(mockContext.logger.warn).toHaveBeenCalledWith('Last attempt was to close');
+      expect(mockContext.logger.warn).toHaveBeenCalledWith(
+        'Last attempt was to close'
+      );
     });
 
     it('cleans up expired tokens before validation', async () => {
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 2 });
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 2,
+      });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
       mockJwt.sign.mockImplementation(() => 'generated-jwt');
@@ -240,25 +262,35 @@ describe('Auth utilities', () => {
         token: 'test-token',
       });
 
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Removing expired verification tokens from database');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Removing expired verification tokens from database'
+      );
       expect(mockContext.db.verificationToken.deleteMany).toHaveBeenCalledWith({
         where: { expires: { lt: expect.any(Date) } },
       });
     });
 
     it('handles database errors gracefully', async () => {
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(false));
-      mockContext.db.verificationToken.update.mockRejectedValue(new Error('Database error'));
+      mockContext.db.verificationToken.update.mockRejectedValue(
+        new Error('Database error')
+      );
 
-      await expect(validateCode({
-        ctx: mockContext,
-        code: 'wrong-code',
-        token: 'test-token',
-      })).rejects.toThrow();
+      await expect(
+        validateCode({
+          ctx: mockContext,
+          code: 'wrong-code',
+          token: 'test-token',
+        })
+      ).rejects.toThrow();
 
-      expect(mockContext.logger.error).toHaveBeenCalledWith('Failed to update token attempts');
+      expect(mockContext.logger.error).toHaveBeenCalledWith(
+        'Failed to update token attempts'
+      );
     });
   });
 
@@ -274,7 +306,9 @@ describe('Auth utilities', () => {
     });
 
     it('generates code with expected format', async () => {
-      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-custom-code'));
+      mockBcrypt.hash.mockImplementation(() =>
+        Promise.resolve('hashed-custom-code')
+      );
 
       const result = await generateCode();
 
@@ -283,7 +317,9 @@ describe('Auth utilities', () => {
     });
 
     it('generates numeric code only', async () => {
-      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-numeric-code'));
+      mockBcrypt.hash.mockImplementation(() =>
+        Promise.resolve('hashed-numeric-code')
+      );
 
       const result = await generateCode();
 
@@ -322,16 +358,22 @@ describe('Auth utilities', () => {
       expect(mockContext.db.verificationToken.delete).toHaveBeenCalledWith({
         where: { token: 'test-token' },
       });
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Removing used verification token');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Removing used verification token'
+      );
     });
 
     it('handles non-existent token gracefully', async () => {
-      mockContext.db.verificationToken.delete.mockRejectedValue(new Error('Token not found'));
+      mockContext.db.verificationToken.delete.mockRejectedValue(
+        new Error('Token not found')
+      );
 
-      await expect(deleteUsedCode({
-        ctx: mockContext,
-        token: 'non-existent-token',
-      })).rejects.toThrow('Token not found');
+      await expect(
+        deleteUsedCode({
+          ctx: mockContext,
+          token: 'non-existent-token',
+        })
+      ).rejects.toThrow('Token not found');
     });
 
     it('logs deletion attempt', async () => {
@@ -342,15 +384,19 @@ describe('Auth utilities', () => {
         token: 'test-token',
       });
 
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Removing used verification token');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Removing used verification token'
+      );
     });
   });
 
   describe('Authentication flow integration', () => {
     it('complete authentication flow', async () => {
       // Step 1: Generate code
-      mockBcrypt.hash.mockImplementation(() => Promise.resolve('hashed-123456'));
-      
+      mockBcrypt.hash.mockImplementation(() =>
+        Promise.resolve('hashed-123456')
+      );
+
       const codeResult = await generateCode();
       expect(codeResult.readable).toHaveLength(6);
       expect(codeResult.hashed).toBe('hashed-123456');
@@ -366,8 +412,12 @@ describe('Auth utilities', () => {
       };
 
       // Step 3: Validate code
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
-      mockContext.db.verificationToken.findUnique.mockResolvedValue(storedToken);
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
+      mockContext.db.verificationToken.findUnique.mockResolvedValue(
+        storedToken
+      );
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
       mockJwt.sign.mockImplementation(() => 'final-jwt-token');
 
@@ -382,7 +432,7 @@ describe('Auth utilities', () => {
 
       // Step 4: Clean up used token
       mockContext.db.verificationToken.delete.mockResolvedValue(storedToken);
-      
+
       await deleteUsedCode({
         ctx: mockContext,
         token: 'verification-token',
@@ -404,15 +454,21 @@ describe('Auth utilities', () => {
       };
 
       // First attempt - wrong code
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
-      mockContext.db.verificationToken.findUnique.mockResolvedValue(tokenWithAttempts);
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
+      mockContext.db.verificationToken.findUnique.mockResolvedValue(
+        tokenWithAttempts
+      );
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(false));
 
-      await expect(validateCode({
-        ctx: mockContext,
-        code: 'wrong-code',
-        token: 'test-token',
-      })).rejects.toThrow();
+      await expect(
+        validateCode({
+          ctx: mockContext,
+          code: 'wrong-code',
+          token: 'test-token',
+        })
+      ).rejects.toThrow();
 
       expect(mockContext.db.verificationToken.update).toHaveBeenCalledWith({
         where: { token: 'test-token' },
@@ -421,7 +477,9 @@ describe('Auth utilities', () => {
 
       // Second attempt - correct code
       const updatedToken = { ...tokenWithAttempts, attempts: 2 };
-      mockContext.db.verificationToken.findUnique.mockResolvedValue(updatedToken);
+      mockContext.db.verificationToken.findUnique.mockResolvedValue(
+        updatedToken
+      );
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
       mockJwt.sign.mockImplementation(() => 'success-jwt');
 
@@ -434,7 +492,7 @@ describe('Auth utilities', () => {
       expect(result.userJwt).toBe('success-jwt');
     });
   });
-  
+
   describe('JWT token handling', () => {
     it('sets expiration time when creating JWT', async () => {
       // Mock implementation for test
@@ -446,41 +504,43 @@ describe('Auth utilities', () => {
         lastAttemptAt: new Date(Date.now() - 60000), // 1 minute ago
         expires: new Date(Date.now() + 10 * 60 * 1000),
       };
-      
-      mockContext.db.verificationToken.deleteMany.mockResolvedValue({ count: 0 });
+
+      mockContext.db.verificationToken.deleteMany.mockResolvedValue({
+        count: 0,
+      });
       mockContext.db.verificationToken.findUnique.mockResolvedValue(mockToken);
       mockBcrypt.compare.mockImplementation(() => Promise.resolve(true));
-      
+
       // Check that jwt.sign is called with the expiresIn option
       await validateCode({
         ctx: mockContext,
         code: '123456',
         token: 'test-token',
       });
-      
+
       expect(mockJwt.sign).toHaveBeenCalledWith(
         { id: 'user-123' },
         env.AUTH_SECRET,
         { expiresIn: '30d' }
       );
     });
-    
+
     it('rejects expired tokens', async () => {
       // Setup headers with a token
       mockHeaders.mockReturnValue({
         get: jest.fn().mockReturnValue('Bearer expired-token'),
       } as any);
-      
+
       mockCookies.mockReturnValue({
         get: jest.fn().mockReturnValue(undefined),
       } as any);
-      
+
       // Mock verify to return an expired token
       mockJwt.verify.mockImplementation(() => ({
         id: 'user-123',
-        exp: Math.floor(Date.now() / 1000) - 3600 // 1 hour in the past
+        exp: Math.floor(Date.now() / 1000) - 3600, // 1 hour in the past
       }));
-      
+
       const result = await getServerAuthSession();
       expect(result).toBeNull();
     });

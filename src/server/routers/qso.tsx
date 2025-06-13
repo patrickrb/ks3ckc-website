@@ -19,7 +19,7 @@ export const qsoRouter = createTRPCRouter({
     })
     .query(async ({ ctx }) => {
       ctx.logger.info('Getting recent qsos');
-      
+
       // Don't proceed if CloudLog API settings aren't configured
       if (!env.CLOUDLOG_API_URL || !env.CLOUDLOG_API_KEY) {
         throw new TRPCError({
@@ -30,7 +30,7 @@ export const qsoRouter = createTRPCRouter({
 
       // Build the URL separately from the API key
       const apiURL = `${env.CLOUDLOG_API_URL}/recent_qsos`;
-      
+
       try {
         // Use headers for authentication instead of URL
         const response = await fetch(apiURL, {

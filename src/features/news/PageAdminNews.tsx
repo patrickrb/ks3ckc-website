@@ -76,7 +76,7 @@ export default function PageAdminNews() {
               size="sm"
               icon={<LuPlus />}
             >
-              {t('users:list.actions.createUser')}
+              Create News
             </ResponsiveIconButton>
           </HStack>
           <DataList>
@@ -96,7 +96,10 @@ export default function PageAdminNews() {
                 <DataListRow as={LinkBox} key={newsItem.id}>
                   <DataListCell>
                     <Text fontWeight="bold">
-                      <LinkOverlay as={LinkAdmin} href={`/management/news/${newsItem.id}`}>
+                      <LinkOverlay
+                        as={LinkAdmin}
+                        href={`/management/news/${newsItem.id}`}
+                      >
                         {newsItem.title}
                       </LinkOverlay>
                     </Text>
@@ -108,7 +111,9 @@ export default function PageAdminNews() {
                   </DataListCell>
                   <DataListCell>
                     <Text fontSize="sm" color="text-dimmed">
-                      {newsItem.author?.name || newsItem.author?.email || 'Unknown'}
+                      {newsItem.author?.name ||
+                        newsItem.author?.email ||
+                        'Unknown'}
                     </Text>
                     <Text fontSize="xs" color="text-dimmed">
                       <Trans

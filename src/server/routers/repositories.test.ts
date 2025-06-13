@@ -4,7 +4,11 @@ import { repositoriesRouter } from '@/server/routers/repositories';
 
 // Mock the extended TRPC error
 jest.mock('@/server/config/errors', () => ({
-  ExtendedTRPCError: jest.fn().mockImplementation((args) => new Error(args.message || 'Extended TRPC Error')),
+  ExtendedTRPCError: jest
+    .fn()
+    .mockImplementation(
+      (args) => new Error(args.message || 'Extended TRPC Error')
+    ),
 }));
 
 // Create mock context
@@ -12,8 +16,8 @@ const createMockContext = (overrides = {}): any => ({
   user: {
     id: 'user-1',
     email: 'test@example.com',
-    authorizations: ['APP', 'ADMIN'] as ("APP" | "ADMIN")[],
-    accountStatus: 'ENABLED' as "DISABLED" | "ENABLED" | "NOT_VERIFIED",
+    authorizations: ['APP', 'ADMIN'] as ('APP' | 'ADMIN')[],
+    accountStatus: 'ENABLED' as 'DISABLED' | 'ENABLED' | 'NOT_VERIFIED',
     language: 'en',
   },
   apiType: 'TRPC' as const,
@@ -64,45 +68,51 @@ describe('repositoriesRouter', () => {
       mockContext.db.repository.findUnique.mockResolvedValue(mockRepository);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.getById({ id: 'repo-1' });
-      
+
       expect(result).toEqual(mockRepository);
       expect(mockContext.db.repository.findUnique).toHaveBeenCalledWith({
         where: { id: 'repo-1' },
       });
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Getting repository');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Getting repository'
+      );
     });
 
     it('throws NOT_FOUND when repository does not exist', async () => {
       mockContext.db.repository.findUnique.mockResolvedValue(null);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
-      await expect(caller.getById({ id: 'non-existent' })).rejects.toThrow(TRPCError);
-      
-      expect(mockContext.logger.warn).toHaveBeenCalledWith('Unable to find repository with the provided input');
+
+      await expect(caller.getById({ id: 'non-existent' })).rejects.toThrow(
+        TRPCError
+      );
+
+      expect(mockContext.logger.warn).toHaveBeenCalledWith(
+        'Unable to find repository with the provided input'
+      );
     });
 
     it('validates input id format', async () => {
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.getById({ id: '' })).rejects.toThrow();
     });
 
     it('requires authentication', async () => {
       const unauthorizedContext = createMockContext({ user: null });
       const caller = repositoriesRouter.createCaller(unauthorizedContext);
-      
+
       await expect(caller.getById({ id: 'repo-1' })).rejects.toThrow();
     });
 
     it('requires proper authorization', async () => {
-      const unauthorizedContext = createMockContext({ 
-        user: { ...mockContext.user, authorizations: ['USER'] }
+      const unauthorizedContext = createMockContext({
+        user: { ...mockContext.user, authorizations: ['USER'] },
       });
       const caller = repositoriesRouter.createCaller(unauthorizedContext);
-      
+
       await expect(caller.getById({ id: 'repo-1' })).rejects.toThrow();
     });
   });
@@ -121,33 +131,35 @@ describe('repositoriesRouter', () => {
       ]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.getAll({ limit: 2 });
-      
+
       expect(result).toEqual({
         items: mockRepositories.slice(0, 2),
         nextCursor: undefined,
         total: 3,
       });
-      
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Getting repositories from database');
+
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Getting repositories from database'
+      );
     });
 
     it('handles search term filtering', async () => {
       const filteredRepos = [mockRepositories[0]];
-      
+
       mockContext.db.$transaction.mockResolvedValue([
         1, // total count
         filteredRepos, // filtered items
       ]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
-      const result = await caller.getAll({ 
+
+      const result = await caller.getAll({
         searchTerm: 'Repository 1',
         limit: 10,
       });
-      
+
       expect(result).toEqual({
         items: filteredRepos,
         nextCursor: undefined,
@@ -167,12 +179,12 @@ describe('repositoriesRouter', () => {
       ]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
-      const result = await caller.getAll({ 
+
+      const result = await caller.getAll({
         cursor: 'repo-1',
         limit: 2,
       });
-      
+
       expect(result.items).toHaveLength(2);
       expect(result.total).toBe(3);
     });
@@ -180,16 +192,16 @@ describe('repositoriesRouter', () => {
     it('calculates next cursor correctly', async () => {
       // Return one more item than limit to test next cursor
       const extendedRepos = [...mockRepositories];
-      
+
       mockContext.db.$transaction.mockResolvedValue([
         4, // total count
         extendedRepos, // 3 items (limit + 1)
       ]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.getAll({ limit: 2 });
-      
+
       expect(result.items).toHaveLength(2); // Should pop the extra item
       expect(result.nextCursor).toBe('repo-3'); // Last item's id
     });
@@ -198,16 +210,16 @@ describe('repositoriesRouter', () => {
       mockContext.db.$transaction.mockResolvedValue([0, []]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await caller.getAll();
-      
+
       // Should use default limit of 20
       expect(mockContext.db.$transaction).toHaveBeenCalled();
     });
 
     it('validates limit boundaries', async () => {
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.getAll({ limit: 0 })).rejects.toThrow();
       await expect(caller.getAll({ limit: 101 })).rejects.toThrow();
     });
@@ -216,9 +228,9 @@ describe('repositoriesRouter', () => {
       mockContext.db.$transaction.mockResolvedValue([0, []]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.getAll({ limit: 10 });
-      
+
       expect(result).toEqual({
         items: [],
         nextCursor: undefined,
@@ -239,55 +251,65 @@ describe('repositoriesRouter', () => {
       mockContext.db.repository.create.mockResolvedValue(createdRepo);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.create(validInput);
-      
+
       expect(result).toEqual(createdRepo);
       expect(mockContext.db.repository.create).toHaveBeenCalledWith({
         data: validInput,
       });
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Creating repository');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Creating repository'
+      );
     });
 
     it('validates required fields', async () => {
       const caller = repositoriesRouter.createCaller(mockContext);
-      
-      await expect(caller.create({ 
-        name: '',
-        link: validInput.link,
-        description: validInput.description,
-      })).rejects.toThrow();
 
-      await expect(caller.create({ 
-        name: validInput.name,
-        link: '',
-        description: validInput.description,
-      })).rejects.toThrow();
+      await expect(
+        caller.create({
+          name: '',
+          link: validInput.link,
+          description: validInput.description,
+        })
+      ).rejects.toThrow();
+
+      await expect(
+        caller.create({
+          name: validInput.name,
+          link: '',
+          description: validInput.description,
+        })
+      ).rejects.toThrow();
     });
 
     it('validates URL format for link', async () => {
       const caller = repositoriesRouter.createCaller(mockContext);
-      
-      await expect(caller.create({ 
-        ...validInput,
-        link: 'not-a-url',
-      })).rejects.toThrow();
+
+      await expect(
+        caller.create({
+          ...validInput,
+          link: 'not-a-url',
+        })
+      ).rejects.toThrow();
     });
 
     it('requires ADMIN authorization', async () => {
-      const userContext = createMockContext({ 
-        user: { ...mockContext.user, authorizations: ['APP'] }
+      const userContext = createMockContext({
+        user: { ...mockContext.user, authorizations: ['APP'] },
       });
       const caller = repositoriesRouter.createCaller(userContext);
-      
+
       await expect(caller.create(validInput)).rejects.toThrow();
     });
 
     it('handles database errors', async () => {
-      mockContext.db.repository.create.mockRejectedValue(new Error('Database error'));
+      mockContext.db.repository.create.mockRejectedValue(
+        new Error('Database error')
+      );
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.create(validInput)).rejects.toThrow();
     });
   });
@@ -305,45 +327,53 @@ describe('repositoriesRouter', () => {
       mockContext.db.repository.update.mockResolvedValue(updatedRepo);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.updateById(validInput);
-      
+
       expect(result).toEqual(updatedRepo);
       expect(mockContext.db.repository.update).toHaveBeenCalledWith({
         where: { id: validInput.id },
         data: validInput,
       });
-      expect(mockContext.logger.info).toHaveBeenCalledWith('Updating repository');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'Updating repository'
+      );
     });
 
     it('validates required fields', async () => {
       const caller = repositoriesRouter.createCaller(mockContext);
-      
-      await expect(caller.updateById({ 
-        ...validInput,
-        id: '',
-      })).rejects.toThrow();
 
-      await expect(caller.updateById({ 
-        ...validInput,
-        name: '',
-      })).rejects.toThrow();
+      await expect(
+        caller.updateById({
+          ...validInput,
+          id: '',
+        })
+      ).rejects.toThrow();
+
+      await expect(
+        caller.updateById({
+          ...validInput,
+          name: '',
+        })
+      ).rejects.toThrow();
     });
 
     it('requires ADMIN authorization', async () => {
-      const userContext = createMockContext({ 
-        user: { ...mockContext.user, authorizations: ['APP'] }
+      const userContext = createMockContext({
+        user: { ...mockContext.user, authorizations: ['APP'] },
       });
       const caller = repositoriesRouter.createCaller(userContext);
-      
+
       await expect(caller.updateById(validInput)).rejects.toThrow();
     });
 
     it('handles database errors', async () => {
-      mockContext.db.repository.update.mockRejectedValue(new Error('Database error'));
+      mockContext.db.repository.update.mockRejectedValue(
+        new Error('Database error')
+      );
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.updateById(validInput)).rejects.toThrow();
     });
   });
@@ -353,47 +383,51 @@ describe('repositoriesRouter', () => {
       mockContext.db.repository.delete.mockResolvedValue(mockRepository);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       const result = await caller.removeById({ id: 'repo-1' });
-      
+
       expect(result).toEqual(mockRepository);
       expect(mockContext.db.repository.delete).toHaveBeenCalledWith({
         where: { id: 'repo-1' },
       });
       expect(mockContext.logger.info).toHaveBeenCalledWith(
-        { input: { id: 'repo-1' } }, 
+        { input: { id: 'repo-1' } },
         'Removing repository'
       );
     });
 
     it('validates input id', async () => {
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.removeById({ id: '' })).rejects.toThrow();
     });
 
     it('requires ADMIN authorization', async () => {
-      const userContext = createMockContext({ 
-        user: { ...mockContext.user, authorizations: ['APP'] }
+      const userContext = createMockContext({
+        user: { ...mockContext.user, authorizations: ['APP'] },
       });
       const caller = repositoriesRouter.createCaller(userContext);
-      
+
       await expect(caller.removeById({ id: 'repo-1' })).rejects.toThrow();
     });
 
     it('handles database errors', async () => {
-      mockContext.db.repository.delete.mockRejectedValue(new Error('Database error'));
+      mockContext.db.repository.delete.mockRejectedValue(
+        new Error('Database error')
+      );
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.removeById({ id: 'repo-1' })).rejects.toThrow();
     });
 
     it('handles non-existent repository', async () => {
-      mockContext.db.repository.delete.mockRejectedValue(new Error('Record not found'));
+      mockContext.db.repository.delete.mockRejectedValue(
+        new Error('Record not found')
+      );
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       await expect(caller.removeById({ id: 'non-existent' })).rejects.toThrow();
     });
   });
@@ -411,7 +445,7 @@ describe('repositoriesRouter', () => {
       mockContext.db.repository.create.mockResolvedValue(createdRepo);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       let result = await caller.create(input);
       expect(result.id).toBe('crud-repo');
 
@@ -421,14 +455,14 @@ describe('repositoriesRouter', () => {
       expect(result.name).toBe(input.name);
 
       // Update
-      const updateInput = { 
-        id: 'crud-repo', 
-        ...input, 
-        name: 'Updated CRUD Repository' 
+      const updateInput = {
+        id: 'crud-repo',
+        ...input,
+        name: 'Updated CRUD Repository',
       };
       const updatedRepo = { ...createdRepo, name: 'Updated CRUD Repository' };
       mockContext.db.repository.update.mockResolvedValue(updatedRepo);
-      
+
       result = await caller.updateById(updateInput);
       expect(result.name).toBe('Updated CRUD Repository');
 
@@ -452,7 +486,7 @@ describe('repositoriesRouter', () => {
       ]);
 
       const caller = repositoriesRouter.createCaller(mockContext);
-      
+
       let result = await caller.getAll({ limit: 10 });
       expect(result.items).toHaveLength(10);
       expect(result.nextCursor).toBe('repo-11');
@@ -464,9 +498,9 @@ describe('repositoriesRouter', () => {
         largeDataset.slice(10, 21), // next 10 + 1 for next cursor
       ]);
 
-      result = await caller.getAll({ 
-        limit: 10, 
-        cursor: result.nextCursor 
+      result = await caller.getAll({
+        limit: 10,
+        cursor: result.nextCursor,
       });
       expect(result.items).toHaveLength(10);
       expect(result.nextCursor).toBe('repo-21');
@@ -477,9 +511,9 @@ describe('repositoriesRouter', () => {
         largeDataset.slice(20, 25), // remaining 5 items
       ]);
 
-      result = await caller.getAll({ 
-        limit: 10, 
-        cursor: result.nextCursor 
+      result = await caller.getAll({
+        limit: 10,
+        cursor: result.nextCursor,
       });
       expect(result.items).toHaveLength(5);
       expect(result.nextCursor).toBeUndefined(); // No more pages

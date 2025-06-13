@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+
 import { useField } from '@formiz/core';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import { FieldMarkdown } from './index';
 
 // Mock Formiz hook
@@ -23,14 +25,14 @@ const mockField = {
   isProcessing: false,
   externalProcessing: {
     start: jest.fn(),
-    end: jest.fn()
+    end: jest.fn(),
   },
   isExternalProcessing: false,
   isDebouncing: false,
   hasBeenModified: false,
   resetKey: 0,
   formattedValue: '',
-  otherProps: {}
+  otherProps: {},
 };
 
 jest.mock('@formiz/core', () => ({
@@ -39,11 +41,18 @@ jest.mock('@formiz/core', () => ({
 
 // Mock FormGroup component
 jest.mock('@/components/FormGroup', () => ({
-  FormGroup: ({ children, errorMessage, id, isRequired, showError, ...props }: any) => {
+  FormGroup: ({
+    children,
+    errorMessage,
+    id,
+    isRequired,
+    showError,
+    ...props
+  }: any) => {
     const { ...domProps } = props;
     return (
-      <div 
-        data-testid="form-group" 
+      <div
+        data-testid="form-group"
         data-error-message={errorMessage}
         data-id={id}
         data-is-required={isRequired}
@@ -59,15 +68,22 @@ jest.mock('@/components/FormGroup', () => ({
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
   Box: ({ children, dangerouslySetInnerHTML, className, ...props }: any) => (
-    <div 
-      data-testid="markdown-box" 
+    <div
+      data-testid="markdown-box"
       className={className}
       {...props}
-      {...(dangerouslySetInnerHTML ? { dangerouslySetInnerHTML } : { children })}
+      {...(dangerouslySetInnerHTML
+        ? { dangerouslySetInnerHTML }
+        : { children })}
     />
   ),
   Tabs: ({ children, index, _onChange, variant, ...props }: any) => (
-    <div data-testid="markdown-tabs" data-index={index} data-variant={variant} {...props}>
+    <div
+      data-testid="markdown-tabs"
+      data-index={index}
+      data-variant={variant}
+      {...props}
+    >
       {children}
     </div>
   ),
@@ -77,11 +93,7 @@ jest.mock('@chakra-ui/react', () => ({
     </div>
   ),
   Tab: ({ children, onClick, ...props }: any) => (
-    <button 
-      data-testid="tab"
-      onClick={onClick} 
-      {...props}
-    >
+    <button data-testid="tab" onClick={onClick} {...props}>
       {children}
     </button>
   ),
@@ -91,16 +103,23 @@ jest.mock('@chakra-ui/react', () => ({
     </div>
   ),
   TabPanel: ({ children, padding, paddingTop, ...props }: any) => (
-    <div 
-      data-testid="tab-panel" 
-      data-padding={padding} 
+    <div
+      data-testid="tab-panel"
+      data-padding={padding}
       data-padding-top={paddingTop}
       {...props}
     >
       {children}
     </div>
   ),
-  Textarea: ({ onChange, onFocus, onBlur, placeholder, value, ...props }: any) => (
+  Textarea: ({
+    onChange,
+    onFocus,
+    onBlur,
+    placeholder,
+    value,
+    ...props
+  }: any) => (
     <textarea
       onChange={onChange}
       onFocus={onFocus}
@@ -123,7 +142,7 @@ describe('FieldMarkdown', () => {
 
   it('renders basic markdown field with tabs', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     expect(screen.getByTestId('markdown-tabs')).toBeInTheDocument();
     expect(screen.getByTestId('tab-list')).toBeInTheDocument();
     expect(screen.getAllByTestId('tab')).toHaveLength(2);
@@ -132,7 +151,7 @@ describe('FieldMarkdown', () => {
 
   it('displays Edit and Preview tabs', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const tabs = screen.getAllByTestId('tab');
     expect(tabs[0]).toHaveTextContent('Edit');
     expect(tabs[1]).toHaveTextContent('Preview');
@@ -140,7 +159,7 @@ describe('FieldMarkdown', () => {
 
   it('shows textarea in edit tab by default', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const tabs = screen.getByTestId('markdown-tabs');
     expect(tabs).toHaveAttribute('data-index', '0'); // First tab (Edit) is active
     expect(screen.getByTestId('field-markdown-textarea')).toBeInTheDocument();
@@ -153,43 +172,46 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     expect(textarea).toHaveValue('# Test Markdown\n\nThis is a test.');
   });
 
   it('handles value changes', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     fireEvent.change(textarea, { target: { value: '# New Content' } });
-    
+
     expect(mockField.setValue).toHaveBeenCalledWith('# New Content');
   });
 
   it('handles focus events', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     fireEvent.focus(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(false);
   });
 
   it('handles blur events', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     fireEvent.blur(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(true);
   });
 
   it('uses default placeholder when none provided', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
-    expect(textarea).toHaveAttribute('placeholder', 'Enter markdown content... (supports **bold**, *italic*, and more)');
+    expect(textarea).toHaveAttribute(
+      'placeholder',
+      'Enter markdown content... (supports **bold**, *italic*, and more)'
+    );
   });
 
   it('uses custom placeholder when provided', () => {
@@ -200,10 +222,15 @@ describe('FieldMarkdown', () => {
       },
     });
 
-    render(<FieldMarkdown name="test" placeholder="Custom markdown placeholder" />);
-    
+    render(
+      <FieldMarkdown name="test" placeholder="Custom markdown placeholder" />
+    );
+
     const textarea = screen.getByTestId('field-markdown-textarea');
-    expect(textarea).toHaveAttribute('placeholder', 'Custom markdown placeholder');
+    expect(textarea).toHaveAttribute(
+      'placeholder',
+      'Custom markdown placeholder'
+    );
   });
 
   it('handles empty value gracefully', () => {
@@ -213,7 +240,7 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     expect(textarea).toHaveValue('');
   });
@@ -225,24 +252,24 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     // Check that preview content is rendered (via dangerouslySetInnerHTML)
     const tabPanels = screen.getAllByTestId('tab-panel');
     expect(tabPanels).toHaveLength(2);
-    
+
     // The preview panel should contain the markdown box
     expect(screen.getByTestId('markdown-box')).toBeInTheDocument();
   });
 
   it('tab panel has correct styling props', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const tabPanels = screen.getAllByTestId('tab-panel');
-    
+
     // Edit tab panel
     expect(tabPanels[0]).toHaveAttribute('data-padding', '0');
     expect(tabPanels[0]).toHaveAttribute('data-padding-top', '4');
-    
+
     // Preview tab panel
     expect(tabPanels[1]).toHaveAttribute('data-padding', '0');
     expect(tabPanels[1]).toHaveAttribute('data-padding-top', '4');
@@ -257,11 +284,14 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" label="Test Markdown" />);
-    
+
     const formGroup = screen.getByTestId('form-group');
     expect(formGroup).toHaveAttribute('data-id', 'test-markdown');
     expect(formGroup).toHaveAttribute('data-is-required', 'true');
-    expect(formGroup).toHaveAttribute('data-error-message', 'Field is required');
+    expect(formGroup).toHaveAttribute(
+      'data-error-message',
+      'Field is required'
+    );
     expect(formGroup).toHaveAttribute('data-show-error', 'true');
   });
 
@@ -278,7 +308,7 @@ describe('FieldMarkdown', () => {
         <div data-testid="markdown-children">Help text</div>
       </FieldMarkdown>
     );
-    
+
     expect(screen.getByTestId('markdown-children')).toBeInTheDocument();
   });
 
@@ -294,7 +324,7 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('custom-markdown-textarea');
     expect(textarea).toBeInTheDocument();
     expect(textarea).toHaveAttribute('rows', '10');
@@ -312,10 +342,10 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     fireEvent.change(textarea, { target: { value: '# Test' } });
-    
+
     expect(mockField.setValue).toHaveBeenCalledWith('# Test');
     expect(customOnChange).toHaveBeenCalled();
   });
@@ -332,10 +362,10 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     fireEvent.focus(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(false);
     expect(customOnFocus).toHaveBeenCalled();
   });
@@ -352,27 +382,27 @@ describe('FieldMarkdown', () => {
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     fireEvent.blur(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(true);
     expect(customOnBlur).toHaveBeenCalled();
   });
 
   it('maintains textarea ID consistency', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     const formGroup = screen.getByTestId('form-group');
-    
+
     expect(textarea).toHaveAttribute('id', 'test-markdown');
     expect(formGroup).toHaveAttribute('data-id', 'test-markdown');
   });
 
   it('handles tabs variant correctly', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     const tabs = screen.getByTestId('markdown-tabs');
     expect(tabs).toHaveAttribute('data-variant', 'enclosed');
   });
@@ -392,11 +422,12 @@ describe('FieldMarkdown', () => {
   it('processes markdown for preview correctly', () => {
     mockUseField.mockReturnValue({
       ...mockField,
-      value: '# Heading\n\n**Bold** text\n\n*Italic* text\n\n[Link](https://example.com)',
+      value:
+        '# Heading\n\n**Bold** text\n\n*Italic* text\n\n[Link](https://example.com)',
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     // The markdown should be processed and rendered in the preview
     expect(screen.getByTestId('markdown-box')).toBeInTheDocument();
   });
@@ -419,14 +450,14 @@ This is a paragraph.
     });
 
     render(<FieldMarkdown name="test" />);
-    
+
     const textarea = screen.getByTestId('field-markdown-textarea');
     expect(textarea).toHaveValue(markdownContent);
   });
 
   it('shows markdown syntax help in edit panel', () => {
     render(<FieldMarkdown name="test" />);
-    
+
     // Basic check that the component renders without errors
     expect(screen.getByTestId('markdown-tabs')).toBeInTheDocument();
     expect(screen.getByTestId('field-markdown-textarea')).toBeInTheDocument();

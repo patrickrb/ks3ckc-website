@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
+import { Menu, MenuButton, MenuItem, MenuList, Portal } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuMoreHorizontal, LuPenTool, LuTrash2 } from 'react-icons/lu';
+import { LuPenTool, LuTrash2 } from 'react-icons/lu';
 
+import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
-import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
+import { Icon } from '@/components/Icons';
 import { useToastError } from '@/components/Toast';
 import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { trpc } from '@/lib/trpc/client';
@@ -20,7 +20,6 @@ export type AdminNewsActionsProps = {
 
 export const AdminNewsActions = ({ newsItem }: AdminNewsActionsProps) => {
   const { t } = useTranslation(['common', 'users']);
-  const router = useRouter();
   const toastError = useToastError();
   const trpcUtils = trpc.useUtils();
 
@@ -41,28 +40,32 @@ export const AdminNewsActions = ({ newsItem }: AdminNewsActionsProps) => {
 
   return (
     <Menu isLazy placement="left-start">
-      <MenuButton
-        as={ResponsiveIconButton}
-        icon={<LuMoreHorizontal />}
-        variant="ghost"
-        size="xs"
-      />
-      <MenuList>
-        <MenuItem as={LinkAdmin} href={`/management/news/${newsItem.id}`} icon={<LuPenTool />}>
-          {t('common:actions.edit')}
-        </MenuItem>
-        <ConfirmModal
-          title={t('users:deleteModal.title')}
-          message={t('users:deleteModal.message', { name: newsItem.title })}
-          onConfirm={onNewsRemove}
-          confirmText={t('common:actions.delete')}
-          confirmVariant="@dangerSecondary"
-        >
-          <MenuItem icon={<LuTrash2 />} color="text-danger">
-            {t('common:actions.delete')}
+      <MenuButton as={ActionsButton} />
+      <Portal>
+        <MenuList>
+          <MenuItem
+            as={LinkAdmin}
+            href={`/management/news/${newsItem.id}`}
+            icon={<Icon icon={LuPenTool} fontSize="lg" color="gray.400" />}
+          >
+            {t('common:actions.edit')}
           </MenuItem>
-        </ConfirmModal>
-      </MenuList>
+          <ConfirmModal
+            title={t('users:deleteModal.title')}
+            message={t('users:deleteModal.message', { name: newsItem.title })}
+            onConfirm={onNewsRemove}
+            confirmText={t('common:actions.delete')}
+            confirmVariant="@dangerSecondary"
+          >
+            <MenuItem
+              icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
+              color="text-danger"
+            >
+              {t('common:actions.delete')}
+            </MenuItem>
+          </ConfirmModal>
+        </MenuList>
+      </Portal>
     </Menu>
   );
 };

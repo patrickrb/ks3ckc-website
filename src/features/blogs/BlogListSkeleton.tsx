@@ -71,8 +71,20 @@ export const BlogListSkeleton: React.FC<BlogListSkeletonProps> = ({
       >
         {/* Tags skeleton */}
         <HStack spacing={2} marginTop="2">
-          <Skeleton height="6" width="16" borderRadius="md" isLoaded={false} speed={1.2} />
-          <Skeleton height="6" width="20" borderRadius="md" isLoaded={false} speed={1.2} />
+          <Skeleton
+            height="6"
+            width="16"
+            borderRadius="md"
+            isLoaded={false}
+            speed={1.2}
+          />
+          <Skeleton
+            height="6"
+            width="20"
+            borderRadius="md"
+            isLoaded={false}
+            speed={1.2}
+          />
         </HStack>
 
         {/* Title skeleton */}
@@ -97,7 +109,12 @@ export const BlogListSkeleton: React.FC<BlogListSkeletonProps> = ({
 
         {/* Author skeleton */}
         <HStack marginTop="2" spacing="2" display="flex" alignItems="center">
-          <Skeleton borderRadius="full" boxSize="40px" isLoaded={false} speed={1.2} />
+          <Skeleton
+            borderRadius="full"
+            boxSize="40px"
+            isLoaded={false}
+            speed={1.2}
+          />
           <Skeleton height="4" width="24" isLoaded={false} speed={1.2} />
           <Skeleton height="4" width="2" isLoaded={false} speed={1.2} />
           <Skeleton height="4" width="20" isLoaded={false} speed={1.2} />

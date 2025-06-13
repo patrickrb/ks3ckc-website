@@ -29,10 +29,11 @@ export default function PageAdminNewsUpdate() {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { data: news, isLoading: newsLoading, isError } = trpc.news.getById.useQuery(
-    { id: newsId ?? '' },
-    { enabled: !!newsId }
-  );
+  const {
+    data: news,
+    isLoading: newsLoading,
+    isError,
+  } = trpc.news.getById.useQuery({ id: newsId ?? '' }, { enabled: !!newsId });
 
   const updateNews = trpc.news.updateById.useMutation({
     onSuccess: () => {
@@ -73,10 +74,7 @@ export default function PageAdminNewsUpdate() {
   }
 
   return (
-    <Formiz
-      connect={form}
-      autoForm
-    >
+    <Formiz connect={form} autoForm>
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
         <AdminLayoutPageTopBar
           leftActions={<AdminBackButton withConfrim={!form.isPristine} />}

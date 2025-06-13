@@ -4,7 +4,11 @@ import { z } from 'zod';
 
 import { zUser } from '@/features/users/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/config/trpc';
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from '@/server/config/trpc';
 
 export const usersRouter = createTRPCRouter({
   getPublicMembers: publicProcedure()
@@ -27,14 +31,16 @@ export const usersRouter = createTRPCRouter({
     )
     .output(
       z.object({
-        items: z.array(zUser().pick({
-          id: true,
-          name: true,
-          callsign: true, 
-          dmrid: true,
-          notes: true,
-          image: true,
-        })),
+        items: z.array(
+          zUser().pick({
+            id: true,
+            name: true,
+            callsign: true,
+            dmrid: true,
+            notes: true,
+            image: true,
+          })
+        ),
         nextCursor: z.string().cuid().optional(),
         total: z.number(),
       })

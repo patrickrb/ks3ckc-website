@@ -16,22 +16,25 @@ export default function AboutUs() {
         About KS3CKC - Kansas City Ham Radio Club
       </Heading>
       <Text fontSize="md" mx={4} mb={5}>
-        Welcome to KS3CKC, the premier Kansas City ham radio club serving amateur radio operators 
-        throughout the Kansas City metro area and surrounding cities. As part of SecKC, the world's 
-        largest hacking meetup, our ham radio club brings together amateur radio enthusiasts from 
-        diverse backgrounds who share a passion for radio communication, emergency preparedness, 
-        and innovative technology.
+        Welcome to KS3CKC, the premier Kansas City ham radio club serving
+        amateur radio operators throughout the Kansas City metro area and
+        surrounding cities. As part of SecKC, the world's largest hacking
+        meetup, our ham radio club brings together amateur radio enthusiasts
+        from diverse backgrounds who share a passion for radio communication,
+        emergency preparedness, and innovative technology.
       </Text>
       <Box bg={cardBg} p={4} borderRadius="md" mb={4}>
         <Heading as="h3" size="md" mb={2}>
           Who We Are
         </Heading>
         <Text fontSize="md" mb={5}>
-          Founded by dedicated amateur radio operators and technology professionals, KS3CKC is 
-          a thriving Kansas City ham radio club where radio enthusiasts come together to learn, 
-          share knowledge, and collaborate on exciting projects. Our members range from newly 
-          licensed technicians to seasoned extra class operators, all united by our passion for 
-          amateur radio, emergency communication, and cutting-edge radio technology.
+          Founded by dedicated amateur radio operators and technology
+          professionals, KS3CKC is a thriving Kansas City ham radio club where
+          radio enthusiasts come together to learn, share knowledge, and
+          collaborate on exciting projects. Our members range from newly
+          licensed technicians to seasoned extra class operators, all united by
+          our passion for amateur radio, emergency communication, and
+          cutting-edge radio technology.
         </Text>
         <Heading as="h3" size="md" mb={2}>
           What We Do
@@ -46,7 +49,9 @@ export default function AboutUs() {
           <UnorderedList>
             <ListItem>Amateur radio operation and advanced techniques</ListItem>
             <ListItem>Building and programming radio equipment</ListItem>
-            <ListItem>Emergency communication and disaster preparedness</ListItem>
+            <ListItem>
+              Emergency communication and disaster preparedness
+            </ListItem>
             <ListItem>Digital modes and signal processing</ListItem>
             <ListItem>Antenna design and RF engineering</ListItem>
             <ListItem>Cybersecurity and radio security practices</ListItem>

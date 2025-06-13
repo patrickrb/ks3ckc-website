@@ -12,18 +12,18 @@ export const metadata: Metadata = {
     'Join KS3CKC, the premier ham radio club in Kansas City. Amateur radio enthusiasts, emergency communication, technical workshops, and community events. Serving Kansas City and surrounding areas.',
   keywords: [
     'Kansas City Ham Radio Club',
-    'ham radio clubs Kansas City', 
+    'ham radio clubs Kansas City',
     'amateur radio Kansas City',
     'KS3CKC',
     'SecKC Amateur Radio',
     'emergency communication',
     'ham radio training',
     'amateur radio community',
-    'radio operators Kansas City'
+    'radio operators Kansas City',
   ],
   authors: [
     { name: 'Patrick Burns', url: 'https://github.com/patrickrb' },
-    { name: 'Reid Crowe', url: 'https://github.com/Reid-n0rc' }
+    { name: 'Reid Crowe', url: 'https://github.com/Reid-n0rc' },
   ],
   creator: 'KS3CKC Amateur Radio Club',
   publisher: 'KS3CKC Amateur Radio Club',

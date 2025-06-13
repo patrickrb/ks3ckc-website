@@ -1,6 +1,9 @@
 import { TRPCClientError } from '@trpc/client';
 
-export function isErrorDatabaseConflict(error: unknown, field: string): boolean {
+export function isErrorDatabaseConflict(
+  error: unknown,
+  field: string
+): boolean {
   return (
     error instanceof TRPCClientError &&
     error.data?.code === 'CONFLICT' &&

@@ -21,8 +21,15 @@ export type FieldImageUploadProps = FieldProps<string> &
 
 export const FieldImageUpload = (props: FieldImageUploadProps) => {
   const field = useField(props);
-  const { inputProps = {}, children, accept = 'image/*', ...rest } = field.otherProps;
-  const [previewUrl, setPreviewUrl] = useState<string | null>(field.value || null);
+  const {
+    inputProps = {},
+    children,
+    accept = 'image/*',
+    ...rest
+  } = field.otherProps;
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    field.value || null
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Update preview when field value changes (e.g., when form initializes with existing data)
@@ -95,26 +102,31 @@ export const FieldImageUpload = (props: FieldImageUploadProps) => {
         <Flex direction="column" alignItems="center">
           {previewUrl ? (
             <Box mb={4}>
-              <Image 
-                src={previewUrl} 
-                maxHeight="200px" 
-                alt="Blog preview image" 
+              <Image
+                src={previewUrl}
+                maxHeight="200px"
+                alt="Blog preview image"
                 borderRadius="md"
               />
             </Box>
           ) : null}
-          
+
           <Flex mt={2}>
             <Button onClick={handleClick} mr={2} size="sm" variant="outline">
               {previewUrl ? 'Change Image' : 'Select Image'}
             </Button>
             {previewUrl && (
-              <Button onClick={handleRemove} size="sm" colorScheme="red" variant="outline">
+              <Button
+                onClick={handleRemove}
+                size="sm"
+                colorScheme="red"
+                variant="outline"
+              >
                 Remove
               </Button>
             )}
           </Flex>
-          
+
           {!previewUrl && (
             <Text fontSize="sm" color="gray.500" mt={2}>
               Recommended size: 1200x630 pixels
