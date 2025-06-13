@@ -13,7 +13,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import { getAvatarUrl, getAvatarFallbackName } from '@/lib/avatar';
+import { getAvatarFallbackName, getAvatarUrl } from '@/lib/avatar';
 import type { RouterOutputs } from '@/lib/trpc/types';
 
 interface BlogAuthorProps {
@@ -43,10 +43,10 @@ const BlogTags: React.FC<IBlogTags> = (props) => {
     <HStack spacing={2} marginTop={props.marginTop}>
       {props.tags.map((tag) => {
         return (
-          <Tag 
-            size={'md'} 
-            variant="solid" 
-            colorScheme="orange" 
+          <Tag
+            size={'md'}
+            variant="solid"
+            colorScheme="orange"
             key={tag}
             as="a"
             href={`/blog?tag=${encodeURIComponent(tag)}`}
@@ -68,7 +68,7 @@ export const BlogAuthor: React.FC<BlogAuthorProps> = (props) => {
         borderRadius="full"
         boxSize="40px"
         src={getAvatarUrl(
-          props.image, 
+          props.image,
           getAvatarFallbackName(props.name, props.email)
         )}
         alt={`Avatar of ${props.name}`}

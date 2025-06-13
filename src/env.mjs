@@ -17,7 +17,9 @@ export const env = createEnv({
     NODE_ENV: zNodeEnv,
 
     // Require a strong secret for authentication
-    AUTH_SECRET: z.string().min(32, "Auth secret should be at least 32 characters long"),
+    AUTH_SECRET: z
+      .string()
+      .min(32, 'Auth secret should be at least 32 characters long'),
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),

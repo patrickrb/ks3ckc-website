@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+
 import { MarkdownRenderer } from './index';
 
 // Mock Chakra UI components
@@ -12,8 +14,10 @@ describe('MarkdownRenderer', () => {
   it('renders markdown content with headers', () => {
     const content = '# Heading 1\n## Heading 2\n### Heading 3';
     render(<MarkdownRenderer content={content} />);
-    
-    const container = screen.getByText('Heading 1').closest('.markdown-content');
+
+    const container = screen
+      .getByText('Heading 1')
+      .closest('.markdown-content');
     expect(container?.innerHTML).toContain('<h1>Heading 1</h1>');
     expect(container?.innerHTML).toContain('<h2>Heading 2</h2>');
     expect(container?.innerHTML).toContain('<h3>Heading 3</h3>');
@@ -22,7 +26,7 @@ describe('MarkdownRenderer', () => {
   it('renders markdown content with formatting', () => {
     const content = 'This is **bold** and this is *italic*.';
     render(<MarkdownRenderer content={content} />);
-    
+
     const container = document.querySelector('.markdown-content');
     expect(container?.innerHTML).toContain('<strong>bold</strong>');
     expect(container?.innerHTML).toContain('<em>italic</em>');
@@ -31,23 +35,27 @@ describe('MarkdownRenderer', () => {
   it('renders markdown content with links', () => {
     const content = 'Check out [this link](https://example.com).';
     render(<MarkdownRenderer content={content} />);
-    
+
     const container = document.querySelector('.markdown-content');
-    expect(container?.innerHTML).toContain('<a href="https://example.com">this link</a>');
+    expect(container?.innerHTML).toContain(
+      '<a href="https://example.com">this link</a>'
+    );
   });
 
   it('renders markdown content with images', () => {
     const content = '![Alt text](https://example.com/image.jpg)';
     render(<MarkdownRenderer content={content} />);
-    
+
     const container = document.querySelector('.markdown-content');
-    expect(container?.innerHTML).toContain('<img alt="Alt text" src="https://example.com/image.jpg">');
+    expect(container?.innerHTML).toContain(
+      '<img alt="Alt text" src="https://example.com/image.jpg">'
+    );
   });
 
   it('renders markdown content with lists', () => {
     const content = '- Item 1\n- Item 2\n- Item 3';
     render(<MarkdownRenderer content={content} />);
-    
+
     const container = document.querySelector('.markdown-content');
     expect(container?.innerHTML).toContain('<ul>');
     expect(container?.innerHTML).toContain('<li>Item 1</li>');
@@ -58,7 +66,7 @@ describe('MarkdownRenderer', () => {
   it('renders markdown content with paragraphs', () => {
     const content = 'First paragraph.\n\nSecond paragraph.';
     render(<MarkdownRenderer content={content} />);
-    
+
     const container = document.querySelector('.markdown-content');
     expect(container?.innerHTML).toContain('<p>First paragraph.</p>');
     expect(container?.innerHTML).toContain('<p>Second paragraph.</p>');
@@ -66,7 +74,7 @@ describe('MarkdownRenderer', () => {
 
   it('handles empty content', () => {
     render(<MarkdownRenderer content="" />);
-    
+
     // Should render nothing when content is empty
     expect(document.querySelector('.markdown-content')).not.toBeInTheDocument();
   });
@@ -87,9 +95,9 @@ And here's a [link](https://example.com).
 ![Sample Image](https://example.com/sample.jpg)`;
 
     render(<MarkdownRenderer content={content} />);
-    
+
     const container = document.querySelector('.markdown-content');
-    
+
     // Check for various elements
     expect(container?.innerHTML).toContain('<h1>Main Title</h1>');
     expect(container?.innerHTML).toContain('<h2>Subheading</h2>');
@@ -97,7 +105,11 @@ And here's a [link](https://example.com).
     expect(container?.innerHTML).toContain('<em>italic</em>');
     expect(container?.innerHTML).toContain('<ul>');
     expect(container?.innerHTML).toContain('<li>First item</li>');
-    expect(container?.innerHTML).toContain('<a href="https://example.com">link</a>');
-    expect(container?.innerHTML).toContain('<img alt="Sample Image" src="https://example.com/sample.jpg">');
+    expect(container?.innerHTML).toContain(
+      '<a href="https://example.com">link</a>'
+    );
+    expect(container?.innerHTML).toContain(
+      '<img alt="Sample Image" src="https://example.com/sample.jpg">'
+    );
   });
 });

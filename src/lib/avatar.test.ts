@@ -1,4 +1,4 @@
-import { getAvatarUrl, getAvatarFallbackName } from './avatar';
+import { getAvatarFallbackName, getAvatarUrl } from './avatar';
 
 describe('avatar utilities', () => {
   describe('getAvatarUrl', () => {
@@ -28,15 +28,21 @@ describe('avatar utilities', () => {
 
   describe('getAvatarFallbackName', () => {
     it('should return name when provided', () => {
-      expect(getAvatarFallbackName('John Doe', 'john@example.com')).toBe('John Doe');
+      expect(getAvatarFallbackName('John Doe', 'john@example.com')).toBe(
+        'John Doe'
+      );
     });
 
     it('should return email when name is null', () => {
-      expect(getAvatarFallbackName(null, 'john@example.com')).toBe('john@example.com');
+      expect(getAvatarFallbackName(null, 'john@example.com')).toBe(
+        'john@example.com'
+      );
     });
 
     it('should return email when name is undefined', () => {
-      expect(getAvatarFallbackName(undefined, 'john@example.com')).toBe('john@example.com');
+      expect(getAvatarFallbackName(undefined, 'john@example.com')).toBe(
+        'john@example.com'
+      );
     });
 
     it('should return "User" when both name and email are null', () => {

@@ -30,7 +30,7 @@ export async function createRepositories() {
         name: 'KS3CKC Radio',
         link: 'https://ks3ckc.radio',
         description:
-          "📻 KS3CKC Radio - Kansas City Amateur Radio Club website with club information, events, and amateur radio resources for the ham radio community.",
+          '📻 KS3CKC Radio - Kansas City Amateur Radio Club website with club information, events, and amateur radio resources for the ham radio community.',
       },
     });
     createdCounter += 1;

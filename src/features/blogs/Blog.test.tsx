@@ -1,8 +1,11 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
-import { Blog } from './Blog';
+import { render, screen } from '@testing-library/react';
+
 import type { RouterOutputs } from '@/lib/trpc/types';
+
+import { Blog } from './Blog';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -87,22 +90,29 @@ describe('Blog', () => {
     } as any);
 
     render(<Blog />);
-    
+
     // Check if title is displayed
     expect(screen.getByText('Test Blog Post')).toBeInTheDocument();
-    
+
     // Check if featured image is displayed
-    const featuredImage = screen.getByAltText('Featured image for Test Blog Post');
+    const featuredImage = screen.getByAltText(
+      'Featured image for Test Blog Post'
+    );
     expect(featuredImage).toBeInTheDocument();
-    expect(featuredImage).toHaveAttribute('src', 'https://example.com/featured-image.jpg');
-    
+    expect(featuredImage).toHaveAttribute(
+      'src',
+      'https://example.com/featured-image.jpg'
+    );
+
     // Check if author info is displayed
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('January 1, 2023')).toBeInTheDocument();
-    
+
     // Check if content is rendered via MarkdownRenderer
     expect(screen.getByTestId('markdown-content')).toBeInTheDocument();
-    expect(screen.getByTestId('markdown-content')).toHaveTextContent('# This is a test blog This is **bold** content.');
+    expect(screen.getByTestId('markdown-content')).toHaveTextContent(
+      '# This is a test blog This is **bold** content.'
+    );
   });
 
   it('shows loading state', () => {
@@ -140,10 +150,12 @@ describe('Blog', () => {
     } as any);
 
     render(<Blog />);
-    
+
     // Featured image should not be rendered
-    expect(screen.queryByAltText('Featured image for Test Blog Post')).not.toBeInTheDocument();
-    
+    expect(
+      screen.queryByAltText('Featured image for Test Blog Post')
+    ).not.toBeInTheDocument();
+
     // Other content should still be there
     expect(screen.getByText('Test Blog Post')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();

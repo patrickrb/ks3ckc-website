@@ -69,13 +69,13 @@ export const decodeJwt = (token: string) => {
     ) {
       return null;
     }
-    
+
     // Check if token is expired (exp is in seconds, Date.now() is in milliseconds)
     const exp = jwtDecoded.exp as number;
     if (exp * 1000 < Date.now()) {
       return null;
     }
-    
+
     return jwtDecoded;
   } catch {
     return null;

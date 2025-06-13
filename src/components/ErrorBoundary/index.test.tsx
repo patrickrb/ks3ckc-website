@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import { ErrorBoundary } from './index';
 
 // Mock react-i18next
@@ -19,24 +21,40 @@ jest.mock('react-i18next', () => ({
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
   Alert: ({ children, status }: any) => (
-    <div data-testid="alert" data-status={status}>{children}</div>
+    <div data-testid="alert" data-status={status}>
+      {children}
+    </div>
   ),
   AlertIcon: () => <div data-testid="alert-icon" />,
-  AlertTitle: ({ children }: any) => <div data-testid="alert-title">{children}</div>,
+  AlertTitle: ({ children }: any) => (
+    <div data-testid="alert-title">{children}</div>
+  ),
   AlertDescription: ({ children }: any) => (
     <div data-testid="alert-description">{children}</div>
   ),
   Box: ({ children }: any) => <div data-testid="box">{children}</div>,
   Button: ({ children, onClick }: any) => (
-    <button data-testid="button" onClick={onClick}>{children}</button>
+    <button data-testid="button" onClick={onClick}>
+      {children}
+    </button>
   ),
-  Modal: ({ children, isOpen }: any) => 
-    isOpen ? <div data-testid="modal" role="dialog">{children}</div> : null,
+  Modal: ({ children, isOpen }: any) =>
+    isOpen ? (
+      <div data-testid="modal" role="dialog">
+        {children}
+      </div>
+    ) : null,
   ModalOverlay: () => <div data-testid="modal-overlay" />,
-  ModalContent: ({ children }: any) => <div data-testid="modal-content">{children}</div>,
-  ModalHeader: ({ children }: any) => <div data-testid="modal-header">{children}</div>,
+  ModalContent: ({ children }: any) => (
+    <div data-testid="modal-content">{children}</div>
+  ),
+  ModalHeader: ({ children }: any) => (
+    <div data-testid="modal-header">{children}</div>
+  ),
   ModalCloseButton: () => <button data-testid="modal-close-button">×</button>,
-  ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
+  ModalBody: ({ children }: any) => (
+    <div data-testid="modal-body">{children}</div>
+  ),
   useDisclosure: () => ({
     isOpen: false,
     onOpen: jest.fn(),
@@ -102,7 +120,9 @@ describe('ErrorBoundary', () => {
     expect(screen.getByTestId('alert')).toBeInTheDocument();
     expect(screen.getByTestId('alert')).toHaveAttribute('data-status', 'error');
     expect(screen.getByTestId('alert-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('alert-title')).toHaveTextContent('Something went wrong');
+    expect(screen.getByTestId('alert-title')).toHaveTextContent(
+      'Something went wrong'
+    );
     expect(screen.getByTestId('button')).toHaveTextContent('Show details');
   });
 
@@ -124,7 +144,9 @@ describe('ErrorBoundary', () => {
 
     expect(screen.getByTestId('modal')).toBeInTheDocument();
     expect(screen.getByTestId('modal')).toHaveAttribute('role', 'dialog');
-    expect(screen.getByTestId('modal-header')).toHaveTextContent('Something went wrong');
+    expect(screen.getByTestId('modal-header')).toHaveTextContent(
+      'Something went wrong'
+    );
     expect(screen.getByTestId('modal-body')).toBeInTheDocument();
   });
 
@@ -155,7 +177,7 @@ describe('ErrorBoundary', () => {
 
   it('button click functionality works', () => {
     const mockOnOpen = jest.fn();
-    
+
     render(
       <div>
         <button data-testid="button" onClick={mockOnOpen}>
@@ -177,14 +199,16 @@ describe('ErrorBoundary', () => {
           <div data-testid="alert-title">Something went wrong</div>
         </div>
         <div data-testid="modal" role="dialog" aria-modal="true">
-          <button data-testid="modal-close-button" aria-label="Close">×</button>
+          <button data-testid="modal-close-button" aria-label="Close">
+            ×
+          </button>
         </div>
       </div>
     );
 
     const alert = screen.getByTestId('alert');
     const modal = screen.getByTestId('modal');
-    
+
     expect(alert).toHaveAttribute('data-status', 'error');
     expect(modal).toHaveAttribute('role', 'dialog');
   });

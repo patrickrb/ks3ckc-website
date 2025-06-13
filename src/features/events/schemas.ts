@@ -6,7 +6,7 @@ export const zEventFormSchema = () =>
     name: z.string().min(1, 'Event name is required'),
     date: z.date(),
     startTime: z.string().optional(),
-    endTime: z.string().optional(), 
+    endTime: z.string().optional(),
     location: z.string().optional(),
     address: z.string().optional(),
     mapUrl: z.string().url().optional().or(z.literal('')),

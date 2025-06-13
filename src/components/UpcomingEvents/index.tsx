@@ -1,4 +1,5 @@
 import { Box, Heading, Link, Text, useColorModeValue } from '@chakra-ui/react';
+
 import { trpc } from '@/lib/trpc/client';
 
 interface Event {
@@ -20,8 +21,10 @@ export default function UpcomingEvents() {
   const mutedText = useColorModeValue('gray.500', 'gray.400');
 
   // Fetch upcoming and past events from the database
-  const { data: upcomingEvents = [], isLoading: isLoadingUpcoming } = trpc.events.getUpcoming.useQuery();
-  const { data: pastEvents = [], isLoading: isLoadingPast } = trpc.events.getPast.useQuery();
+  const { data: upcomingEvents = [], isLoading: isLoadingUpcoming } =
+    trpc.events.getUpcoming.useQuery();
+  const { data: pastEvents = [], isLoading: isLoadingPast } =
+    trpc.events.getPast.useQuery();
 
   const renderEventDetails = (event: Event) => {
     if (!event.startTime && !event.location && !event.description) {
@@ -32,7 +35,8 @@ export default function UpcomingEvents() {
       <>
         {event.startTime && (
           <Text fontSize="md" mb={1}>
-            {event.startTime}{event.endTime && ` - ${event.endTime}`}
+            {event.startTime}
+            {event.endTime && ` - ${event.endTime}`}
           </Text>
         )}
         {event.location && (

@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { 
-  Container, 
-  Heading, 
-  Text, 
-  VStack, 
-  HStack, 
-  Image, 
-  Box, 
+import {
+  Box,
+  Container,
+  HStack,
+  Heading,
+  Image,
+  Link,
+  Text,
+  VStack,
   useColorModeValue,
-  Link
 } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 
-import { getAvatarUrl, getAvatarFallbackName } from '@/lib/avatar';
 import { MarkdownRenderer } from '@/components/MarkdownRenderer';
+import { getAvatarFallbackName, getAvatarUrl } from '@/lib/avatar';
 import { trpc } from '@/lib/trpc/client';
 
 export const Blog = () => {
@@ -47,8 +47,12 @@ export const Blog = () => {
     return (
       <Container maxW="4xl" py="40px">
         <VStack spacing="4" textAlign="center">
-          <Heading size="lg" color="red.500">Blog Not Found</Heading>
-          <Text>The blog post you're looking for doesn't exist or has been removed.</Text>
+          <Heading size="lg" color="red.500">
+            Blog Not Found
+          </Heading>
+          <Text>
+            The blog post you're looking for doesn't exist or has been removed.
+          </Text>
           <Link href="/blog" color="blue.500" _hover={{ color: 'blue.600' }}>
             ← Return to all blogs
           </Link>
@@ -88,19 +92,22 @@ export const Blog = () => {
 
         {/* Author and Date Info */}
         <Box>
-          <HStack 
-            spacing="4" 
-            justifyContent="center" 
-            p="4" 
-            bg={bgColor} 
+          <HStack
+            spacing="4"
+            justifyContent="center"
+            p="4"
+            bg={bgColor}
             borderRadius="md"
           >
             <Image
               borderRadius="full"
               boxSize="50px"
               src={getAvatarUrl(
-                blog.data.author.image, 
-                getAvatarFallbackName(blog.data.author.name, blog.data.author.email)
+                blog.data.author.image,
+                getAvatarFallbackName(
+                  blog.data.author.name,
+                  blog.data.author.email
+                )
               )}
               alt={`Avatar of ${blog.data.author.name || 'Author'}`}
             />
@@ -126,8 +133,8 @@ export const Blog = () => {
 
         {/* Blog Content */}
         <Box>
-          <MarkdownRenderer 
-            content={blog.data.content} 
+          <MarkdownRenderer
+            content={blog.data.content}
             fontSize="lg"
             lineHeight="1.7"
           />

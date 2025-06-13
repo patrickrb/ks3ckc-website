@@ -82,7 +82,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        
+
       - name: Install system dependencies for Playwright
         run: |
           apt-get update

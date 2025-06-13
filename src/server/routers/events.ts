@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from '@/server/config/trpc';
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from '@/server/config/trpc';
 
 // Event input validation schema
 export const zEventFormSchema = () =>
@@ -8,7 +12,7 @@ export const zEventFormSchema = () =>
     name: z.string().min(1, 'Event name is required'),
     date: z.date(),
     startTime: z.string().optional(),
-    endTime: z.string().optional(), 
+    endTime: z.string().optional(),
     location: z.string().optional(),
     address: z.string().optional(),
     mapUrl: z.string().url().optional().or(z.literal('')),
@@ -30,29 +34,29 @@ export const eventsRouter = createTRPCRouter({
     .input(z.void())
     .output(z.array(z.any()))
     .query(async ({ ctx }) => {
-    const now = new Date();
-    
-    return ctx.db.event.findMany({
-      where: {
-        isActive: true,
-        date: {
-          gte: now,
-        },
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            callsign: true,
+      const now = new Date();
+
+      return ctx.db.event.findMany({
+        where: {
+          isActive: true,
+          date: {
+            gte: now,
           },
         },
-      },
-      orderBy: {
-        date: 'asc',
-      },
-    });
-  }),
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              callsign: true,
+            },
+          },
+        },
+        orderBy: {
+          date: 'asc',
+        },
+      });
+    }),
 
   // Public - Get all active past events
   getPast: publicProcedure()
@@ -66,29 +70,29 @@ export const eventsRouter = createTRPCRouter({
     .input(z.void())
     .output(z.array(z.any()))
     .query(async ({ ctx }) => {
-    const now = new Date();
-    
-    return ctx.db.event.findMany({
-      where: {
-        isActive: true,
-        date: {
-          lt: now,
-        },
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            callsign: true,
+      const now = new Date();
+
+      return ctx.db.event.findMany({
+        where: {
+          isActive: true,
+          date: {
+            lt: now,
           },
         },
-      },
-      orderBy: {
-        date: 'desc',
-      },
-    });
-  }),
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              callsign: true,
+            },
+          },
+        },
+        orderBy: {
+          date: 'desc',
+        },
+      });
+    }),
 
   // Admin/Contributor - Get all events (including inactive)
   getAll: protectedProcedure({ authorizations: ['ADMIN', 'CONTRIBUTOR'] })

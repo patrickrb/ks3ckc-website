@@ -45,7 +45,8 @@ export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
             </Text>
             <Stack>
               <Text>
-                You can learn more about KS3CKC and amateur radio by visiting our website:
+                You can learn more about KS3CKC and amateur radio by visiting
+                our website:
               </Text>
               <Text>
                 Visit{' '}
@@ -61,11 +62,12 @@ export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
               <AlertDescription pb={2}>
                 <Stack>
                   <Text>
-                    Have questions about amateur radio or want to get involved with KS3CKC?{' '}
+                    Have questions about amateur radio or want to get involved
+                    with KS3CKC?{' '}
                     <Link href="https://ks3ckc.radio" isExternal>
                       Visit our website
-                    </Link>
-                    {' '}or contact us!
+                    </Link>{' '}
+                    or contact us!
                   </Text>
                   <HStack spacing={4}>
                     <Button

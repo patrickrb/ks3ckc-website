@@ -2,8 +2,7 @@ import React from 'react';
 
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuFileEdit, LuNewspaper, LuUsers, LuCalendar} from 'react-icons/lu';
-
+import { LuCalendar, LuFileEdit, LuNewspaper, LuUsers } from 'react-icons/lu';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
 import { LinkAdmin } from '@/features/admin/LinkAdmin';

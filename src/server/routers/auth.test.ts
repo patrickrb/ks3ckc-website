@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
-import { sendEmail } from '@/server/config/email';
+
 import { validateCode } from '@/server/config/auth';
+import { sendEmail } from '@/server/config/email';
 import { authRouter } from '@/server/routers/auth';
 
 // Mock dependencies
@@ -21,7 +22,9 @@ jest.mock('@/emails/templates/login-code', () => {
 });
 
 jest.mock('@/emails/templates/login-not-found', () => ({
-  EmailLoginNotFound: jest.fn().mockImplementation(() => ({ type: 'login-not-found' })),
+  EmailLoginNotFound: jest
+    .fn()
+    .mockImplementation(() => ({ type: 'login-not-found' })),
 }));
 
 jest.mock('@/emails/templates/register-code', () => {
@@ -43,7 +46,11 @@ jest.mock('@/lib/i18n/server', () => ({
 
 // Mock the extended TRPC error
 jest.mock('@/server/config/errors', () => ({
-  ExtendedTRPCError: jest.fn().mockImplementation((args) => new Error(args.message || 'Extended TRPC Error')),
+  ExtendedTRPCError: jest
+    .fn()
+    .mockImplementation(
+      (args) => new Error(args.message || 'Extended TRPC Error')
+    ),
 }));
 
 // Create mock context
@@ -90,14 +97,16 @@ describe('authRouter', () => {
   describe('checkAuthenticated', () => {
     it('returns not authenticated when no user', async () => {
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.checkAuthenticated();
-      
+
       expect(result).toEqual({
         isAuthenticated: false,
         authorizations: undefined,
       });
-      expect(mockContext.logger.info).toHaveBeenCalledWith('User is not logged');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'User is not logged'
+      );
     });
 
     it('returns authenticated when user exists', async () => {
@@ -106,12 +115,12 @@ describe('authRouter', () => {
         email: 'test@example.com',
         authorizations: ['USER'],
       };
-      
+
       mockContext = createMockContext({ user: mockUser });
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.checkAuthenticated();
-      
+
       expect(result).toEqual({
         isAuthenticated: true,
         authorizations: ['USER'],
@@ -125,12 +134,12 @@ describe('authRouter', () => {
         email: 'test@example.com',
         authorizations: ['USER', 'ADMIN'],
       };
-      
+
       mockContext = createMockContext({ user: mockUser });
       const caller = authRouter.createCaller(mockContext);
-      
+
       await caller.checkAuthenticated();
-      
+
       expect(mockContext.logger.info).toHaveBeenCalledWith('User is logged');
     });
 
@@ -140,12 +149,12 @@ describe('authRouter', () => {
         email: 'test@example.com',
         authorizations: [],
       };
-      
+
       mockContext = createMockContext({ user: mockUser });
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.checkAuthenticated();
-      
+
       expect(result).toEqual({
         isAuthenticated: true,
         authorizations: [],
@@ -158,12 +167,12 @@ describe('authRouter', () => {
         email: 'test@example.com',
         authorizations: null,
       };
-      
+
       mockContext = createMockContext({ user: mockUser });
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.checkAuthenticated();
-      
+
       expect(result).toEqual({
         isAuthenticated: true,
         authorizations: null,
@@ -176,27 +185,29 @@ describe('authRouter', () => {
       const mockCookies = {
         delete: jest.fn(),
       };
-      
+
       (cookies as jest.Mock).mockReturnValue(mockCookies);
-      
+
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.logout();
-      
+
       expect(result).toEqual({ success: true });
       expect(mockCookies.delete).toHaveBeenCalledWith('auth');
-      expect(mockContext.logger.info).toHaveBeenCalledWith('User has been logged out');
+      expect(mockContext.logger.info).toHaveBeenCalledWith(
+        'User has been logged out'
+      );
     });
 
     it('handles logout when no cookie exists', async () => {
       const mockCookies = {
         delete: jest.fn(),
       };
-      
+
       (cookies as jest.Mock).mockReturnValue(mockCookies);
-      
+
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.logout()).resolves.toEqual({ success: true });
       expect(mockCookies.delete).toHaveBeenCalledWith('auth');
     });
@@ -230,13 +241,13 @@ describe('authRouter', () => {
       mockSendEmail.mockImplementation(() => Promise.resolve(true));
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.register(validInput);
-      
+
       expect(result).toEqual({
         verificationToken: 'verification-token',
       });
-      
+
       expect(mockContext.db.user.create).toHaveBeenCalledWith({
         data: {
           email: validInput.email,
@@ -259,10 +270,12 @@ describe('authRouter', () => {
       mockContext.db.user.findUnique.mockResolvedValue(existingUser);
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.register(validInput)).rejects.toThrow();
-      
-      expect(mockContext.logger.warn).toHaveBeenCalledWith('User already exists');
+
+      expect(mockContext.logger.warn).toHaveBeenCalledWith(
+        'User already exists'
+      );
       expect(mockContext.db.user.create).not.toHaveBeenCalled();
     });
 
@@ -273,7 +286,7 @@ describe('authRouter', () => {
       };
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.register(invalidInput)).rejects.toThrow();
     });
 
@@ -284,7 +297,7 @@ describe('authRouter', () => {
       };
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.register(invalidInput)).rejects.toThrow();
     });
 
@@ -293,7 +306,7 @@ describe('authRouter', () => {
       mockContext.db.user.create.mockRejectedValue(new Error('Database error'));
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.register(validInput)).rejects.toThrow();
     });
   });
@@ -322,10 +335,12 @@ describe('authRouter', () => {
 
       // Mock the validateCode function
       const mockValidateCode = validateCode as jest.Mock;
-      mockValidateCode.mockImplementation(() => Promise.resolve({
-        verificationToken: mockToken,
-        userJwt: "jwt-token",
-      }));
+      mockValidateCode.mockImplementation(() =>
+        Promise.resolve({
+          verificationToken: mockToken,
+          userJwt: 'jwt-token',
+        })
+      );
 
       mockContext.db.user.update.mockResolvedValue({
         ...mockUser,
@@ -338,25 +353,33 @@ describe('authRouter', () => {
       (cookies as jest.Mock).mockReturnValue(mockCookies);
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       const result = await caller.registerValidate(validInput);
-      
-      expect(result).toEqual({ token: "jwt-token" });
+
+      expect(result).toEqual({ token: 'jwt-token' });
       expect(mockContext.db.user.update).toHaveBeenCalledWith({
         where: { id: 'user-1' },
         data: { accountStatus: 'ENABLED' },
       });
-      expect(mockCookies.set).toHaveBeenCalledWith('auth', 'jwt-token', expect.any(Object));
+      expect(mockCookies.set).toHaveBeenCalledWith(
+        'auth',
+        'jwt-token',
+        expect.any(Object)
+      );
     });
 
     it('handles invalid verification code', async () => {
       // Mock validateCode to throw error
       const mockValidateCode = validateCode as jest.Mock;
-      mockValidateCode.mockImplementation(() => Promise.reject(new Error("Invalid code")));
+      mockValidateCode.mockImplementation(() =>
+        Promise.reject(new Error('Invalid code'))
+      );
 
       const caller = authRouter.createCaller(mockContext);
-      
-      await expect(caller.registerValidate(validInput)).rejects.toThrow('Invalid code');
+
+      await expect(caller.registerValidate(validInput)).rejects.toThrow(
+        'Invalid code'
+      );
     });
 
     it('validates input token format', async () => {
@@ -366,7 +389,7 @@ describe('authRouter', () => {
       };
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.registerValidate(invalidInput)).rejects.toThrow();
     });
 
@@ -377,7 +400,7 @@ describe('authRouter', () => {
       };
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       await expect(caller.registerValidate(invalidInput)).rejects.toThrow();
     });
   });
@@ -406,12 +429,12 @@ describe('authRouter', () => {
       mockSendEmail.mockImplementation(() => Promise.resolve(true));
 
       const caller = authRouter.createCaller(mockContext);
-      
+
       const registerResult = await caller.register({
         email: 'test@example.com',
         name: 'Test User',
       });
-      
+
       expect(registerResult.token).toBe('verification-token');
 
       // Step 2: Check auth (should be false)
@@ -420,10 +443,12 @@ describe('authRouter', () => {
 
       // Step 3: Validate email
       const mockValidateCode = validateCode as jest.Mock;
-      mockValidateCode.mockImplementation(() => Promise.resolve({
-        verificationToken: mockToken,
-        userJwt: 'jwt-token',
-      }));
+      mockValidateCode.mockImplementation(() =>
+        Promise.resolve({
+          verificationToken: mockToken,
+          userJwt: 'jwt-token',
+        })
+      );
 
       mockContext.db.user.update.mockResolvedValue({
         ...mockUser,
@@ -437,10 +462,14 @@ describe('authRouter', () => {
 
       // Step 4: Check auth with enabled user
       mockContext = createMockContext({
-        user: { ...mockUser, accountStatus: 'ENABLED', authorizations: ['USER'] },
+        user: {
+          ...mockUser,
+          accountStatus: 'ENABLED',
+          authorizations: ['USER'],
+        },
       });
       const newCaller = authRouter.createCaller(mockContext);
-      
+
       authResult = await newCaller.checkAuthenticated();
       expect(authResult.isAuthenticated).toBe(true);
       expect(authResult.authorizations).toContain('USER');

@@ -1,13 +1,20 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
-import { BlogListEntry } from './BlogListEntry';
+import { render, screen } from '@testing-library/react';
+
 import type { RouterOutputs } from '@/lib/trpc/types';
+
+import { BlogListEntry } from './BlogListEntry';
 
 // Mock avatar utilities
 jest.mock('@/lib/avatar', () => ({
-  getAvatarUrl: jest.fn((userImage, fallbackSeed) => 
-    userImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(fallbackSeed || 'default')}&background=e2e8f0&color=4a5568&size=200`
+  getAvatarUrl: jest.fn(
+    (userImage, fallbackSeed) =>
+      userImage ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        fallbackSeed || 'default'
+      )}&background=e2e8f0&color=4a5568&size=200`
   ),
   getAvatarFallbackName: jest.fn((name, email) => name || email || 'User'),
 }));
@@ -22,7 +29,11 @@ jest.mock('@chakra-ui/react', () => ({
   Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
   HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   Tag: ({ children, ...props }: any) => <span {...props}>{children}</span>,
-  Avatar: ({ name, ...props }: any) => <div data-testid="avatar" {...props}>{name}</div>,
+  Avatar: ({ name, ...props }: any) => (
+    <div data-testid="avatar" {...props}>
+      {name}
+    </div>
+  ),
 }));
 
 describe('BlogListEntry', () => {
@@ -55,11 +66,16 @@ describe('BlogListEntry', () => {
 
   it('renders blog post with featured image when provided', () => {
     render(<BlogListEntry blog={mockBlog} />);
-    
+
     // Check if the featured image is displayed
-    const featuredImage = screen.getByAltText('Featured image for Test Blog Post');
+    const featuredImage = screen.getByAltText(
+      'Featured image for Test Blog Post'
+    );
     expect(featuredImage).toBeInTheDocument();
-    expect(featuredImage).toHaveAttribute('src', 'https://example.com/featured-image.jpg');
+    expect(featuredImage).toHaveAttribute(
+      'src',
+      'https://example.com/featured-image.jpg'
+    );
   });
 
   it('renders blog post with fallback image when featuredImage is null', () => {
@@ -67,35 +83,42 @@ describe('BlogListEntry', () => {
       ...mockBlog,
       featuredImage: null,
     } as RouterOutputs['blogs']['getAll']['items'][number];
-    
+
     render(<BlogListEntry blog={blogWithoutImage} />);
-    
+
     // Check if the fallback image is displayed
-    const featuredImage = screen.getByAltText('Featured image for Test Blog Post');
+    const featuredImage = screen.getByAltText(
+      'Featured image for Test Blog Post'
+    );
     expect(featuredImage).toBeInTheDocument();
-    expect(featuredImage).toHaveAttribute('src', expect.stringContaining('unsplash.com'));
+    expect(featuredImage).toHaveAttribute(
+      'src',
+      expect.stringContaining('unsplash.com')
+    );
   });
 
   it('renders author name and date', () => {
     render(<BlogListEntry blog={mockBlog} />);
-    
+
     // Check if author name is displayed
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    
+
     // Check if date is displayed (formatted as locale date string)
     expect(screen.getByText('1/1/2023')).toBeInTheDocument();
   });
 
   it('renders blog title and content', () => {
     render(<BlogListEntry blog={mockBlog} />);
-    
+
     expect(screen.getByText('Test Blog Post')).toBeInTheDocument();
-    expect(screen.getByText('This is a test blog post content')).toBeInTheDocument();
+    expect(
+      screen.getByText('This is a test blog post content')
+    ).toBeInTheDocument();
   });
 
   it('renders tags when they exist', () => {
     render(<BlogListEntry blog={mockBlog} />);
-    
+
     expect(screen.getByText('Engineering')).toBeInTheDocument();
     expect(screen.getByText('Product')).toBeInTheDocument();
   });
@@ -105,20 +128,23 @@ describe('BlogListEntry', () => {
       ...mockBlog,
       tags: [],
     } as RouterOutputs['blogs']['getAll']['items'][number];
-    
+
     render(<BlogListEntry blog={blogWithoutTags} />);
-    
+
     expect(screen.queryByText('Engineering')).not.toBeInTheDocument();
     expect(screen.queryByText('Product')).not.toBeInTheDocument();
   });
 
   it('renders author avatar using avatar utilities', () => {
     render(<BlogListEntry blog={mockBlog} />);
-    
+
     // Check if author avatar is displayed
     const authorAvatar = screen.getByAltText('Avatar of John Doe');
     expect(authorAvatar).toBeInTheDocument();
-    expect(authorAvatar).toHaveAttribute('src', expect.stringContaining('ui-avatars.com'));
+    expect(authorAvatar).toHaveAttribute(
+      'src',
+      expect.stringContaining('ui-avatars.com')
+    );
   });
 
   it('handles author with custom image', () => {
@@ -129,11 +155,14 @@ describe('BlogListEntry', () => {
         image: 'data:image/jpeg;base64,customimage',
       },
     } as RouterOutputs['blogs']['getAll']['items'][number];
-    
+
     render(<BlogListEntry blog={blogWithCustomAvatar} />);
-    
+
     const authorAvatar = screen.getByAltText('Avatar of John Doe');
     expect(authorAvatar).toBeInTheDocument();
-    expect(authorAvatar).toHaveAttribute('src', 'data:image/jpeg;base64,customimage');
+    expect(authorAvatar).toHaveAttribute(
+      'src',
+      'data:image/jpeg;base64,customimage'
+    );
   });
 });

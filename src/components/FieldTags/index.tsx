@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 
 import {
   Box,
@@ -102,7 +102,9 @@ export const FieldTags = <FormattedValue = Value,>(
             onKeyDown={handleKeyDown}
             onFocus={() => field.setIsTouched(false)}
             onBlur={handleInputBlur}
-            placeholder={placeholder ? String(placeholder) : 'Type a tag and press Enter'}
+            placeholder={
+              placeholder ? String(placeholder) : 'Type a tag and press Enter'
+            }
             autoFocus={autoFocus}
           />
         </InputGroup>

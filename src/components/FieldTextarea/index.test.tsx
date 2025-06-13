@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+
 import { useField } from '@formiz/core';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import { FieldTextarea } from './index';
 
 // Mock Formiz hook
@@ -23,14 +25,14 @@ const mockField = {
   isProcessing: false,
   externalProcessing: {
     start: jest.fn(),
-    end: jest.fn()
+    end: jest.fn(),
   },
   isExternalProcessing: false,
   isDebouncing: false,
   hasBeenModified: false,
   resetKey: 0,
   formattedValue: '',
-  otherProps: {}
+  otherProps: {},
 };
 
 jest.mock('@formiz/core', () => ({
@@ -39,11 +41,18 @@ jest.mock('@formiz/core', () => ({
 
 // Mock FormGroup component
 jest.mock('@/components/FormGroup', () => ({
-  FormGroup: ({ children, errorMessage, id, isRequired, showError, ...props }: any) => {
+  FormGroup: ({
+    children,
+    errorMessage,
+    id,
+    isRequired,
+    showError,
+    ...props
+  }: any) => {
     const { ...domProps } = props;
     return (
-      <div 
-        data-testid="form-group" 
+      <div
+        data-testid="form-group"
         data-error-message={errorMessage}
         data-id={id}
         data-is-required={isRequired}
@@ -79,7 +88,7 @@ describe('FieldTextarea', () => {
 
   it('renders basic textarea field', () => {
     render(<FieldTextarea name="test" />);
-    
+
     expect(screen.getByTestId('field-textarea')).toBeInTheDocument();
     expect(screen.getByTestId('form-group')).toBeInTheDocument();
   });
@@ -91,35 +100,35 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     expect(textarea).toHaveValue('test textarea content');
   });
 
   it('handles value changes', () => {
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     fireEvent.change(textarea, { target: { value: 'new content' } });
-    
+
     expect(mockField.setValue).toHaveBeenCalledWith('new content');
   });
 
   it('handles focus events', () => {
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     fireEvent.focus(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(false);
   });
 
   it('handles blur events', () => {
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     fireEvent.blur(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(true);
   });
 
@@ -132,7 +141,7 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" placeholder="Enter your text here" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     expect(textarea).toHaveAttribute('placeholder', 'Enter your text here');
   });
@@ -144,7 +153,7 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     expect(textarea).toHaveValue('');
   });
@@ -161,7 +170,7 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('custom-textarea');
     expect(textarea).toBeInTheDocument();
     expect(textarea).toHaveAttribute('rows', '5');
@@ -179,10 +188,10 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     fireEvent.change(textarea, { target: { value: 'test' } });
-    
+
     expect(mockField.setValue).toHaveBeenCalledWith('test');
     expect(customOnChange).toHaveBeenCalled();
   });
@@ -199,10 +208,10 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     fireEvent.focus(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(false);
     expect(customOnFocus).toHaveBeenCalled();
   });
@@ -219,10 +228,10 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     fireEvent.blur(textarea);
-    
+
     expect(mockField.setIsTouched).toHaveBeenCalledWith(true);
     expect(customOnBlur).toHaveBeenCalled();
   });
@@ -236,11 +245,14 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" label="Test Textarea" />);
-    
+
     const formGroup = screen.getByTestId('form-group');
     expect(formGroup).toHaveAttribute('data-id', 'test-textarea');
     expect(formGroup).toHaveAttribute('data-is-required', 'true');
-    expect(formGroup).toHaveAttribute('data-error-message', 'Field is required');
+    expect(formGroup).toHaveAttribute(
+      'data-error-message',
+      'Field is required'
+    );
     expect(formGroup).toHaveAttribute('data-show-error', 'true');
   });
 
@@ -257,7 +269,7 @@ describe('FieldTextarea', () => {
         <div data-testid="textarea-children">Help text</div>
       </FieldTextarea>
     );
-    
+
     expect(screen.getByTestId('textarea-children')).toBeInTheDocument();
   });
 
@@ -275,10 +287,10 @@ describe('FieldTextarea', () => {
 
   it('maintains textarea ID consistency', () => {
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     const formGroup = screen.getByTestId('form-group');
-    
+
     expect(textarea).toHaveAttribute('id', 'test-textarea');
     expect(formGroup).toHaveAttribute('data-id', 'test-textarea');
   });
@@ -291,7 +303,7 @@ describe('FieldTextarea', () => {
     });
 
     render(<FieldTextarea name="test" />);
-    
+
     const textarea = screen.getByTestId('field-textarea');
     expect(textarea).toHaveValue(multilineContent);
   });
