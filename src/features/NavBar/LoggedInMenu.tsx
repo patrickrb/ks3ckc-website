@@ -3,7 +3,9 @@
 import React from 'react';
 
 import {
+  Avatar,
   Button,
+  HStack,
   Menu,
   MenuButton,
   MenuDivider,
@@ -19,6 +21,7 @@ import { useRouter } from 'next/navigation';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { APP_PATH } from '@/features/app/constants';
 import { useAuth } from '@/hooks/useAuth';
+import { getAvatarFallbackName, getAvatarUrl } from '@/lib/avatar';
 
 export const LoggedInMenu = ({ ...rest }: StackProps) => {
   const router = useRouter();
@@ -36,7 +39,17 @@ export const LoggedInMenu = ({ ...rest }: StackProps) => {
     <Stack display={{ base: 'none', md: 'flex' }}>
       <Menu>
         <MenuButton as={Button} bg={menuButtonBg} color={menuButtonColor}>
-          Profile
+          <HStack spacing="2">
+            <Avatar
+              size="sm"
+              name={getAvatarFallbackName(account?.name, account?.email)}
+              src={getAvatarUrl(
+                account?.image,
+                getAvatarFallbackName(account?.name, account?.email)
+              )}
+            />
+            <span>Profile</span>
+          </HStack>
         </MenuButton>
         <MenuList>
           <MenuGroup>
