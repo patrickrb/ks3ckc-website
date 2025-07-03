@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Stack } from '@chakra-ui/react';
+import { Divider, Stack } from '@chakra-ui/react';
 import { z } from 'zod';
 
+import { BlogImageManager } from '@/components/BlogImageManager';
 import { FieldImageUpload } from '@/components/FieldImageUpload';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldMarkdown } from '@/components/FieldMarkdown';
@@ -22,7 +23,11 @@ export const BlogSchema = z.object({
   tags: z.array(z.string()).default([]),
 });
 
-export const BlogForm = () => {
+interface BlogFormProps {
+  blogId?: string;
+}
+
+export const BlogForm = ({ blogId }: BlogFormProps) => {
   return (
     <Stack spacing={4}>
       <FieldInput
@@ -48,7 +53,14 @@ export const BlogForm = () => {
         required="Content is required"
         helper="You can use Markdown to format your content"
         placeholder="Write your blog content here using Markdown..."
+        blogId={blogId}
       />
+      {blogId && (
+        <>
+          <Divider />
+          <BlogImageManager blogId={blogId} />
+        </>
+      )}
     </Stack>
   );
 };

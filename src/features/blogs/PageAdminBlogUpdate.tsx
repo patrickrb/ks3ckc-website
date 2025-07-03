@@ -111,7 +111,7 @@ export default function PageAdminBlogUpdate() {
         {isReady && blog.isError && <ErrorPage />}
         {isReady && blog.isSuccess && (
           <AdminLayoutPageContent>
-            <BlogForm />
+            <BlogForm blogId={blog.data?.id} />
           </AdminLayoutPageContent>
         )}
       </AdminLayoutPage>

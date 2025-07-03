@@ -62,17 +62,34 @@ model Repository {
 }
 
 model Blogs {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   title         String
-  content       String   @db.Text
+  content       String      @db.Text
   featuredImage String?
-  tags          String[] @default([])
-  author        User     @relation(fields: [authorId], references: [id])
+  tags          String[]    @default([])
+  author        User        @relation(fields: [authorId], references: [id])
   authorId      String
+  images        BlogImage[]
   
   @@index([authorId])
+}
+
+model BlogImage {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  filename    String
+  originalName String
+  blobUrl     String
+  blobName    String
+  mimeType    String
+  size        Int
+  blog        Blogs    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId      String
+  
+  @@index([blogId])
 }
 
 model News {
