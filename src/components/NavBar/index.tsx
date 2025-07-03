@@ -17,7 +17,6 @@ import {
   Stack,
   StackProps,
   useBreakpointValue,
-  useTheme,
 } from '@chakra-ui/react';
 import { Heading } from '@react-email/components';
 import Link from 'next/link';
@@ -35,8 +34,6 @@ export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 
 const NavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
-  const theme = useTheme();
-  console.log('theme: ', theme);
   return (
     <Stack direction="row" spacing="1" {...rest}>
       <NavBarMainMenuItem href="/home">

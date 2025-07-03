@@ -42,7 +42,9 @@ jest.mock('@chakra-ui/react', () => ({
   Text: ({ children, ...props }: any) => <p {...props}>{children}</p>,
   VStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-  Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
+  Image: ({ alt, ...props }: any) => (
+    <div data-testid="image" data-alt={alt} {...props} />
+  ),
   Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
   Spinner: () => <div data-testid="spinner">Loading...</div>,
 }));

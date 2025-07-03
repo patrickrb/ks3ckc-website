@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 import { getAvatarFallbackName, getAvatarUrl } from '@/lib/avatar';
+import { truncateContent } from '@/lib/text';
 import type { RouterOutputs } from '@/lib/trpc/types';
 
 interface BlogAuthorProps {
@@ -84,6 +85,13 @@ export const BlogListEntry = ({
   blog,
   layoutDirection = 'normal',
 }: AdminBlogActionProps) => {
+  const { text: truncatedContent, isTruncated } = truncateContent(
+    blog.content,
+    150
+  );
+  const contentColor = useColorModeValue('gray.700', 'gray.200');
+  const linkColor = useColorModeValue('blue.500', 'blue.300');
+
   return (
     <>
       <Box
@@ -153,13 +161,21 @@ export const BlogListEntry = ({
               {blog.title}
             </Link>
           </Heading>
-          <Text
-            as="p"
-            marginTop="2"
-            color={useColorModeValue('gray.700', 'gray.200')}
-            fontSize="lg"
-          >
-            {blog.content}
+          <Text as="p" marginTop="2" color={contentColor} fontSize="lg">
+            {truncatedContent}
+            {isTruncated && (
+              <>
+                ...{' '}
+                <Link
+                  href={`/blog/${blog.id}`}
+                  color={linkColor}
+                  fontWeight="medium"
+                  _hover={{ textDecoration: 'underline' }}
+                >
+                  read more
+                </Link>
+              </>
+            )}
           </Text>
           <BlogAuthor
             name={blog.author.name || 'anonymous'}

@@ -71,9 +71,9 @@ jest.mock('@chakra-ui/react', () => ({
     </button>
   ),
   Avatar: ({ src, name, ...props }: any) => (
-    <img data-testid="avatar" src={src} alt={name} {...props} />
+    <div data-testid="avatar" data-src={src} data-alt={name} {...props} />
   ),
-  useColorModeValue: jest.fn((light, dark) => light),
+  useColorModeValue: jest.fn((light) => light),
 }));
 
 // Mock avatar utilities

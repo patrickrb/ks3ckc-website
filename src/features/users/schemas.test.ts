@@ -1,7 +1,4 @@
-import {
-  USER_AUTHORIZATIONS,
-  UserAuthorization,
-} from '@/features/users/schemas';
+import { USER_AUTHORIZATIONS } from '@/features/users/schemas';
 
 describe('User Authorizations', () => {
   it('should include CONTRIBUTOR authorization', () => {

@@ -1,26 +1,9 @@
 'use client';
 
-import {
-  AtSignIcon,
-  ChatIcon,
-  ExternalLinkIcon,
-  LinkIcon,
-} from '@chakra-ui/icons';
-import {
-  Box,
-  Container,
-  Flex,
-  Icon,
-  Link,
-  SimpleGrid,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 
 import AboutUs from '@/components/AboutUs';
 import HeroComponent from '@/components/HeroComponent';
-import NewsItems from '@/components/NewsItems';
-import RecentContacts from '@/components/RecentContacts';
-import UpcomingEvents from '@/components/UpcomingEvents';
 
 export default function AboutPage() {
   return (

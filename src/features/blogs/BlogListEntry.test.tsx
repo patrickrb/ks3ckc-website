@@ -26,7 +26,9 @@ jest.mock('@chakra-ui/react', () => ({
   Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
   Heading: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
   Text: ({ children, ...props }: any) => <p {...props}>{children}</p>,
-  Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
+  Image: ({ alt, ...props }: any) => (
+    <div data-testid="image" data-alt={alt} {...props} />
+  ),
   HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   Tag: ({ children, ...props }: any) => <span {...props}>{children}</span>,
   Avatar: ({ name, ...props }: any) => (
@@ -164,5 +166,54 @@ describe('BlogListEntry', () => {
       'src',
       'data:image/jpeg;base64,customimage'
     );
+  });
+
+  it('displays full content when content is short', () => {
+    const shortContentBlog = {
+      ...mockBlog,
+      content: 'This is a short blog post.',
+    } as RouterOutputs['blogs']['getAll']['items'][number];
+
+    render(<BlogListEntry blog={shortContentBlog} />);
+
+    expect(screen.getByText('This is a short blog post.')).toBeInTheDocument();
+    expect(screen.queryByText('read more')).not.toBeInTheDocument();
+  });
+
+  it('truncates long content and shows read more link', () => {
+    const longContentBlog = {
+      ...mockBlog,
+      content:
+        'This is a very long blog post content that should be truncated because it exceeds the maximum character limit for the blog list preview and should show a read more link.',
+    } as RouterOutputs['blogs']['getAll']['items'][number];
+
+    render(<BlogListEntry blog={longContentBlog} />);
+
+    // Should show truncated content with ellipses
+    expect(
+      screen.getByText(
+        /This is a very long blog post content that should be truncated/
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText(/\.\.\./)).toBeInTheDocument();
+
+    // Should have read more link
+    const readMoreLink = screen.getByText('read more');
+    expect(readMoreLink).toBeInTheDocument();
+    expect(readMoreLink.closest('a')).toHaveAttribute('href', '/blog/1');
+  });
+
+  it('truncates content at paragraph break when available', () => {
+    const multiParagraphBlog = {
+      ...mockBlog,
+      content:
+        'First paragraph content.\n\nSecond paragraph that should not be shown in the preview.',
+    } as RouterOutputs['blogs']['getAll']['items'][number];
+
+    render(<BlogListEntry blog={multiParagraphBlog} />);
+
+    expect(screen.getByText(/First paragraph content\./)).toBeInTheDocument();
+    expect(screen.queryByText(/Second paragraph/)).not.toBeInTheDocument();
+    expect(screen.getByText('read more')).toBeInTheDocument();
   });
 });

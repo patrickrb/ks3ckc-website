@@ -1,20 +1,6 @@
 'use client';
 
-import {
-  AtSignIcon,
-  ChatIcon,
-  ExternalLinkIcon,
-  LinkIcon,
-} from '@chakra-ui/icons';
-import {
-  Box,
-  Container,
-  Flex,
-  Icon,
-  Link,
-  SimpleGrid,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 
 import HeroComponent from '@/components/HeroComponent';
 import UpcomingEvents from '@/components/UpcomingEvents';
