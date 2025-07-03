@@ -27,6 +27,10 @@ jobs:
       AUTH_SECRET: Replace me with `openssl rand -base64 32` generated secret
       EMAIL_SERVER: smtp://username:password@localhost:1025
       EMAIL_FROM: Start UI <noreply@example.com>
+      # Azure Blob Storage (test values for CI)
+      AZURE_STORAGE_ACCOUNT_NAME: testaccount
+      AZURE_STORAGE_ACCOUNT_KEY: dGVzdC1rZXktZm9yLWNpLXRlc3RzLW5vdC1yZWFsLWp1c3QtcGxhY2Vob2xkZXI=
+      AZURE_STORAGE_CONTAINER_NAME: test-images
     services:
       postgres:
         image: postgres

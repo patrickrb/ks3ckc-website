@@ -26,6 +26,11 @@ export const env = createEnv({
     // API credentials
     CLOUDLOG_API_KEY: z.string().optional(),
     CLOUDLOG_API_URL: z.string().url().optional(),
+    
+    // Azure Blob Storage
+    AZURE_STORAGE_ACCOUNT_NAME: z.string().min(1, 'Azure Storage Account Name is required'),
+    AZURE_STORAGE_ACCOUNT_KEY: z.string().min(1, 'Azure Storage Account Key is required'),
+    AZURE_STORAGE_CONTAINER_NAME: z.string().min(1, 'Azure Storage Container Name is required'),
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
       .default(process.env.NODE_ENV === 'production' ? 'error' : 'info'),
@@ -67,6 +72,9 @@ export const env = createEnv({
     LOGGER_PRETTY: process.env.LOGGER_PRETTY,
     CLOUDLOG_API_KEY: process.env.CLOUDLOG_API_KEY,
     CLOUDLOG_API_URL: process.env.CLOUDLOG_API_URL,
+    AZURE_STORAGE_ACCOUNT_NAME: process.env.AZURE_STORAGE_ACCOUNT_NAME,
+    AZURE_STORAGE_ACCOUNT_KEY: process.env.AZURE_STORAGE_ACCOUNT_KEY,
+    AZURE_STORAGE_CONTAINER_NAME: process.env.AZURE_STORAGE_CONTAINER_NAME,
 
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_VERCEL_URL
       ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`

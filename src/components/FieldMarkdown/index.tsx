@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
   Box,
@@ -9,10 +9,12 @@ import {
   Tabs,
   Textarea,
   TextareaProps,
+  useToast,
 } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import { trpc } from '@/lib/trpc/client';
 
 type Value = TextareaProps['value'];
 
@@ -25,6 +27,7 @@ export type FieldMarkdownProps<FormattedValue = Value> = FieldProps<
   FormGroupProps &
   Pick<TextareaProps, UsualTextareaProps> & {
     textareaProps?: Omit<TextareaProps, UsualTextareaProps>;
+    blogId?: string;
   };
 
 export const FieldMarkdown = <FormattedValue = Value,>(
@@ -32,8 +35,14 @@ export const FieldMarkdown = <FormattedValue = Value,>(
 ) => {
   const field = useField(props);
   const [tabIndex, setTabIndex] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const toast = useToast();
 
-  const { textareaProps, children, placeholder, ...rest } = field.otherProps;
+  const { textareaProps, children, placeholder, blogId, ...rest } =
+    field.otherProps;
+
+  const uploadImage = trpc.blogImages.upload.useMutation();
 
   const formGroupProps = {
     ...rest,
@@ -45,6 +54,112 @@ export const FieldMarkdown = <FormattedValue = Value,>(
 
   const handleTabsChange = (index: number) => {
     setTabIndex(index);
+  };
+
+  const handleFileUpload = async (file: File) => {
+    if (!blogId) {
+      toast({
+        title: 'Error',
+        description: 'Blog ID is required for image upload',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        const base64Data = base64String.split(',')[1]!;
+
+        const result = await uploadImage.mutateAsync({
+          blogId,
+          file: {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            data: base64Data,
+          },
+        });
+
+        const imageMarkdown = `![${result.originalName}](${result.blobUrl})`;
+
+        if (textareaRef.current) {
+          const textarea = textareaRef.current;
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const currentValue = field.value?.toString() || '';
+          const newValue =
+            currentValue.slice(0, start) +
+            imageMarkdown +
+            currentValue.slice(end);
+
+          field.setValue(newValue);
+
+          setTimeout(() => {
+            textarea.focus();
+            textarea.setSelectionRange(
+              start + imageMarkdown.length,
+              start + imageMarkdown.length
+            );
+          }, 0);
+        }
+
+        toast({
+          title: 'Success',
+          description: 'Image uploaded successfully',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      };
+
+      reader.readAsDataURL(file);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to upload image',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+
+    if (imageFiles.length > 0 && imageFiles[0]) {
+      handleFileUpload(imageFiles[0]);
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const items = Array.from(e.clipboardData.items);
+    const imageItem = items.find((item) => item.type.startsWith('image/'));
+
+    if (imageItem) {
+      e.preventDefault();
+      const file = imageItem.getAsFile();
+      if (file) {
+        handleFileUpload(file);
+      }
+    }
   };
 
   // A simple markdown renderer
@@ -88,9 +203,10 @@ export const FieldMarkdown = <FormattedValue = Value,>(
           <TabPanel padding={0} paddingTop={4}>
             <Textarea
               {...textareaProps}
+              ref={textareaRef}
               placeholder={
                 placeholder ||
-                'Enter markdown content... (supports **bold**, *italic*, and more)'
+                'Enter markdown content... (supports **bold**, *italic*, and more)\n\nDrop or paste images to upload them!'
               }
               id={field.id}
               value={field.value ?? ''}
@@ -106,8 +222,13 @@ export const FieldMarkdown = <FormattedValue = Value,>(
                 field.setIsTouched(true);
                 textareaProps?.onBlur?.(e);
               }}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onPaste={handlePaste}
               minHeight="400px"
               fontFamily="mono"
+              opacity={isUploading ? 0.6 : 1}
+              cursor={isUploading ? 'wait' : 'text'}
             />
             {tabIndex === 0 && (
               <div
@@ -127,6 +248,10 @@ export const FieldMarkdown = <FormattedValue = Value,>(
                   </li>
                   <li>
                     <code>![image alt](image-url.jpg)</code> for images
+                  </li>
+                  <li>
+                    <strong>Drag & drop</strong> or <strong>paste</strong>{' '}
+                    images to upload
                   </li>
                   <li>
                     <code># Heading</code> for headings (# to #####)
