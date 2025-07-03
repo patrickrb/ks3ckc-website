@@ -74,7 +74,7 @@ export default function NewsItems() {
       </Heading>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} w="full">
         {Array.isArray(newsItems) &&
-          newsItems.map((item, i) => (
+          newsItems.map((item) => (
             <Box
               key={item.id}
               data-testid="news-item"

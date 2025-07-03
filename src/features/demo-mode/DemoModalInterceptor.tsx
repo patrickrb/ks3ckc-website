@@ -6,7 +6,6 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
-  Code,
   HStack,
   Link,
   Modal,
