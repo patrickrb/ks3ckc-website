@@ -1,9 +1,16 @@
 import React, { useRef, useState } from 'react';
 
+import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
-  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Tab,
   TabList,
   TabPanel,
@@ -12,6 +19,7 @@ import {
   Text,
   Textarea,
   TextareaProps,
+  VStack,
   useToast,
 } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
@@ -354,80 +362,103 @@ export const FieldMarkdown = <FormattedValue = Value,>(
       </Tabs>
       {children}
 
-      {/* Image Alignment Menu */}
-      {showAlignmentMenu && pendingImage && (
-        <Box
-          position="fixed"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
-          bg="white"
-          boxShadow="xl"
-          borderRadius="md"
-          p={6}
-          zIndex={1000}
-          border="1px solid"
-          borderColor="gray.200"
-        >
-          <Text fontSize="lg" fontWeight="semibold" mb={4}>
-            Choose image alignment
-          </Text>
-          <Text fontSize="sm" color="gray.600" mb={4}>
-            {pendingImage.originalName}
-          </Text>
-          <HStack spacing={3}>
+      {/* Image Alignment Modal */}
+      <Modal
+        isOpen={showAlignmentMenu}
+        onClose={() => {
+          setShowAlignmentMenu(false);
+          setPendingImage(null);
+        }}
+        isCentered
+        size={{ base: 'sm', md: 'md' }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Choose Image Alignment</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={4}>
+              <Text
+                fontSize="sm"
+                color="gray.500"
+                textAlign="center"
+                noOfLines={1}
+              >
+                {pendingImage?.originalName}
+              </Text>
+              <VStack spacing={3} w="full">
+                <Button
+                  onClick={() => insertImageWithAlignment('left')}
+                  colorScheme="blue"
+                  variant="outline"
+                  w="full"
+                  size="lg"
+                  h="60px"
+                  leftIcon={<ArrowLeftIcon />}
+                  _hover={{ bg: 'blue.50' }}
+                >
+                  <VStack spacing={1}>
+                    <Text fontSize="sm" fontWeight="semibold">
+                      Float Left
+                    </Text>
+                    <Text fontSize="xs" opacity={0.8}>
+                      Text wraps around the right side
+                    </Text>
+                  </VStack>
+                </Button>
+                <Button
+                  onClick={() => insertImageWithAlignment('right')}
+                  colorScheme="blue"
+                  variant="outline"
+                  w="full"
+                  size="lg"
+                  h="60px"
+                  rightIcon={<ArrowRightIcon />}
+                  _hover={{ bg: 'blue.50' }}
+                >
+                  <VStack spacing={1}>
+                    <Text fontSize="sm" fontWeight="semibold">
+                      Float Right
+                    </Text>
+                    <Text fontSize="xs" opacity={0.8}>
+                      Text wraps around the left side
+                    </Text>
+                  </VStack>
+                </Button>
+                <Button
+                  onClick={() => insertImageWithAlignment('none')}
+                  colorScheme="blue"
+                  variant="solid"
+                  w="full"
+                  size="lg"
+                  h="60px"
+                  _hover={{ bg: 'blue.600' }}
+                >
+                  <VStack spacing={1}>
+                    <Text fontSize="sm" fontWeight="semibold">
+                      Center (Recommended)
+                    </Text>
+                    <Text fontSize="xs" opacity={0.9}>
+                      Full width display, no text wrapping
+                    </Text>
+                  </VStack>
+                </Button>
+              </VStack>
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
             <Button
-              onClick={() => insertImageWithAlignment('left')}
-              colorScheme="blue"
-              variant="outline"
+              variant="ghost"
+              onClick={() => {
+                setShowAlignmentMenu(false);
+                setPendingImage(null);
+              }}
             >
-              Float Left
+              Cancel
             </Button>
-            <Button
-              onClick={() => insertImageWithAlignment('right')}
-              colorScheme="blue"
-              variant="outline"
-            >
-              Float Right
-            </Button>
-            <Button
-              onClick={() => insertImageWithAlignment('none')}
-              colorScheme="blue"
-              variant="outline"
-            >
-              Center
-            </Button>
-          </HStack>
-          <Button
-            size="sm"
-            variant="ghost"
-            mt={3}
-            onClick={() => {
-              setShowAlignmentMenu(false);
-              setPendingImage(null);
-            }}
-          >
-            Cancel
-          </Button>
-        </Box>
-      )}
-
-      {/* Overlay for alignment menu */}
-      {showAlignmentMenu && (
-        <Box
-          position="fixed"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          bg="blackAlpha.500"
-          zIndex={999}
-          onClick={() => {
-            setShowAlignmentMenu(false);
-            setPendingImage(null);
-          }}
-        />
-      )}
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </FormGroup>
   );
 };
