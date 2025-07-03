@@ -17,7 +17,6 @@ import {
   Stack,
   StackProps,
   useBreakpointValue,
-  useTheme,
 } from '@chakra-ui/react';
 import { Heading } from '@react-email/components';
 import Link from 'next/link';

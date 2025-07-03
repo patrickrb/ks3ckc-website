@@ -7,14 +7,11 @@ import UpcomingEvents from './index';
 
 // Mock Chakra UI components
 jest.mock('@chakra-ui/react', () => ({
-  Box: ({ children, ...props }: any) => {
-    const { borderRadius, ...otherProps } = props;
-    return (
-      <div data-testid="box" {...otherProps}>
-        {children}
-      </div>
-    );
-  },
+  Box: ({ children, ...props }: any) => (
+    <div data-testid="box" {...props}>
+      {children}
+    </div>
+  ),
   Heading: ({ children, ...props }: any) => (
     <h1 data-testid="heading" {...props}>
       {children}
@@ -35,7 +32,7 @@ jest.mock('@chakra-ui/react', () => ({
       {children}
     </p>
   ),
-  useColorModeValue: (light: any, dark: any) => light,
+  useColorModeValue: (light: any) => light,
 }));
 
 // Mock tRPC

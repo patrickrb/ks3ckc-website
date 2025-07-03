@@ -26,7 +26,9 @@ jest.mock('@chakra-ui/react', () => ({
   Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
   Heading: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
   Text: ({ children, ...props }: any) => <p {...props}>{children}</p>,
-  Image: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
+  Image: ({ alt, ...props }: any) => (
+    <div data-testid="image" data-alt={alt} {...props} />
+  ),
   HStack: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   Tag: ({ children, ...props }: any) => <span {...props}>{children}</span>,
   Avatar: ({ name, ...props }: any) => (
