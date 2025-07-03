@@ -23,7 +23,16 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
       // Italic
       .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-      // Images (must come before links since they have similar syntax)
+      // Images with alignment (must come before regular images)
+      .replace(
+        /!\[(.*?)\]\((.*?)\s+"align-left"\)/gim,
+        '<img alt="$1" src="$2" style="float: left; margin: 0 1rem 1rem 0; max-width: 300px; height: auto;" />'
+      )
+      .replace(
+        /!\[(.*?)\]\((.*?)\s+"align-right"\)/gim,
+        '<img alt="$1" src="$2" style="float: right; margin: 0 0 1rem 1rem; max-width: 300px; height: auto;" />'
+      )
+      // Regular images (must come after aligned images)
       .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
       // Links
       .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
@@ -92,6 +101,9 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             borderRadius: 'md',
             boxShadow: 'sm',
           },
+          '& img[style*="float"]': {
+            marginY: '0',
+          },
           '& li': {
             marginLeft: '1.5rem',
             listStyleType: 'disc',
@@ -102,6 +114,13 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           },
           '& p': {
             marginBottom: '1rem',
+            lineHeight: '1.6',
+          },
+          // Clear floats after content
+          '&:after': {
+            content: '""',
+            display: 'table',
+            clear: 'both',
           },
         }}
         {...boxProps}
