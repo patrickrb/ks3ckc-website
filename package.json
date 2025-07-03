@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "A club website for KS3CKC",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "prepare": "husky install",
