@@ -2,11 +2,14 @@ import React, { useRef, useState } from 'react';
 
 import {
   Box,
+  Button,
+  HStack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   Textarea,
   TextareaProps,
   useToast,
@@ -36,6 +39,8 @@ export const FieldMarkdown = <FormattedValue = Value,>(
   const field = useField(props);
   const [tabIndex, setTabIndex] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [pendingImage, setPendingImage] = useState<any>(null);
+  const [showAlignmentMenu, setShowAlignmentMenu] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const toast = useToast();
 
@@ -86,32 +91,12 @@ export const FieldMarkdown = <FormattedValue = Value,>(
           },
         });
 
-        const imageMarkdown = `![${result.originalName}](${result.blobUrl})`;
-
-        if (textareaRef.current) {
-          const textarea = textareaRef.current;
-          const start = textarea.selectionStart;
-          const end = textarea.selectionEnd;
-          const currentValue = field.value?.toString() || '';
-          const newValue =
-            currentValue.slice(0, start) +
-            imageMarkdown +
-            currentValue.slice(end);
-
-          field.setValue(newValue);
-
-          setTimeout(() => {
-            textarea.focus();
-            textarea.setSelectionRange(
-              start + imageMarkdown.length,
-              start + imageMarkdown.length
-            );
-          }, 0);
-        }
+        // Show alignment menu for uploaded image
+        showImageAlignmentMenu(result);
 
         toast({
           title: 'Success',
-          description: 'Image uploaded successfully',
+          description: 'Image uploaded successfully. Choose alignment.',
           status: 'success',
           duration: 3000,
           isClosable: true,
@@ -162,6 +147,57 @@ export const FieldMarkdown = <FormattedValue = Value,>(
     }
   };
 
+  const showImageAlignmentMenu = (imageResult: any) => {
+    setPendingImage(imageResult);
+    setShowAlignmentMenu(true);
+    setIsUploading(false);
+  };
+
+  const insertImageWithAlignment = (alignment: 'none' | 'left' | 'right') => {
+    if (!pendingImage || !textareaRef.current) return;
+
+    const textarea = textareaRef.current;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const currentValue = field.value?.toString() || '';
+
+    let imageMarkdown;
+    switch (alignment) {
+      case 'left':
+        imageMarkdown = `![${pendingImage.originalName}](${pendingImage.blobUrl} "align-left")`;
+        break;
+      case 'right':
+        imageMarkdown = `![${pendingImage.originalName}](${pendingImage.blobUrl} "align-right")`;
+        break;
+      default:
+        imageMarkdown = `![${pendingImage.originalName}](${pendingImage.blobUrl})`;
+    }
+
+    const newValue =
+      currentValue.slice(0, start) + imageMarkdown + currentValue.slice(end);
+
+    field.setValue(newValue);
+
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(
+        start + imageMarkdown.length,
+        start + imageMarkdown.length
+      );
+    }, 0);
+
+    setShowAlignmentMenu(false);
+    setPendingImage(null);
+
+    toast({
+      title: 'Success',
+      description: 'Image inserted successfully',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
   // A simple markdown renderer
   const renderMarkdown = (markdown: string) => {
     if (!markdown) return null;
@@ -177,8 +213,20 @@ export const FieldMarkdown = <FormattedValue = Value,>(
       .replace(/\*(.*?)\*/gim, '<em>$1</em>')
       // Links
       .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
-      // Images
-      .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
+      // Images with alignment
+      .replace(
+        /!\[(.*?)\]\((.*?)\s+"align-left"\)/gim,
+        '<img alt="$1" src="$2" style="float: left; margin: 0 1rem 1rem 0; max-width: 300px; height: auto;" />'
+      )
+      .replace(
+        /!\[(.*?)\]\((.*?)\s+"align-right"\)/gim,
+        '<img alt="$1" src="$2" style="float: right; margin: 0 0 1rem 1rem; max-width: 300px; height: auto;" />'
+      )
+      // Regular images (no alignment)
+      .replace(
+        /!\[(.*?)\]\((.*?)\)/gim,
+        '<img alt="$1" src="$2" style="max-width: 100%; height: auto; display: block; margin: 1rem auto;" />'
+      )
       // Lists
       .replace(/^\- (.*$)/gim, '<li>$1</li>')
       // Line breaks
@@ -250,6 +298,14 @@ export const FieldMarkdown = <FormattedValue = Value,>(
                     <code>![image alt](image-url.jpg)</code> for images
                   </li>
                   <li>
+                    <code>![image alt](url "align-left")</code> for left-aligned
+                    images
+                  </li>
+                  <li>
+                    <code>![image alt](url "align-right")</code> for
+                    right-aligned images
+                  </li>
+                  <li>
                     <strong>Drag & drop</strong> or <strong>paste</strong>{' '}
                     images to upload
                   </li>
@@ -271,6 +327,25 @@ export const FieldMarkdown = <FormattedValue = Value,>(
               minHeight="400px"
               bg="white"
               color="gray.800"
+              sx={{
+                '& img[style*="float"]': {
+                  '&:after': {
+                    content: '""',
+                    display: 'table',
+                    clear: 'both',
+                  },
+                },
+                '& p': {
+                  lineHeight: '1.6',
+                  marginBottom: '1rem',
+                },
+                // Clear floats after content
+                '&:after': {
+                  content: '""',
+                  display: 'table',
+                  clear: 'both',
+                },
+              }}
             >
               {renderMarkdown(field.value?.toString() || '')}
             </Box>
@@ -278,6 +353,81 @@ export const FieldMarkdown = <FormattedValue = Value,>(
         </TabPanels>
       </Tabs>
       {children}
+
+      {/* Image Alignment Menu */}
+      {showAlignmentMenu && pendingImage && (
+        <Box
+          position="fixed"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          bg="white"
+          boxShadow="xl"
+          borderRadius="md"
+          p={6}
+          zIndex={1000}
+          border="1px solid"
+          borderColor="gray.200"
+        >
+          <Text fontSize="lg" fontWeight="semibold" mb={4}>
+            Choose image alignment
+          </Text>
+          <Text fontSize="sm" color="gray.600" mb={4}>
+            {pendingImage.originalName}
+          </Text>
+          <HStack spacing={3}>
+            <Button
+              onClick={() => insertImageWithAlignment('left')}
+              colorScheme="blue"
+              variant="outline"
+            >
+              Float Left
+            </Button>
+            <Button
+              onClick={() => insertImageWithAlignment('right')}
+              colorScheme="blue"
+              variant="outline"
+            >
+              Float Right
+            </Button>
+            <Button
+              onClick={() => insertImageWithAlignment('none')}
+              colorScheme="blue"
+              variant="outline"
+            >
+              Center
+            </Button>
+          </HStack>
+          <Button
+            size="sm"
+            variant="ghost"
+            mt={3}
+            onClick={() => {
+              setShowAlignmentMenu(false);
+              setPendingImage(null);
+            }}
+          >
+            Cancel
+          </Button>
+        </Box>
+      )}
+
+      {/* Overlay for alignment menu */}
+      {showAlignmentMenu && (
+        <Box
+          position="fixed"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="blackAlpha.500"
+          zIndex={999}
+          onClick={() => {
+            setShowAlignmentMenu(false);
+            setPendingImage(null);
+          }}
+        />
+      )}
     </FormGroup>
   );
 };

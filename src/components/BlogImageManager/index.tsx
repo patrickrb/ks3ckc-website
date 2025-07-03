@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { CopyIcon, DeleteIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -16,6 +17,10 @@ import {
   HStack,
   IconButton,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -73,12 +78,24 @@ export const BlogImageManager: React.FC<BlogImageManagerProps> = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const copyImageMarkdown = (image: BlogImage) => {
-    const markdown = `![${image.originalName}](${image.blobUrl})`;
+  const copyImageMarkdown = (
+    image: BlogImage,
+    alignment?: 'left' | 'right'
+  ) => {
+    let markdown;
+    if (alignment === 'left') {
+      markdown = `![${image.originalName}](${image.blobUrl} "align-left")`;
+    } else if (alignment === 'right') {
+      markdown = `![${image.originalName}](${image.blobUrl} "align-right")`;
+    } else {
+      markdown = `![${image.originalName}](${image.blobUrl})`;
+    }
+
     navigator.clipboard.writeText(markdown);
+    const alignmentText = alignment ? `(${alignment} aligned)` : '';
     toast({
       title: 'Copied to clipboard',
-      description: 'Image markdown copied to clipboard',
+      description: `Image markdown ${alignmentText} copied to clipboard`,
       status: 'success',
       duration: 2000,
       isClosable: true,
@@ -198,15 +215,30 @@ export const BlogImageManager: React.FC<BlogImageManagerProps> = ({
                 </VStack>
 
                 <HStack justify="space-between">
-                  <Tooltip label="Copy markdown">
-                    <IconButton
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
                       icon={<CopyIcon />}
                       size="sm"
                       variant="outline"
-                      onClick={() => copyImageMarkdown(image)}
-                      aria-label="Copy markdown"
+                      aria-label="Copy markdown options"
                     />
-                  </Tooltip>
+                    <MenuList>
+                      <MenuItem onClick={() => copyImageMarkdown(image)}>
+                        Copy (Center)
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => copyImageMarkdown(image, 'left')}
+                      >
+                        Copy (Float Left)
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => copyImageMarkdown(image, 'right')}
+                      >
+                        Copy (Float Right)
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                   <Tooltip label="View image">
                     <IconButton
                       icon={<ExternalLinkIcon />}
@@ -266,13 +298,39 @@ export const BlogImageManager: React.FC<BlogImageManagerProps> = ({
             )}
           </ModalBody>
           <ModalFooter>
-            <Button
-              leftIcon={<CopyIcon />}
-              onClick={() => selectedImage && copyImageMarkdown(selectedImage)}
-              mr={3}
-            >
-              Copy Markdown
-            </Button>
+            <Menu>
+              <MenuButton
+                as={Button}
+                leftIcon={<CopyIcon />}
+                rightIcon={<ChevronDownIcon />}
+                mr={3}
+              >
+                Copy Markdown
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() =>
+                    selectedImage && copyImageMarkdown(selectedImage)
+                  }
+                >
+                  Copy (Center)
+                </MenuItem>
+                <MenuItem
+                  onClick={() =>
+                    selectedImage && copyImageMarkdown(selectedImage, 'left')
+                  }
+                >
+                  Copy (Float Left)
+                </MenuItem>
+                <MenuItem
+                  onClick={() =>
+                    selectedImage && copyImageMarkdown(selectedImage, 'right')
+                  }
+                >
+                  Copy (Float Right)
+                </MenuItem>
+              </MenuList>
+            </Menu>
             <Button variant="ghost" onClick={onClose}>
               Close
             </Button>
