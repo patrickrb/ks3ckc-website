@@ -26,11 +26,11 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       // Images with alignment (must come before regular images)
       .replace(
         /!\[(.*?)\]\((.*?)\s+"align-left"\)/gim,
-        '<img alt="$1" src="$2" style="float: left; margin: 0 1rem 1rem 0; max-width: 300px; height: auto;" />'
+        '<img alt="$1" src="$2" class="float-left" />'
       )
       .replace(
         /!\[(.*?)\]\((.*?)\s+"align-right"\)/gim,
-        '<img alt="$1" src="$2" style="float: right; margin: 0 0 1rem 1rem; max-width: 300px; height: auto;" />'
+        '<img alt="$1" src="$2" class="float-right" />'
       )
       // Regular images (must come after aligned images)
       .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
@@ -101,8 +101,21 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             borderRadius: 'md',
             boxShadow: 'sm',
           },
-          '& img[style*="float"]': {
-            marginY: '0',
+          '& img.float-left': {
+            float: 'left',
+            margin: '0 1rem 1rem 0',
+            maxWidth: { base: '150px', sm: '200px', md: '300px' },
+            height: 'auto',
+            borderRadius: 'md',
+            boxShadow: 'sm',
+          },
+          '& img.float-right': {
+            float: 'right',
+            margin: '0 0 1rem 1rem',
+            maxWidth: { base: '150px', sm: '200px', md: '300px' },
+            height: 'auto',
+            borderRadius: 'md',
+            boxShadow: 'sm',
           },
           '& li': {
             marginLeft: '1.5rem',
