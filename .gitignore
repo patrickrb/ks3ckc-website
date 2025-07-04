@@ -66,4 +66,7 @@ prisma/dev.db-journal
 **/public/sw.js*
 **/public/worker-development.js*
 
+#claude
+./claude
+
 certificates
