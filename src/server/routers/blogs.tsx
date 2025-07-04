@@ -125,7 +125,6 @@ export const blogsRouter = createTRPCRouter({
       openapi: {
         method: 'GET',
         path: '/blogs',
-        protect: true,
         tags: ['blogs'],
       },
     })
