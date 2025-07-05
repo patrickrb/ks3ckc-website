@@ -26,14 +26,17 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       // Images with alignment (must come before regular images)
       .replace(
         /!\[(.*?)\]\((.*?)\s+"align-left"\)/gim,
-        '<img alt="$1" src="$2" class="float-left" />'
+        '<a href="$2" target="_blank" rel="noopener noreferrer" class="image-link float-left"><img alt="$1" src="$2" class="float-left" /></a>'
       )
       .replace(
         /!\[(.*?)\]\((.*?)\s+"align-right"\)/gim,
-        '<img alt="$1" src="$2" class="float-right" />'
+        '<a href="$2" target="_blank" rel="noopener noreferrer" class="image-link float-right"><img alt="$1" src="$2" class="float-right" /></a>'
       )
       // Regular images (must come after aligned images)
-      .replace(/!\[(.*?)\]\((.*?)\)/gim, '<img alt="$1" src="$2" />')
+      .replace(
+        /!\[(.*?)\]\((.*?)\)/gim,
+        '<a href="$2" target="_blank" rel="noopener noreferrer" class="image-link"><img alt="$1" src="$2" /></a>'
+      )
       // Links
       .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
       // Lists (wrap in ul tags)
@@ -94,6 +97,25 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               color: 'blue.600',
             },
           },
+          '& a.image-link': {
+            textDecoration: 'none',
+            cursor: 'pointer',
+            _hover: {
+              opacity: 0.8,
+              transform: 'scale(1.05)',
+              transition: 'all 0.2s ease',
+            },
+          },
+          '& a.image-link.float-left': {
+            float: 'left',
+            margin: '0 1rem 1rem 0',
+            maxWidth: { base: '150px', sm: '200px', md: '300px' },
+          },
+          '& a.image-link.float-right': {
+            float: 'right',
+            margin: '0 0 1rem 1rem',
+            maxWidth: { base: '150px', sm: '200px', md: '300px' },
+          },
           '& img': {
             maxWidth: '100%',
             height: 'auto',
@@ -102,16 +124,12 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             boxShadow: 'sm',
           },
           '& img.float-left': {
-            float: 'left',
-            margin: '0 1rem 1rem 0',
             maxWidth: { base: '150px', sm: '200px', md: '300px' },
             height: 'auto',
             borderRadius: 'md',
             boxShadow: 'sm',
           },
           '& img.float-right': {
-            float: 'right',
-            margin: '0 0 1rem 1rem',
             maxWidth: { base: '150px', sm: '200px', md: '300px' },
             height: 'auto',
             borderRadius: 'md',
