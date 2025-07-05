@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
 
@@ -12,7 +12,7 @@ import {
 } from '@/server/config/auth';
 
 // Mock dependencies
-jest.mock('bcrypt');
+jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
 jest.mock('next/headers');
 jest.mock('@/env.mjs', () => ({
