@@ -91,8 +91,6 @@ export const NavBar = (props: BoxProps) => {
   const showDrawer = useBreakpointValue({
     base: true,
     md: false,
-    lg: true,
-    xl: false,
   });
 
   const NavBarDrawerButton = (props: Partial<IconButtonProps>) => {
@@ -165,21 +163,21 @@ export const NavBar = (props: BoxProps) => {
         }}
       >
         <NavBarDrawerButton
-          display={{ base: 'flex', md: 'none', lg: 'flex', xl: 'none' }}
+          display={{ base: 'flex', md: 'none' }}
           ms="-0.5rem"
         />
-        <Box as={Link} href="/" mx={{ base: 'auto', md: 0, lg: 'auto', xl: 0 }}>
+        <Box as={Link} href="/" mx={{ base: 'auto', md: 0 }}>
           <SeckKCLogo width="83" height="83" />
         </Box>
         <Heading as="h1" color="gray.50" />
         <NavBarMainMenu
           me="auto"
           ms="4"
-          display={{ base: 'none', md: 'flex', lg: 'none', xl: 'flex' }}
+          display={{ base: 'none', md: 'flex' }}
         />
         <NavBarAuthMenu
           direction="row"
-          display={{ base: 'none', md: 'flex', lg: 'none', xl: 'flex' }}
+          display={{ base: 'none', md: 'flex' }}
         />
         {/* <NavBarAccountMenu /> */}
       </Flex>
