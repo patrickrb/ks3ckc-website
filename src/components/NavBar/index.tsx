@@ -35,7 +35,11 @@ export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 const NavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
   return (
-    <Stack direction="row" spacing="1" {...rest}>
+    <Stack
+      direction="row"
+      spacing={{ base: '0.5', md: '0', xl: '1' }}
+      {...rest}
+    >
       <NavBarMainMenuItem href="/home">
         {t('navbar:layout.mainMenu.home')}
       </NavBarMainMenuItem>
@@ -201,8 +205,9 @@ const NavBarMainMenuItem = ({ href, ...rest }: BoxProps & { href: string }) => {
       opacity={isActive ? 1 : 0.8}
       fontWeight="semibold"
       borderRadius="md"
-      px="4"
+      px={{ base: '2', md: '1', xl: '4' }}
       py="2"
+      fontSize={{ base: 'sm', md: 'md', xl: 'md' }}
       _active={{ bg: 'gray.700' }}
       _hover={{
         bg: 'gray.900',
