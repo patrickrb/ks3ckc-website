@@ -35,7 +35,11 @@ export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 const NavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['navbar']);
   return (
-    <Stack direction="row" spacing="1" {...rest}>
+    <Stack
+      direction="row"
+      spacing={{ base: '0.5', md: '0', xl: '1' }}
+      {...rest}
+    >
       <NavBarMainMenuItem href="/home">
         {t('navbar:layout.mainMenu.home')}
       </NavBarMainMenuItem>
@@ -87,6 +91,8 @@ export const NavBar = (props: BoxProps) => {
   const showDrawer = useBreakpointValue({
     base: true,
     md: false,
+    lg: true,
+    xl: false,
   });
 
   const NavBarDrawerButton = (props: Partial<IconButtonProps>) => {
@@ -159,21 +165,21 @@ export const NavBar = (props: BoxProps) => {
         }}
       >
         <NavBarDrawerButton
-          display={{ base: 'flex', md: 'none' }}
+          display={{ base: 'flex', md: 'none', lg: 'flex', xl: 'none' }}
           ms="-0.5rem"
         />
-        <Box as={Link} href="/" mx={{ base: 'auto', md: 0 }}>
+        <Box as={Link} href="/" mx={{ base: 'auto', md: 0, lg: 'auto', xl: 0 }}>
           <SeckKCLogo width="83" height="83" />
         </Box>
         <Heading as="h1" color="gray.50" />
         <NavBarMainMenu
           me="auto"
           ms="4"
-          display={{ base: 'none', md: 'flex' }}
+          display={{ base: 'none', md: 'flex', lg: 'none', xl: 'flex' }}
         />
         <NavBarAuthMenu
           direction="row"
-          display={{ base: 'none', md: 'flex' }}
+          display={{ base: 'none', md: 'flex', lg: 'none', xl: 'flex' }}
         />
         {/* <NavBarAccountMenu /> */}
       </Flex>
@@ -201,8 +207,9 @@ const NavBarMainMenuItem = ({ href, ...rest }: BoxProps & { href: string }) => {
       opacity={isActive ? 1 : 0.8}
       fontWeight="semibold"
       borderRadius="md"
-      px="4"
+      px={{ base: '2', md: '1', xl: '4' }}
       py="2"
+      fontSize={{ base: 'sm', md: 'md', xl: 'md' }}
       _active={{ bg: 'gray.700' }}
       _hover={{
         bg: 'gray.900',
