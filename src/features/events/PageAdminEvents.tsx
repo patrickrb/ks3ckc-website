@@ -32,6 +32,7 @@ import {
 import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminNav } from '@/features/management/ManagementNav';
 import { trpc } from '@/lib/trpc/client';
+import type { RouterOutputs } from '@/lib/trpc/types';
 
 import { AdminEventActions } from './AdminEventActions';
 
@@ -92,7 +93,7 @@ export default function PageAdminEvents() {
                 </Text>
               </DataListEmptyState>
             )}
-            {events.data?.map((event) => (
+            {events.data?.map((event: RouterOutputs['events']['getAll'][number]) => (
               <DataListRow as={LinkBox} key={event.id} withHover>
                 <DataListCell>
                   <HStack maxW="full">
