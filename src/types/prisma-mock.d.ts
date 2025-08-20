@@ -5,16 +5,16 @@ declare module '@prisma/client' {
   // Mock PrismaClient class
   export class PrismaClient {
     constructor(options?: any);
-    
+
     // Database models based on schema (using lowercase for Prisma client)
     user: any;
     verificationToken: any;
     repository: any;
-    blogs: any;  // Note: model is "Blogs" but client uses lowercase "blogs"
+    blogs: any; // Note: model is "Blogs" but client uses lowercase "blogs"
     blogImage: any;
     news: any;
     event: any;
-    
+
     // Standard Prisma methods
     $connect(): Promise<void>;
     $disconnect(): Promise<void>;
@@ -44,16 +44,16 @@ declare module '@prisma/client' {
         this.meta = meta;
       }
     }
-    
+
     export class PrismaClientUnknownRequestError extends Error {}
     export class PrismaClientRustPanicError extends Error {}
     export class PrismaClientInitializationError extends Error {}
     export class PrismaClientValidationError extends Error {}
-    
+
     // Additional Prisma types used in the codebase
     export interface LogLevel {}
     export interface LogDefinition {}
-    
+
     // Common Prisma input types that are used in the codebase
     export interface BlogsWhereInput {
       [key: string]: any;
@@ -73,7 +73,7 @@ declare module '@prisma/client' {
     export interface VerificationTokenWhereInput {
       [key: string]: any;
     }
-    
+
     // Add other input types as needed
     export interface BlogsOrderByInput {
       [key: string]: any;

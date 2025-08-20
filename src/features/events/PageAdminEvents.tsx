@@ -93,59 +93,64 @@ export default function PageAdminEvents() {
                 </Text>
               </DataListEmptyState>
             )}
-            {events.data?.map((event: RouterOutputs['events']['getAll'][number]) => (
-              <DataListRow as={LinkBox} key={event.id} withHover>
-                <DataListCell>
-                  <HStack maxW="full">
-                    <LinkOverlay
-                      as={LinkAdmin}
-                      href={`/management/events/${event.id}`}
-                    >
-                      <DataListText fontWeight="bold">
-                        {event.name}
-                      </DataListText>
-                      <DataListText color="text-dimmed">
-                        <HStack spacing={2}>
-                          <Text fontSize="sm">
-                            {new Date(event.date).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </Text>
-                          {!event.isActive && (
-                            <Badge colorScheme="gray" size="sm">
-                              {t('events:status.inactive', {
-                                defaultValue: 'Inactive',
-                              })}
-                            </Badge>
-                          )}
-                          {event.location && (
-                            <Text fontSize="sm">📍 {event.location}</Text>
-                          )}
-                        </HStack>
-                      </DataListText>
-                    </LinkOverlay>
-                  </HStack>
-                </DataListCell>
-                <DataListCell w="auto">
-                  <Text fontSize="sm" color="gray.500">
-                    {t('events:management.createdBy', {
-                      defaultValue: 'Created by',
-                    })}{' '}
-                    {event.author.name || event.author.callsign}
-                  </Text>
-                </DataListCell>
-                <DataListCell w="auto">
-                  <DateAgo date={event.createdAt} />
-                </DataListCell>
-                <DataListCell>
-                  <AdminEventActions event={event} />
-                </DataListCell>
-              </DataListRow>
-            ))}
+            {events.data?.map(
+              (event: RouterOutputs['events']['getAll'][number]) => (
+                <DataListRow as={LinkBox} key={event.id} withHover>
+                  <DataListCell>
+                    <HStack maxW="full">
+                      <LinkOverlay
+                        as={LinkAdmin}
+                        href={`/management/events/${event.id}`}
+                      >
+                        <DataListText fontWeight="bold">
+                          {event.name}
+                        </DataListText>
+                        <DataListText color="text-dimmed">
+                          <HStack spacing={2}>
+                            <Text fontSize="sm">
+                              {new Date(event.date).toLocaleDateString(
+                                'en-US',
+                                {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                }
+                              )}
+                            </Text>
+                            {!event.isActive && (
+                              <Badge colorScheme="gray" size="sm">
+                                {t('events:status.inactive', {
+                                  defaultValue: 'Inactive',
+                                })}
+                              </Badge>
+                            )}
+                            {event.location && (
+                              <Text fontSize="sm">📍 {event.location}</Text>
+                            )}
+                          </HStack>
+                        </DataListText>
+                      </LinkOverlay>
+                    </HStack>
+                  </DataListCell>
+                  <DataListCell w="auto">
+                    <Text fontSize="sm" color="gray.500">
+                      {t('events:management.createdBy', {
+                        defaultValue: 'Created by',
+                      })}{' '}
+                      {event.author.name || event.author.callsign}
+                    </Text>
+                  </DataListCell>
+                  <DataListCell w="auto">
+                    <DateAgo date={event.createdAt} />
+                  </DataListCell>
+                  <DataListCell>
+                    <AdminEventActions event={event} />
+                  </DataListCell>
+                </DataListRow>
+              )
+            )}
           </DataList>
         </Stack>
       </AdminLayoutPageContent>
