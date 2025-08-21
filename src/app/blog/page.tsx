@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import {
   Box,
@@ -105,7 +105,23 @@ export default function BlogListPage() {
   return (
     <Box>
       <Container maxW="container.lg">
-        <ArticleList />
+        <Suspense
+          fallback={
+            <Container maxW={'7xl'} p="12">
+              <Heading as="h1">Blog entries</Heading>
+              <Stack spacing={5} mt={8}>
+                {[...Array(3)].map((_, index) => (
+                  <BlogListSkeleton
+                    key={index}
+                    layoutDirection={index % 2 === 0 ? 'normal' : 'reverse'}
+                  />
+                ))}
+              </Stack>
+            </Container>
+          }
+        >
+          <ArticleList />
+        </Suspense>
       </Container>
     </Box>
   );

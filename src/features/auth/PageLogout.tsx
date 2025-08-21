@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { trpc } from '@/lib/trpc/client';
 
-export default function PageLogout() {
+function LogoutContent() {
   const queryCache = useQueryClient();
   const logout = trpc.auth.logout.useMutation();
   const { refreshAuth } = useAuth();
@@ -46,5 +46,19 @@ export default function PageLogout() {
     <Center flex="1">
       <Spinner />
     </Center>
+  );
+}
+
+export default function PageLogout() {
+  return (
+    <Suspense
+      fallback={
+        <Center flex="1">
+          <Spinner />
+        </Center>
+      }
+    >
+      <LogoutContent />
+    </Suspense>
   );
 }

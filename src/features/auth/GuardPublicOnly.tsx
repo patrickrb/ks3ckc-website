@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, Suspense, useEffect } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -8,7 +8,7 @@ import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
 import { trpc } from '@/lib/trpc/client';
 
-export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
+function GuardPublicOnlyContent({ children }: { children: ReactNode }) {
   const checkAuthenticated = trpc.auth.checkAuthenticated.useQuery();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -40,4 +40,12 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
   }
 
   return <LoaderFull />;
+}
+
+export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
+  return (
+    <Suspense fallback={<LoaderFull />}>
+      <GuardPublicOnlyContent>{children}</GuardPublicOnlyContent>
+    </Suspense>
+  );
 };
