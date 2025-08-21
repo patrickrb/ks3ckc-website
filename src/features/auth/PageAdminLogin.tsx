@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
-import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Heading,
+  Spinner,
+} from '@chakra-ui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +15,7 @@ import { ADMIN_PATH } from '@/features/admin/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
-export default function PageAdminLogin() {
+function AdminLoginContent() {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,5 +40,23 @@ export default function PageAdminLogin() {
         <LoginForm onSuccess={handleOnSuccess} />
       </CardBody>
     </Card>
+  );
+}
+
+export default function PageAdminLogin() {
+  return (
+    <Suspense
+      fallback={
+        <Card boxShadow="card">
+          <CardBody>
+            <Center p={8}>
+              <Spinner />
+            </Center>
+          </CardBody>
+        </Card>
+      }
+    >
+      <AdminLoginContent />
+    </Suspense>
   );
 }

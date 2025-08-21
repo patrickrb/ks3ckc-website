@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import {
   Button,
+  Center,
   Divider,
   HStack,
   Heading,
+  Spinner,
   Stack,
   Text,
 } from '@chakra-ui/react';
@@ -17,7 +19,7 @@ import { LoginForm } from '@/features/auth/LoginForm';
 import { useAuth } from '@/hooks/useAuth';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
-export default function PageLogin() {
+function LoginContent() {
   const { t } = useTranslation(['auth', 'common']);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,5 +67,29 @@ export default function PageLogin() {
 
       <LoginForm onSuccess={handleOnSuccess} buttonVariant="@secondary" />
     </Stack>
+  );
+}
+
+export default function PageLogin() {
+  const { t } = useTranslation(['auth', 'common']);
+
+  return (
+    <Suspense
+      fallback={
+        <Stack spacing={6}>
+          <Stack spacing={1}>
+            <Heading size="md">{t('auth:login.appTitle')}</Heading>
+            <Text fontSize="sm" color="text-dimmed">
+              {t('auth:login.appSubTitle')}
+            </Text>
+          </Stack>
+          <Center p={8}>
+            <Spinner />
+          </Center>
+        </Stack>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
