@@ -102,7 +102,7 @@
     "sharp": "0.33.0",
     "superjson": "2.2.1",
     "trpc-openapi": "1.2.0",
-    "zod": "3.22.4",
+    "zod": "3.25.76",
     "zustand": "4.4.7"
   },
   "devDependencies": {
