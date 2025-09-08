@@ -56,7 +56,7 @@
     "@formiz/core": "2.1.0",
     "@formiz/validations": "2.0.1",
     "@formkit/auto-animate": "1.0.0-beta.6",
-    "@prisma/client": "5.7.0",
+    "@prisma/client": "5.22.0",
     "@react-email/components": "0.0.12",
     "@react-email/render": "0.0.10",
     "@stoplight/elements": "7.15.3",
