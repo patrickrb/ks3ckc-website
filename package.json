@@ -79,7 +79,7 @@
     "lodash": "4.17.21",
     "markdown-it": "^14.1.0",
     "next": "14.2.30",
-    "nodemailer": "6.9.9",
+    "nodemailer": "7.0.7",
     "nuqs": "1.14.1",
     "pino": "8.16.2",
     "pino-pretty": "10.3.0",
