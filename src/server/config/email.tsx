@@ -7,7 +7,14 @@ import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import { env } from '@/env.mjs';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
-const transport = nodemailer.createTransport(env.EMAIL_SERVER);
+let transport: nodemailer.Transporter | null = null;
+
+const getTransport = () => {
+  if (!transport && env.EMAIL_SERVER) {
+    transport = nodemailer.createTransport(env.EMAIL_SERVER);
+  }
+  return transport;
+};
 
 export const sendEmail = ({
   template,
@@ -18,8 +25,13 @@ export const sendEmail = ({
     return;
   }
 
+  const emailTransport = getTransport();
+  if (!emailTransport) {
+    throw new Error('Email transport not configured');
+  }
+
   const html = render(template);
-  return transport.sendMail({
+  return emailTransport.sendMail({
     from: env.EMAIL_FROM,
     html,
     ...options,
