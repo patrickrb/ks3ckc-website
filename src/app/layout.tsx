@@ -7,7 +7,9 @@ import { NextLoader } from '@/app/NextLoader';
 import { env } from '@/env.mjs';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
+  metadataBase: env.NEXT_PUBLIC_BASE_URL
+    ? new URL(env.NEXT_PUBLIC_BASE_URL)
+    : undefined,
   title: 'KS3CKC - Kansas City Ham Radio Club | Amateur Radio Community',
   applicationName: 'KS3CKC - Kansas City Ham Radio Club',
   description:

@@ -2,23 +2,31 @@ import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 
 import { env } from '../../env.mjs';
 
-if (
-  !env.AZURE_STORAGE_ACCOUNT_NAME ||
-  !env.AZURE_STORAGE_ACCOUNT_KEY ||
-  !env.AZURE_STORAGE_CONTAINER_NAME
-) {
-  throw new Error(
-    'Azure Blob Storage configuration is missing. Please check your environment variables.'
-  );
-}
+let containerClient: ContainerClient | null = null;
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(
-  `DefaultEndpointsProtocol=https;AccountName=${env.AZURE_STORAGE_ACCOUNT_NAME};AccountKey=${env.AZURE_STORAGE_ACCOUNT_KEY};EndpointSuffix=core.windows.net`
-);
+const getContainerClient = (): ContainerClient => {
+  if (!containerClient) {
+    if (
+      !env.AZURE_STORAGE_ACCOUNT_NAME ||
+      !env.AZURE_STORAGE_ACCOUNT_KEY ||
+      !env.AZURE_STORAGE_CONTAINER_NAME
+    ) {
+      throw new Error(
+        'Azure Blob Storage configuration is missing. Please check your environment variables.'
+      );
+    }
 
-const containerClient: ContainerClient = blobServiceClient.getContainerClient(
-  env.AZURE_STORAGE_CONTAINER_NAME
-);
+    const blobServiceClient = BlobServiceClient.fromConnectionString(
+      `DefaultEndpointsProtocol=https;AccountName=${env.AZURE_STORAGE_ACCOUNT_NAME};AccountKey=${env.AZURE_STORAGE_ACCOUNT_KEY};EndpointSuffix=core.windows.net`
+    );
+
+    containerClient = blobServiceClient.getContainerClient(
+      env.AZURE_STORAGE_CONTAINER_NAME
+    );
+  }
+
+  return containerClient;
+};
 
 export interface UploadImageResult {
   blobName: string;
@@ -35,7 +43,7 @@ export const uploadImage = async (
   const timestamp = Date.now();
   const blobName = `blog-${blogId}/${timestamp}-${file.name}`;
 
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  const blockBlobClient = getContainerClient().getBlockBlobClient(blobName);
 
   const buffer = await file.arrayBuffer();
 
@@ -57,7 +65,7 @@ export const uploadImage = async (
 };
 
 export const deleteImage = async (blobName: string): Promise<void> => {
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  const blockBlobClient = getContainerClient().getBlockBlobClient(blobName);
   await blockBlobClient.deleteIfExists();
 };
 
