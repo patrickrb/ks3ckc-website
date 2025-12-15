@@ -41,7 +41,7 @@
     "*.{ts,tsx,js,jsx,json}": "prettier --write"
   },
   "dependencies": {
-    "@azure/storage-blob": "^12.27.0",
+    "@azure/storage-blob": "^12.29.1",
     "@chakra-ui/anatomy": "2.2.2",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/next-js": "2.2.0",
