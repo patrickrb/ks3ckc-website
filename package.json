@@ -65,7 +65,7 @@
     "@tanstack/react-query-devtools": "4.36.1",
     "@trpc/client": "10.44.1",
     "@trpc/react-query": "10.44.1",
-    "@trpc/server": "10.44.1",
+    "@trpc/server": "10.45.3",
     "bcryptjs": "^3.0.2",
     "chakra-react-select": "4.7.6",
     "colorette": "2.0.20",
