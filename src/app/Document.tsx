@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 
+import { Analytics } from '@vercel/analytics/next';
 import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -121,6 +122,7 @@ export const Document = ({ children }: { children: ReactNode }) => {
             <ReactQueryDevtools initialIsOpen={false} />
           </TrpcProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
