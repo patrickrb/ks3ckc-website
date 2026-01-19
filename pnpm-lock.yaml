@@ -75,11 +75,11 @@ importers:
         specifier: 4.36.1
         version: 4.36.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/client':
-        specifier: 10.44.1
-        version: 10.44.1(@trpc/server@10.44.1)
+        specifier: 10.45.3
+        version: 10.45.3(@trpc/server@10.44.1)
       '@trpc/react-query':
         specifier: 10.44.1
-        version: 10.44.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.44.1(@trpc/server@10.44.1))(@trpc/server@10.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 10.44.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.45.3(@trpc/server@10.44.1))(@trpc/server@10.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
         specifier: 10.44.1
         version: 10.44.1
@@ -3516,10 +3516,10 @@ packages:
       '@vue/compiler-sfc':
         optional: true
 
-  '@trpc/client@10.44.1':
-    resolution: {integrity: sha512-vTWsykNcgz1LnwePVl2fKZnhvzP9N3GaaLYPkfGINo314ZOS0OBqe9x0ytB2LLUnRVTAAZ2WoONzARd8nHiqrA==}
+  '@trpc/client@10.45.3':
+    resolution: {integrity: sha512-Fkr2pUckEyse4HeAj79FL9OIKGrITRzK4Z1KDB0qxlCwA7sgcAeafY23qzOOKHeJxAi+hTJmJx3k9p2iabY90g==}
     peerDependencies:
-      '@trpc/server': 10.44.1
+      '@trpc/server': 10.45.3
 
   '@trpc/react-query@10.44.1':
     resolution: {integrity: sha512-Sgi/v0YtdunOXjBRi7om9gILGkOCFYXPzn5KqLuEHiZw5dr5w4qGHFwCeMAvndZxmwfblJrl1tk2AznmsVu8MA==}
@@ -15005,14 +15005,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@trpc/client@10.44.1(@trpc/server@10.44.1)':
+  '@trpc/client@10.45.3(@trpc/server@10.44.1)':
     dependencies:
       '@trpc/server': 10.44.1
 
-  '@trpc/react-query@10.44.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.44.1(@trpc/server@10.44.1))(@trpc/server@10.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@10.44.1(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.45.3(@trpc/server@10.44.1))(@trpc/server@10.44.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/react-query': 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@trpc/client': 10.44.1(@trpc/server@10.44.1)
+      '@trpc/client': 10.45.3(@trpc/server@10.44.1)
       '@trpc/server': 10.44.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
