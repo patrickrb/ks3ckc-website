@@ -100,7 +100,7 @@
     "react-use-measure": "2.1.1",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
-    "sharp": "0.33.0",
+    "sharp": "0.34.5",
     "superjson": "2.2.1",
     "trpc-openapi": "1.2.0",
     "zod": "3.25.76",
