@@ -129,8 +129,8 @@ importers:
         specifier: ^7.0.11
         version: 7.0.11
       nuqs:
-        specifier: 1.14.1
-        version: 1.14.1(next@14.2.35(@babel/core@7.23.5)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 1.20.0
+        version: 1.20.0(next@14.2.35(@babel/core@7.23.5)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       pino:
         specifier: 8.16.2
         version: 8.16.2
@@ -7906,8 +7906,8 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
-  nuqs@1.14.1:
-    resolution: {integrity: sha512-UxrDrdVQrq6O37yq2OWwCh3t/K/GsCoSchTc1tWC8VOproK3/Z58KXKAwRdZN2+vAGgdwyKv2StVOaRKw16p+g==}
+  nuqs@1.20.0:
+    resolution: {integrity: sha512-nGVfv7eWMNxAzOJ9n8ARTo6ObqeEr1ETYZ+dIMCg/VfGUoZoPrqyTOndIvQIgUzK3pIC41mTXg10JJxh9ziEhw==}
     peerDependencies:
       next: '>=13.4 <14.0.2 || ^14.0.3'
 
@@ -20660,7 +20660,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@1.14.1(next@14.2.35(@babel/core@7.23.5)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  nuqs@1.20.0(next@14.2.35(@babel/core@7.23.5)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
       mitt: 3.0.1
       next: 14.2.35(@babel/core@7.23.5)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
