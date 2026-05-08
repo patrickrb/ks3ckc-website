@@ -92,7 +92,7 @@ describe('Auth utilities', () => {
 
       // Note: This test would need the actual database context to work fully
       // For now, we're testing the token extraction logic
-      expect(mockHeaders().get).toHaveBeenCalledWith('Authorization');
+      expect((await mockHeaders()).get).toHaveBeenCalledWith('Authorization');
     });
 
     it('extracts token from cookies when header is not present', async () => {
@@ -108,7 +108,7 @@ describe('Auth utilities', () => {
 
       await getServerAuthSession();
 
-      expect(mockCookies().get).toHaveBeenCalledWith(AUTH_COOKIE_NAME);
+      expect((await mockCookies()).get).toHaveBeenCalledWith(AUTH_COOKIE_NAME);
     });
 
     it('handles invalid JWT token', async () => {

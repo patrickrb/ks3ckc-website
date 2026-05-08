@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+build
+public/workbox-*.js
+public/sw.js
+public/worker-*.js
+public/storybook
+storybook-static
+coverage
+*.config.js
+!*.eslintrc.js
+prisma/seed

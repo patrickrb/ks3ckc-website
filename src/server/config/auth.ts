@@ -21,11 +21,12 @@ export const AUTH_COOKIE_NAME = 'auth';
  * getServerAuthSession
  */
 export const getServerAuthSession = async () => {
+  const [headerStore, cookieStore] = await Promise.all([headers(), cookies()]);
   const token =
     // Get from Headers
-    headers().get('Authorization')?.split('Bearer ')[1] ??
+    headerStore.get('Authorization')?.split('Bearer ')[1] ??
     // Get from Cookies
-    cookies().get(AUTH_COOKIE_NAME)?.value;
+    cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
   if (!token) {
     return null;
