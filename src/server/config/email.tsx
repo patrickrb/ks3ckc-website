@@ -16,7 +16,7 @@ const getTransport = () => {
   return transport;
 };
 
-export const sendEmail = ({
+export const sendEmail = async ({
   template,
   ...options
 }: Omit<MailOptions, 'html'> &
@@ -30,7 +30,7 @@ export const sendEmail = ({
     throw new Error('Email transport not configured');
   }
 
-  const html = render(template);
+  const html = await render(template);
   return emailTransport.sendMail({
     from: env.EMAIL_FROM,
     html,
@@ -67,7 +67,9 @@ export const previewEmailRoute = async (
     });
   }
 
-  const html = render(<Email language={language ?? 'en'} {...searchQuery} />);
+  const html = await render(
+    <Email language={language ?? 'en'} {...searchQuery} />
+  );
 
   return new Response(html, {
     status: 200,
