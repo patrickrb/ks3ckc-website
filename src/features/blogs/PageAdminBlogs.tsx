@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Box,
   Button,
   Flex,
   HStack,
@@ -24,6 +25,11 @@ import {
   DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
+import {
+  PHOS,
+  phosGhostBtn,
+  phosPrimaryBtn,
+} from '@/components/HomeRedesign/phosphorTheme';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { SearchInput } from '@/components/SearchInput';
 import {
@@ -63,8 +69,19 @@ export default function PageAdminBlogs() {
               alignItems={{ base: 'start', md: 'center' }}
               flex={1}
             >
-              <Heading flex="none" size="md">
-                Blogs Management
+              <Heading
+                flex="none"
+                size="sm"
+                fontFamily={PHOS.mono}
+                color={PHOS.green}
+                fontWeight={700}
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+              >
+                <Box as="span" color={PHOS.amber} mr={2}>
+                  ›
+                </Box>
+                ./blogs
               </Heading>
               <SearchInput
                 size="sm"
@@ -76,9 +93,9 @@ export default function PageAdminBlogs() {
             <ResponsiveIconButton
               as={LinkAdmin}
               href="/management/blogs/create"
-              variant="@primary"
               size="sm"
               icon={<LuPlus />}
+              sx={phosPrimaryBtn}
             >
               Create Blog
             </ResponsiveIconButton>
@@ -147,6 +164,7 @@ export default function PageAdminBlogs() {
                     onClick={() => blogs.fetchNextPage()}
                     isLoading={blogs.isFetchingNextPage}
                     isDisabled={!blogs.hasNextPage}
+                    sx={phosGhostBtn}
                   >
                     {t('users:list.loadMore.button')}
                   </Button>

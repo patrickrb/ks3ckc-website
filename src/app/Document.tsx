@@ -2,12 +2,13 @@
 
 import { ReactNode } from 'react';
 
-import { Analytics } from '@vercel/analytics/next';
 import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Analytics } from '@vercel/analytics/next';
+import { usePathname } from 'next/navigation';
 
 import { Providers } from '@/app/Providers';
-import { NavBar } from '@/components/NavBar';
+import PhosShell from '@/components/HomeRedesign/PhosShell';
 import { Viewport } from '@/components/Viewport';
 import { DevEnvHint } from '@/features/devtools/DevEnvHint';
 import i18n from '@/lib/i18n/client';
@@ -15,7 +16,21 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
+// Routes that should bypass the public phosphor shell (no PhosNav/PhosFooter).
+// These provide their own chrome (API responses, devtools, internal app screens
+// rendered via AdminLayout/AppLayout which now wrap in their own phosphor frame).
+const RAW_PREFIXES = ['/api', '/devtools'];
+
+const matchesPrefix = (pathname: string, prefix: string) =>
+  pathname === prefix || pathname.startsWith(`${prefix}/`);
+
+const isRawRoute = (pathname: string) =>
+  RAW_PREFIXES.some((p) => matchesPrefix(pathname, p));
+
 export const Document = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname() ?? '';
+  const useRawShell = isRawRoute(pathname);
+
   return (
     <html
       lang={i18n.language}
@@ -53,6 +68,17 @@ export const Document = ({ children }: { children: ReactNode }) => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
         <link
           rel="mask-icon"
           href="/safari-pinned-tab.svg"
@@ -116,8 +142,13 @@ export const Document = ({ children }: { children: ReactNode }) => {
         />
         <Providers>
           <TrpcProvider>
-            <NavBar />
-            <Viewport>{children}</Viewport>
+            {useRawShell ? (
+              <Viewport>{children}</Viewport>
+            ) : (
+              <PhosShell>
+                <Viewport>{children}</Viewport>
+              </PhosShell>
+            )}
             <DevEnvHint />
             <ReactQueryDevtools initialIsOpen={false} />
           </TrpcProvider>

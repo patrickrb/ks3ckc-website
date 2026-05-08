@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Box,
   Button,
   Flex,
   HStack,
@@ -24,6 +25,11 @@ import {
   DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
+import {
+  PHOS,
+  phosGhostBtn,
+  phosPrimaryBtn,
+} from '@/components/HomeRedesign/phosphorTheme';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { SearchInput } from '@/components/SearchInput';
 import {
@@ -59,8 +65,19 @@ export default function PageAdminNews() {
               alignItems={{ base: 'start', md: 'center' }}
               flex={1}
             >
-              <Heading flex="none" size="md">
-                News Management
+              <Heading
+                flex="none"
+                size="sm"
+                fontFamily={PHOS.mono}
+                color={PHOS.green}
+                fontWeight={700}
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+              >
+                <Box as="span" color={PHOS.amber} mr={2}>
+                  ›
+                </Box>
+                ./news
               </Heading>
               <SearchInput
                 size="sm"
@@ -72,9 +89,9 @@ export default function PageAdminNews() {
             <ResponsiveIconButton
               as={LinkAdmin}
               href="/management/news/create"
-              variant="@primary"
               size="sm"
               icon={<LuPlus />}
+              sx={phosPrimaryBtn}
             >
               Create News
             </ResponsiveIconButton>
@@ -135,9 +152,9 @@ export default function PageAdminNews() {
                 <DataListCell w="auto">
                   <Button
                     size="sm"
-                    variant="ghost"
                     onClick={() => news.fetchNextPage()}
                     isLoading={news.isFetchingNextPage}
+                    sx={phosGhostBtn}
                   >
                     Load more
                   </Button>

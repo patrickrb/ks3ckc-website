@@ -1,254 +1,375 @@
 'use client';
 
-import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { ReactNode } from 'react';
+
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
-  Button,
-  Card,
-  CardBody,
   Container,
-  HStack,
-  Heading,
-  Icon,
+  Flex,
   Image,
   Link,
   ListItem,
   OrderedList,
   Text,
   UnorderedList,
-  VStack,
-  useColorModeValue,
 } from '@chakra-ui/react';
-import { FaAndroid, FaApple, FaDesktop, FaQrcode } from 'react-icons/fa';
+import { FaAndroid, FaApple, FaDesktop } from 'react-icons/fa';
 
-import HeroComponent from '@/components/HeroComponent';
+import PhosPageHeader from '@/components/HomeRedesign/PhosPageHeader';
+import PhosPanel from '@/components/HomeRedesign/PhosPanel';
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
+
+const HARDWARE = [
+  'Heltec LoRa 32 V3',
+  'T-Beam or T-Echo devices',
+  'LilyGO T-Deck',
+  'RAK WisBlock devices',
+];
+
+const FLASH_STEPS = [
+  <>
+    visit{' '}
+    <Link
+      href="https://meshtastic.org/docs/getting-started"
+      isExternal
+      color={PHOS.greenD}
+      textDecoration="underline"
+      textUnderlineOffset="3px"
+      _hover={{ color: PHOS.green, bg: 'rgba(57,255,20,0.12)' }}
+    >
+      meshtastic.org/docs/getting-started
+    </Link>
+  </>,
+  'select your device type (ESP32, nRF52, or RP2040)',
+  'use a data-capable USB cable (charging-only cables won&apos;t enumerate)',
+  'follow the device-specific flashing instructions',
+];
+
+const CONNECT_STEPS = [
+  'open the Meshtastic app',
+  'tap the "+" button to find devices',
+  'connect via Bluetooth, Wi-Fi, or USB',
+  'pair if required (default PIN is often 123456)',
+  'set your region in the app',
+  'choose a unique name for yourself',
+];
+
+const JOIN_STEPS = [
+  'scan the QR code at the top of this page, OR',
+  <>
+    tap the link:{' '}
+    <Link
+      href="https://meshtastic.org/e/#CgcSAQE6AggNEg4IATgBQANIAVAeWBRoAQ"
+      isExternal
+      color={PHOS.greenD}
+      textDecoration="underline"
+      textUnderlineOffset="3px"
+      _hover={{ color: PHOS.green, bg: 'rgba(57,255,20,0.12)' }}
+    >
+      Join SecKC Channel ↗
+    </Link>
+  </>,
+  'your device will auto-configure to join our mesh',
+  'start messaging with other SecKC members',
+];
+
+function PhosOl({ items }: { items: ReactNode[] }) {
+  return (
+    <OrderedList styleType="none" m={0} pl={0}>
+      {items.map((s, i) => (
+        <ListItem
+          key={i}
+          fontSize="14px"
+          color={PHOS.paper}
+          opacity={0.9}
+          py="3px"
+          display="flex"
+          alignItems="baseline"
+          gap={2}
+        >
+          <Text as="span" color={PHOS.green} fontWeight="700" minW="22px">
+            {String(i + 1).padStart(2, '0')}
+          </Text>
+          <Text as="span" flex="1">
+            {s}
+          </Text>
+        </ListItem>
+      ))}
+    </OrderedList>
+  );
+}
+
+function PhosUl({ items }: { items: string[] }) {
+  return (
+    <UnorderedList styleType="none" m={0} pl={0}>
+      {items.map((s) => (
+        <ListItem
+          key={s}
+          fontSize="14px"
+          color={PHOS.paper}
+          opacity={0.9}
+          py="3px"
+          _before={{
+            content: '"+ "',
+            color: PHOS.green,
+            marginRight: '6px',
+          }}
+        >
+          {s}
+        </ListItem>
+      ))}
+    </UnorderedList>
+  );
+}
+
+function AppButton({
+  href,
+  icon: Icon,
+  label,
+}: {
+  href: string;
+  icon: typeof FaAndroid;
+  label: string;
+}) {
+  return (
+    <Link
+      href={href}
+      isExternal
+      display="inline-flex"
+      alignItems="center"
+      gap={2}
+      px={3.5}
+      py={2}
+      border="1px solid"
+      borderColor={PHOS.green}
+      color={PHOS.green}
+      fontSize="13px"
+      fontWeight="600"
+      letterSpacing="0.02em"
+      _hover={{ bg: PHOS.green, color: PHOS.bg, textDecoration: 'none' }}
+    >
+      <Box as={Icon} boxSize="14px" />
+      {label}
+    </Link>
+  );
+}
 
 export default function MeshtasticPage() {
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const linkColor = useColorModeValue('blue.500', 'blue.300');
-
   return (
     <Box>
-      <HeroComponent />
-      <Container maxW="container.lg" py={10}>
-        <VStack spacing={8} align="stretch">
-          <Box textAlign="center">
-            <Heading as="h1" size="2xl" mb={4}>
-              Connect to SECKC Meshtastic
-            </Heading>
-            <Text fontSize="lg" color="gray.600" _dark={{ color: 'gray.400' }}>
-              Join our local mesh network for emergency communications and
-              experimentation
-            </Text>
-          </Box>
+      <PhosPageHeader
+        cmd="ssh seckc-mesh.local"
+        title="seckc meshtastic"
+        subtitle="local LoRa mesh network for emergency comms and experimentation. join us on the air without the air."
+        comment="region: US · 906.875 MHz default"
+      />
 
-          <Box display="flex" justifyContent="center" my={8}>
-            <Image
-              src="/seckc_meshtastic_qr_code.png"
-              alt="SECKC Meshtastic QR Code"
-              maxW="300px"
-              borderRadius="lg"
-              boxShadow="lg"
-            />
-          </Box>
-
-          <Alert status="info" borderRadius="md">
-            <AlertIcon />
-            <Box>
-              <AlertTitle>Quick Connect!</AlertTitle>
-              <AlertDescription>
-                Scan the QR code above with your Meshtastic app or use this
-                link:{' '}
+      <Container maxW="container.lg" py={{ base: 8, md: 12 }}>
+        <Flex direction="column" gap={6}>
+          {/* QR + connect alert */}
+          <PhosPanel title="./join.qr" meta="point your phone at this">
+            <Box
+              px={{ base: 4, md: 6 }}
+              py={6}
+              fontFamily={PHOS.mono}
+              display="flex"
+              flexDirection={{ base: 'column', md: 'row' }}
+              gap={6}
+              alignItems="center"
+            >
+              <Image
+                src="/seckc_meshtastic_qr_code.png"
+                alt="SECKC Meshtastic QR Code"
+                maxW="240px"
+                w="100%"
+                border="1px solid"
+                borderColor={PHOS.line2}
+              />
+              <Box flex="1">
+                <Text
+                  fontSize="11px"
+                  color={PHOS.greenDim}
+                  textTransform="uppercase"
+                  letterSpacing="0.14em"
+                  mb={2}
+                >
+                  $ qr-decode ./join.qr
+                </Text>
+                <Text
+                  fontSize="14px"
+                  color={PHOS.paper}
+                  mb={3}
+                  lineHeight="1.6"
+                >
+                  scan the code with your meshtastic app, or tap the link below
+                  to auto-configure your device for the SecKC mesh.
+                </Text>
                 <Link
                   href="https://meshtastic.org/e/#CgcSAQE6AggNEg4IATgBQANIAVAeWBRoAQ"
-                  color={linkColor}
                   isExternal
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={2}
+                  px={3.5}
+                  py={2}
+                  border="1px solid"
+                  borderColor={PHOS.green}
+                  color={PHOS.bg}
+                  bg={PHOS.green}
+                  fontSize="13px"
+                  fontWeight="600"
+                  letterSpacing="0.02em"
+                  _hover={{ bg: PHOS.greenD, textDecoration: 'none' }}
                 >
-                  https://meshtastic.org/e/#CgcSAQE6AggNEg4IATgBQANIAVAeWBRoAQ
-                  <ExternalLinkIcon mx="2px" />
+                  ▶ join channel ↗
                 </Link>
-              </AlertDescription>
+              </Box>
             </Box>
-          </Alert>
+          </PhosPanel>
 
-          <Card bg={cardBg}>
-            <CardBody>
-              <Heading as="h2" size="lg" mb={4}>
-                What is Meshtastic?
-              </Heading>
-              <Text mb={4}>
-                Meshtastic is an open-source mesh networking platform that
-                enables long-range, low-power communication between devices.
-                It's perfect for emergency communications, hiking, camping, and
-                areas with limited cellular coverage.
-              </Text>
-              <Text>
-                Our SECKC network provides a local mesh for members to
-                experiment with and use during emergencies or events.
-              </Text>
-            </CardBody>
-          </Card>
-
-          <Card bg={cardBg}>
-            <CardBody>
-              <Heading as="h2" size="lg" mb={4}>
-                Getting Started
-              </Heading>
-
-              <Heading as="h3" size="md" mb={3}>
-                Step 1: Get Compatible Hardware
-              </Heading>
-              <Text mb={4}>
-                You'll need a Meshtastic-compatible device. Popular options
-                include:
-              </Text>
-              <UnorderedList mb={4} spacing={1}>
-                <ListItem>Heltec LoRa 32 V3</ListItem>
-                <ListItem>T-Beam or T-Echo devices</ListItem>
-                <ListItem>LilyGO T-Deck</ListItem>
-                <ListItem>RAK WisBlock devices</ListItem>
-              </UnorderedList>
-              <Alert status="warning" mb={4}>
-                <AlertIcon />
-                <AlertDescription>
-                  <strong>Important:</strong> Never power on your device without
-                  attaching an antenna first!
-                </AlertDescription>
-              </Alert>
-
-              <Heading as="h3" size="md" mb={3}>
-                Step 2: Flash Firmware
-              </Heading>
-              <OrderedList mb={4} spacing={2}>
-                <ListItem>
-                  Visit{' '}
-                  <Link
-                    href="https://meshtastic.org/docs/getting-started"
-                    color={linkColor}
-                    isExternal
-                  >
-                    meshtastic.org/docs/getting-started{' '}
-                    <ExternalLinkIcon mx="2px" />
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  Select your device type (ESP32, nRF52, or RP2040)
-                </ListItem>
-                <ListItem>
-                  Use a data-capable USB cable (not just a charging cable)
-                </ListItem>
-                <ListItem>
-                  Follow the device-specific flashing instructions
-                </ListItem>
-              </OrderedList>
-
-              <Heading as="h3" size="md" mb={3}>
-                Step 3: Install the App
-              </Heading>
-              <HStack spacing={4} mb={4}>
-                <Button
-                  leftIcon={<Icon as={FaAndroid} />}
-                  colorScheme="green"
-                  as={Link}
-                  href="https://play.google.com/store/apps/details?id=com.geeksville.mesh"
-                  isExternal
-                >
-                  Android
-                </Button>
-                <Button
-                  leftIcon={<Icon as={FaApple} />}
-                  colorScheme="blue"
-                  as={Link}
-                  href="https://apps.apple.com/us/app/meshtastic/id1586432531"
-                  isExternal
-                >
-                  iOS
-                </Button>
-                <Button
-                  leftIcon={<Icon as={FaDesktop} />}
-                  colorScheme="purple"
-                  as={Link}
-                  href="https://meshtastic.org/docs/software/web-client"
-                  isExternal
-                >
-                  Web Client
-                </Button>
-              </HStack>
-
-              <Heading as="h3" size="md" mb={3}>
-                Step 4: Connect to Your Device
-              </Heading>
-              <OrderedList mb={4} spacing={2}>
-                <ListItem>Open the Meshtastic app</ListItem>
-                <ListItem>Tap the "+" button to find devices</ListItem>
-                <ListItem>Connect via Bluetooth, Wi-Fi, or USB</ListItem>
-                <ListItem>
-                  Pair if required (default PIN is often '123456')
-                </ListItem>
-                <ListItem>Set your region in the app</ListItem>
-                <ListItem>Choose a unique name for yourself</ListItem>
-              </OrderedList>
-
-              <Heading as="h3" size="md" mb={3}>
-                Step 5: Join the SECKC Channel
-              </Heading>
-              <OrderedList spacing={2}>
-                <ListItem>
-                  <Icon as={FaQrcode} mr={2} />
-                  Scan the QR code at the top of this page, OR
-                </ListItem>
-                <ListItem>
-                  Tap the link:{' '}
-                  <Link
-                    href="https://meshtastic.org/e/#CgcSAQE6AggNEg4IATgBQANIAVAeWBRoAQ"
-                    color={linkColor}
-                    isExternal
-                  >
-                    Join SECKC Channel <ExternalLinkIcon mx="2px" />
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  Your device will automatically configure to join our mesh
-                  network
-                </ListItem>
-                <ListItem>Start messaging with other SECKC members!</ListItem>
-              </OrderedList>
-            </CardBody>
-          </Card>
-
-          <Card bg={cardBg}>
-            <CardBody>
-              <Heading as="h2" size="lg" mb={4}>
-                Need Help?
-              </Heading>
-              <Text mb={4}>
-                If you need assistance getting connected, reach out to us:
-              </Text>
-              <UnorderedList spacing={2}>
-                <ListItem>Ask questions during our regular meetings</ListItem>
-                <ListItem>Visit our website for contact information</ListItem>
-                <ListItem>
-                  Check the official Meshtastic documentation for
-                  troubleshooting
-                </ListItem>
-              </UnorderedList>
+          <PhosPanel title="./what-is-meshtastic" meta="man page">
+            <Box px={{ base: 4, md: 6 }} py={5} fontFamily={PHOS.mono}>
               <Text
-                mt={4}
-                fontSize="sm"
-                color="gray.600"
-                _dark={{ color: 'gray.400' }}
+                fontSize="14px"
+                color={PHOS.paper}
+                opacity={0.9}
+                lineHeight="1.7"
+                mb={3}
               >
-                Remember: Meshtastic is for experimentation and emergency
-                communications. Follow proper amateur radio practices and
-                regulations.
+                Meshtastic is an open-source LoRa mesh networking platform.
+                long-range, low-power, peer-to-peer text + telemetry. perfect
+                for emergency comms, hiking, camping, areas with no cell
+                coverage.
               </Text>
-            </CardBody>
-          </Card>
-        </VStack>
+              <Text
+                fontSize="14px"
+                color={PHOS.paper}
+                opacity={0.9}
+                lineHeight="1.7"
+              >
+                our SecKC mesh is a regional network for members to experiment
+                with — and depend on when normal infrastructure is down.
+              </Text>
+            </Box>
+          </PhosPanel>
+
+          <PhosPanel title="./getting-started.sh" meta="step-by-step">
+            <Box px={{ base: 4, md: 6 }} py={5} fontFamily={PHOS.mono}>
+              <Text
+                fontSize="11px"
+                color={PHOS.greenDim}
+                textTransform="uppercase"
+                letterSpacing="0.14em"
+                mb={2}
+              >
+                # step 01 — hardware
+              </Text>
+              <Text fontSize="14px" color={PHOS.paper} mb={3}>
+                grab a meshtastic-compatible device:
+              </Text>
+              <PhosUl items={HARDWARE} />
+              <Box
+                mt={4}
+                px={3.5}
+                py={2.5}
+                border="1px solid"
+                borderColor={PHOS.amber}
+                color={PHOS.amber}
+                fontSize="12px"
+              >
+                ⚠ never power on a radio without an antenna attached.
+              </Box>
+
+              <Text
+                fontSize="11px"
+                color={PHOS.greenDim}
+                textTransform="uppercase"
+                letterSpacing="0.14em"
+                mb={2}
+                mt={6}
+              >
+                # step 02 — flash firmware
+              </Text>
+              <PhosOl items={FLASH_STEPS} />
+
+              <Text
+                fontSize="11px"
+                color={PHOS.greenDim}
+                textTransform="uppercase"
+                letterSpacing="0.14em"
+                mb={2}
+                mt={6}
+              >
+                # step 03 — install the app
+              </Text>
+              <Flex gap={2.5} flexWrap="wrap">
+                <AppButton
+                  href="https://play.google.com/store/apps/details?id=com.geeksville.mesh"
+                  icon={FaAndroid}
+                  label="android"
+                />
+                <AppButton
+                  href="https://apps.apple.com/us/app/meshtastic/id1586432531"
+                  icon={FaApple}
+                  label="ios"
+                />
+                <AppButton
+                  href="https://meshtastic.org/docs/software/web-client"
+                  icon={FaDesktop}
+                  label="web client"
+                />
+              </Flex>
+
+              <Text
+                fontSize="11px"
+                color={PHOS.greenDim}
+                textTransform="uppercase"
+                letterSpacing="0.14em"
+                mb={2}
+                mt={6}
+              >
+                # step 04 — connect device
+              </Text>
+              <PhosOl items={CONNECT_STEPS} />
+
+              <Text
+                fontSize="11px"
+                color={PHOS.greenDim}
+                textTransform="uppercase"
+                letterSpacing="0.14em"
+                mb={2}
+                mt={6}
+              >
+                # step 05 — join the channel
+              </Text>
+              <PhosOl items={JOIN_STEPS} />
+            </Box>
+          </PhosPanel>
+
+          <PhosPanel title="./help" meta="when things go sideways">
+            <Box px={{ base: 4, md: 6 }} py={5} fontFamily={PHOS.mono}>
+              <Text fontSize="14px" color={PHOS.paper} mb={3}>
+                stuck? we&apos;ve been there.
+              </Text>
+              <PhosUl
+                items={[
+                  'ask in #seckc discord',
+                  'show up to a wednesday meeting',
+                  'check the official meshtastic docs for troubleshooting',
+                ]}
+              />
+              <Text
+                fontSize="12px"
+                color={PHOS.greenDim}
+                mt={4}
+                lineHeight="1.6"
+              >
+                {'// '}meshtastic is for experimentation and emergency comms.
+                follow proper amateur radio practices and FCC regs.
+              </Text>
+            </Box>
+          </PhosPanel>
+        </Flex>
       </Container>
     </Box>
   );
