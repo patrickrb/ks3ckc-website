@@ -165,7 +165,7 @@ export const authRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       ctx.logger.info('Set auth cookie');
-      cookies().set({
+      (await cookies()).set({
         name: AUTH_COOKIE_NAME,
         value: userJwt,
         httpOnly: true,
@@ -189,7 +189,7 @@ export const authRouter = createTRPCRouter({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx }) => {
       ctx.logger.info('Delete auth cookie');
-      cookies().delete({
+      (await cookies()).delete({
         name: AUTH_COOKIE_NAME,
         httpOnly: true,
         secure: env.NODE_ENV === 'production',
@@ -345,7 +345,7 @@ export const authRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       ctx.logger.info('Set auth cookie');
-      cookies().set({
+      (await cookies()).set({
         name: AUTH_COOKIE_NAME,
         value: userJwt,
         httpOnly: true,

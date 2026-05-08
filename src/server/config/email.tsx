@@ -43,7 +43,7 @@ export const previewEmailRoute = async (
   {
     params,
   }: {
-    params: { options: [string, string?] };
+    params: Promise<{ options: string[] }>;
   }
 ) => {
   // Allows debug only in development
@@ -53,7 +53,7 @@ export const previewEmailRoute = async (
     });
   }
 
-  const [template, language = DEFAULT_LANGUAGE_KEY] = params.options;
+  const [template, language = DEFAULT_LANGUAGE_KEY] = (await params).options;
   const query = req.url.split('?')[1];
   const searchQuery = Object.fromEntries(new URLSearchParams(query ?? ''));
 
