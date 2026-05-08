@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider, createLocalStorageManager } from '@chakra-ui/react';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { useTranslation } from 'react-i18next';
 
 import '@/lib/dayjs/config';
@@ -27,7 +28,7 @@ export const Providers: FC<React.PropsWithChildren<unknown>> = ({
             'ltr',
         }}
       >
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
       </ChakraProvider>
     </CacheProvider>
   );

@@ -18,7 +18,7 @@ jobs:
     name: Playwright E2E Tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.43.1-jammy
+    container: mcr.microsoft.com/playwright:v1.57.0-noble
     env:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       NEXT_PUBLIC_DEV_ENV_NAME: tests
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 10
       - run: pnpm install
 
       # - uses: actions/checkout@v4
