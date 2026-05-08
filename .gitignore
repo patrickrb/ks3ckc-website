@@ -72,3 +72,6 @@ prisma/dev.db-journal
 ./claude
 
 certificates
+
+# Windows NTFS alternate data streams (mark-of-the-web, etc.)
+*:Zone.Identifier
