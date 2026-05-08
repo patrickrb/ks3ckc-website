@@ -2,8 +2,9 @@
 
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 
-import { Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';
 
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
 import { Viewport } from '@/components/Viewport';
 
 export type AppLayoutContextNavDisplayed = boolean | 'desktop';
@@ -58,12 +59,34 @@ export const AppLayout: FC<React.PropsWithChildren<unknown>> = ({
     <AppLayoutContext.Provider value={providerValue}>
       <Viewport
         data-testid="app-layout"
-        bg="gray.50"
-        _dark={{ bg: 'gray.900' }}
+        bg={PHOS.bg}
+        color={PHOS.paper}
+        fontFamily={PHOS.mono}
+        position="relative"
+        sx={{
+          '&::before': {
+            content: '""',
+            position: 'fixed',
+            inset: 0,
+            background:
+              'repeating-linear-gradient(to bottom, rgba(57,255,20,0.025) 0px, rgba(57,255,20,0.025) 1px, transparent 1px, transparent 3px)',
+            pointerEvents: 'none',
+            mixBlendMode: 'screen',
+            zIndex: 0,
+          },
+        }}
       >
-        <Flex flex="1" direction="column">
-          {children}
-        </Flex>
+        <Box
+          position="relative"
+          zIndex={1}
+          display="flex"
+          flexDirection="column"
+          flex="1"
+        >
+          <Flex flex="1" direction="column">
+            {children}
+          </Flex>
+        </Box>
       </Viewport>
     </AppLayoutContext.Provider>
   );

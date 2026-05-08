@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Box,
   Button,
   Flex,
   HStack,
@@ -23,6 +24,11 @@ import {
   DataListRow,
   DataListText,
 } from '@/components/DataList';
+import {
+  PHOS,
+  phosGhostBtn,
+  phosPrimaryBtn,
+} from '@/components/HomeRedesign/phosphorTheme';
 import { Icon } from '@/components/Icons';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { SearchInput } from '@/components/SearchInput';
@@ -57,8 +63,19 @@ export default function PageAdminRepositories() {
               alignItems={{ base: 'start', md: 'center' }}
               flex={1}
             >
-              <Heading flex="none" size="md">
-                {t('repositories:list.title')}
+              <Heading
+                flex="none"
+                size="sm"
+                fontFamily={PHOS.mono}
+                color={PHOS.green}
+                fontWeight={700}
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+              >
+                <Box as="span" color={PHOS.amber} mr={2}>
+                  ›
+                </Box>
+                ./repositories
               </Heading>
               <SearchInput
                 value={searchTerm}
@@ -70,9 +87,9 @@ export default function PageAdminRepositories() {
             <ResponsiveIconButton
               as={LinkAdmin}
               href="/repositories/create"
-              variant="@primary"
               size="sm"
               icon={<LuPlus />}
+              sx={phosPrimaryBtn}
             >
               {t('repositories:list.actions.createRepository')}
             </ResponsiveIconButton>
@@ -98,7 +115,11 @@ export default function PageAdminRepositories() {
               .map((repository) => (
                 <DataListRow as={LinkBox} key={repository.id} withHover>
                   <DataListCell w="auto">
-                    <Icon icon={LuBookMarked} fontSize="xl" color="gray.400" />
+                    <Icon
+                      icon={LuBookMarked}
+                      fontSize="xl"
+                      color={PHOS.greenDim}
+                    />
                   </DataListCell>
                   <DataListCell>
                     <DataListText fontWeight="bold">
@@ -131,6 +152,7 @@ export default function PageAdminRepositories() {
                     onClick={() => repositories.fetchNextPage()}
                     isLoading={repositories.isFetchingNextPage}
                     isDisabled={!repositories.hasNextPage}
+                    sx={phosGhostBtn}
                   >
                     {t('repositories:list.loadMore.button')}
                   </Button>

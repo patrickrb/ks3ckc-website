@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   Badge,
+  Box,
   Flex,
   HStack,
   Heading,
@@ -24,6 +25,7 @@ import {
   DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
+import { PHOS, phosPrimaryBtn } from '@/components/HomeRedesign/phosphorTheme';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import {
   AdminLayoutPage,
@@ -53,10 +55,19 @@ export default function PageAdminEvents() {
         <Stack spacing={4}>
           <HStack spacing={4} w="full">
             <Flex flex="1" direction={{ base: 'column', md: 'row' }} rowGap={2}>
-              <Heading flex="1" size="md">
-                {t('events:management.title', {
-                  defaultValue: 'Events Management',
-                })}
+              <Heading
+                flex="1"
+                size="sm"
+                fontFamily={PHOS.mono}
+                color={PHOS.green}
+                fontWeight={700}
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+              >
+                <Box as="span" color={PHOS.amber} mr={2}>
+                  ›
+                </Box>
+                ./events
               </Heading>
             </Flex>
             <ResponsiveIconButton
@@ -64,7 +75,7 @@ export default function PageAdminEvents() {
               href="/management/events/create"
               icon={<LuPlus />}
               size="sm"
-              colorScheme="brand"
+              sx={phosPrimaryBtn}
             >
               {t('events:management.actions.create', {
                 defaultValue: 'Create Event',
@@ -135,7 +146,7 @@ export default function PageAdminEvents() {
                     </HStack>
                   </DataListCell>
                   <DataListCell w="auto">
-                    <Text fontSize="sm" color="gray.500">
+                    <Text fontSize="sm" color={PHOS.greenDim}>
                       {t('events:management.createdBy', {
                         defaultValue: 'Created by',
                       })}{' '}

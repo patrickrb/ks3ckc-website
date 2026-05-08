@@ -2,10 +2,9 @@
 
 import { ReactNode } from 'react';
 
-import { Box, Center, Flex } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 
-import { SeckKCLogo } from '@/components/Logo';
-import { SlideIn } from '@/components/SlideIn';
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
 
 type AppPublicOnlyLayout = {
   children: ReactNode;
@@ -13,31 +12,29 @@ type AppPublicOnlyLayout = {
 
 export const AppPublicOnlyLayout = ({ children }: AppPublicOnlyLayout) => {
   return (
-    <Flex flex={1} minW={0}>
-      <Center
-        flex={1}
-        display={{ base: 'none', md: 'flex' }}
-        color="white"
-        bg="gray.900"
-        _dark={{
-          bg: 'gray.800',
-        }}
-      >
-        <SeckKCLogo w="45rem" mb="8" mx="auto" />
-      </Center>
-      <Flex flex={1} minW={0} bg="gray.50" _dark={{ bg: 'gray.900' }}>
-        <SlideIn>
-          <Box px="4" py="4rem" w="22rem" maxW="full" m="auto">
-            <SeckKCLogo
-              w="12rem"
-              mb="8"
-              mx="auto"
-              display={{ base: 'block', md: 'none' }}
-            />
-            {children}
-          </Box>
-        </SlideIn>
-      </Flex>
-    </Flex>
+    <Box
+      as="section"
+      position="relative"
+      minH={{ base: 'auto', md: '70vh' }}
+      px={{ base: 4, md: 8 }}
+      py={{ base: 8, md: 14 }}
+      fontFamily={PHOS.mono}
+      sx={{
+        background: `radial-gradient(ellipse at 50% 30%, rgba(57,255,20,0.05), transparent 70%), ${PHOS.bg}`,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background:
+            'repeating-linear-gradient(to bottom, rgba(57,255,20,0.03) 0px, rgba(57,255,20,0.03) 1px, transparent 1px, transparent 3px)',
+          pointerEvents: 'none',
+          mixBlendMode: 'screen',
+          zIndex: 1,
+        },
+        '& > *': { position: 'relative', zIndex: 2 },
+      }}
+    >
+      <Container maxW="lg">{children}</Container>
+    </Box>
   );
 };

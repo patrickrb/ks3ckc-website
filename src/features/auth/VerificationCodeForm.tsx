@@ -1,4 +1,4 @@
-import { Button, HStack, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react';
 import { FormContext, useFormContext } from '@formiz/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { TRPCClientErrorLike } from '@trpc/client';
@@ -7,6 +7,7 @@ import { parseAsInteger, useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { FieldPinInput } from '@/components/FieldPinInput';
+import { PHOS, phosPrimaryBtn } from '@/components/HomeRedesign/phosphorTheme';
 import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
   getValidationRetryDelayInSeconds,
@@ -27,10 +28,19 @@ export const VerificationCodeForm = ({
   const { t } = useTranslation(['auth']);
   const form = useFormContext();
   return (
-    <Stack spacing="4">
-      <Stack>
-        <Heading size="md">{t('auth:validate.title')}</Heading>
-        <Text fontSize="sm">
+    <Stack spacing="4" fontFamily={PHOS.mono}>
+      <Box>
+        <Text
+          as="h2"
+          fontSize={{ base: '18px', md: '20px' }}
+          color={PHOS.paper}
+          fontWeight="700"
+          textShadow="0 0 8px rgba(57,255,20,0.25)"
+          mb={1.5}
+        >
+          {t('auth:validate.title')}
+        </Text>
+        <Text fontSize="13px" color={PHOS.paper} opacity={0.8} lineHeight="1.6">
           <Trans
             t={t}
             i18nKey="auth:validate.description"
@@ -39,11 +49,17 @@ export const VerificationCodeForm = ({
               expiration: VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
             }}
             components={{
-              b: <strong />,
+              b: (
+                <Box
+                  as="strong"
+                  color={PHOS.green}
+                  textShadow="0 0 6px rgba(57,255,20,0.35)"
+                />
+              ),
             }}
           />
         </Text>
-      </Stack>
+      </Box>
       <FieldPinInput
         name="code"
         label={t('auth:data.verificationCode.label')}
@@ -53,23 +69,22 @@ export const VerificationCodeForm = ({
         required={t('auth:data.verificationCode.required')}
         pinInputProps={{
           onComplete: () => {
-            // Only auto submit on first try
             if (!form.isSubmitted) {
               form.submit();
             }
           },
         }}
       />
-      <HStack spacing={8}>
+      <HStack spacing={4}>
         <Button
           size="lg"
           isLoading={isLoading}
           isDisabled={form.isSubmitted && !form.isValid}
           type="submit"
-          variant="@primary"
           flex={1}
+          {...phosPrimaryBtn}
         >
-          {t('auth:validate.actions.confirm')}
+          ▶ {t('auth:validate.actions.confirm')}
         </Button>
       </HStack>
 
