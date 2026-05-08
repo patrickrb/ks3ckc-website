@@ -11,3 +11,4 @@ coverage
 *.config.js
 !*.eslintrc.js
 prisma/seed
+design files
