@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { LuChevronDown } from 'react-icons/lu';
 
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
 import { Icon } from '@/components/Icons';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 
@@ -61,12 +62,30 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
               textAlign="left"
               as={Button}
               rightIcon={<LuChevronDown />}
+              bg={PHOS.bg}
+              color={PHOS.green}
+              border="1px solid"
+              borderColor={PHOS.line2}
+              borderRadius={0}
+              fontFamily={PHOS.mono}
+              fontWeight={600}
+              _hover={{ bg: PHOS.greenDeep, borderColor: PHOS.greenDim }}
+              _active={{ bg: PHOS.greenDeep, borderColor: PHOS.green }}
               sx={{ '> *': { minW: 0 } }}
             >
               {active}
             </MenuButton>
             <Portal>
-              <MenuList>{children}</MenuList>
+              <MenuList
+                bg={PHOS.panel}
+                border="1px solid"
+                borderColor={PHOS.line2}
+                borderRadius={0}
+                py={0}
+                fontFamily={PHOS.mono}
+              >
+                {children}
+              </MenuList>
             </Portal>
           </>
         )}
@@ -98,8 +117,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
             mt="0.05rem"
             me="2"
             fontSize="lg"
-            color={isActive ? 'brand.500' : 'gray.400'}
-            _dark={{ color: isActive ? 'brand.300' : 'gray.400' }}
+            color={isActive ? PHOS.green : PHOS.greenDim}
           />
         )}
         <Text as="span" noOfLines={isMenu ? 1 : 2}>
@@ -118,36 +136,25 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
 
   return (
     <Item
-      px="3"
-      py="1"
-      borderRadius={isMenu ? undefined : 'md'}
-      transition="0.2s"
+      px={3}
+      py={2}
+      borderRadius={0}
+      transition="0.15s"
       fontSize="sm"
-      fontWeight="bold"
-      bg={isActive ? 'white' : 'transparent'}
-      border="1px solid transparent"
-      boxShadow={isActive ? 'card' : undefined}
-      color={isActive ? 'gray.700' : 'gray.600'}
-      borderColor={isActive ? 'gray.100' : undefined}
-      borderLeft={isMenu ? 'none' : undefined}
-      borderRight={isMenu ? 'none' : undefined}
-      _dark={{
-        color: isActive ? 'white' : 'gray.100',
-        borderColor: isActive ? 'gray.800' : undefined,
-        bg: isActive ? 'gray.800' : 'transparent',
-      }}
+      fontWeight={isActive ? 700 : 500}
+      fontFamily={PHOS.mono}
+      bg={isActive ? PHOS.greenDeep : 'transparent'}
+      border="1px solid"
+      borderColor={isActive ? PHOS.line2 : 'transparent'}
+      borderLeftWidth={isMenu ? 0 : '2px'}
+      borderLeftColor={isActive ? PHOS.green : 'transparent'}
+      color={isActive ? PHOS.green : PHOS.paper}
       _hover={
-        !isActive && !isMenu
+        !isActive
           ? {
-              bg: 'white',
-              color: 'gray.700',
-              boxShadow: 'card',
-              borderColor: 'gray.100',
-              _dark: {
-                bg: 'gray.700',
-                color: 'gray.100',
-                borderColor: 'gray.800',
-              },
+              bg: 'rgba(57,255,20,0.06)',
+              color: PHOS.green,
+              borderLeftColor: PHOS.greenDim,
             }
           : {}
       }
@@ -167,7 +174,7 @@ export const NavGroup: FC<React.PropsWithChildren<FlexProps>> = ({
 
   if (isMenu) {
     return (
-      <MenuGroup title={title} {...rest}>
+      <MenuGroup title={title?.toString()} {...rest}>
         {children}
       </MenuGroup>
     );
@@ -175,15 +182,18 @@ export const NavGroup: FC<React.PropsWithChildren<FlexProps>> = ({
   return (
     <Flex direction="column">
       <Flex
-        fontSize="xs"
-        fontWeight="bold"
-        px="3"
-        pt="6"
-        pb="2"
-        color="text-dimmed"
+        fontSize="10px"
+        fontWeight={700}
+        px={3}
+        pt={2}
+        pb={2}
+        color={PHOS.greenDim}
+        textTransform="uppercase"
+        letterSpacing="0.14em"
+        fontFamily={PHOS.mono}
         {...rest}
       >
-        {title}
+        {title ? `// ${title}` : null}
       </Flex>
       <Stack spacing="1">{children}</Stack>
     </Flex>

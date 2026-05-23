@@ -2,11 +2,9 @@
 
 import { ReactNode } from 'react';
 
-import { Box } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 
-import { Logo } from '@/components/Logo';
-import { SlideIn } from '@/components/SlideIn';
-import { Viewport } from '@/components/Viewport';
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
 
 type AdminPublicOnlyLayout = {
   children: ReactNode;
@@ -14,13 +12,29 @@ type AdminPublicOnlyLayout = {
 
 export const AdminPublicOnlyLayout = ({ children }: AdminPublicOnlyLayout) => {
   return (
-    <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
-      <SlideIn>
-        <Box px="4" py="4rem" w="22rem" maxW="full" m="auto">
-          <Logo w="12rem" mb="8" mx="auto" />
-          {children}
-        </Box>
-      </SlideIn>
-    </Viewport>
+    <Box
+      as="section"
+      position="relative"
+      minH={{ base: 'auto', md: '70vh' }}
+      px={{ base: 4, md: 8 }}
+      py={{ base: 8, md: 14 }}
+      fontFamily={PHOS.mono}
+      sx={{
+        background: `radial-gradient(ellipse at 50% 30%, rgba(255,176,0,0.05), transparent 70%), ${PHOS.bg}`,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          background:
+            'repeating-linear-gradient(to bottom, rgba(255,176,0,0.03) 0px, rgba(255,176,0,0.03) 1px, transparent 1px, transparent 3px)',
+          pointerEvents: 'none',
+          mixBlendMode: 'screen',
+          zIndex: 1,
+        },
+        '& > *': { position: 'relative', zIndex: 2 },
+      }}
+    >
+      <Container maxW="lg">{children}</Container>
+    </Box>
   );
 };

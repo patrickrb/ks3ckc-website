@@ -5,6 +5,7 @@ import {
   IconButton,
   Input,
   InputGroup,
+  InputLeftElement,
   InputProps,
   InputRightElement,
   forwardRef,
@@ -13,6 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuSearch, LuX } from 'react-icons/lu';
+
+import { PHOS, phosInputProps } from '@/components/HomeRedesign/phosphorTheme';
 
 type CustomProps = {
   value?: string;
@@ -87,6 +90,14 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
 
     return (
       <InputGroup {...rest}>
+        <InputLeftElement
+          pointerEvents="none"
+          color={PHOS.greenDim}
+          fontFamily={PHOS.mono}
+          fontSize="13px"
+        >
+          $
+        </InputLeftElement>
         <Input
           ref={refs}
           onChange={handleChange}
@@ -94,20 +105,31 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
           placeholder={placeholder ?? t('components:searchInput.placeholder')}
           isDisabled={isDisabled}
           onKeyDown={handleEscape}
+          pl={8}
+          {...phosInputProps}
         />
         <InputRightElement pointerEvents="none">
           {!isDisabled && search ? (
             <IconButton
               onClick={handleClear}
-              variant="@secondary"
               size="xs"
               aria-label={clearLabel ?? t('components:searchInput.clear')}
               pointerEvents="auto"
+              bg="transparent"
+              color={PHOS.greenDim}
+              border="1px solid"
+              borderColor={PHOS.line2}
+              borderRadius={0}
+              _hover={{ color: PHOS.green, borderColor: PHOS.green }}
             >
               <LuX />
             </IconButton>
           ) : (
-            <Box pointerEvents="none" opacity={isDisabled ? 0.3 : undefined}>
+            <Box
+              pointerEvents="none"
+              opacity={isDisabled ? 0.3 : undefined}
+              color={PHOS.greenDim}
+            >
               <LuSearch />
             </Box>
           )}

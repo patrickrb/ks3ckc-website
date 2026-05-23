@@ -17,6 +17,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { LuRefreshCw } from 'react-icons/lu';
 
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
+
 export type DataListProps = FlexProps;
 
 export const DataList = (props: DataListProps) => {
@@ -24,20 +26,16 @@ export const DataList = (props: DataListProps) => {
     <Flex
       flexDirection="column"
       position="relative"
-      boxShadow="card"
-      borderRadius="md"
       overflowX="auto"
       overflowY="hidden"
       minH="10rem"
-      bg="white"
+      bg={PHOS.panel}
+      color={PHOS.paper}
+      fontFamily={PHOS.mono}
       border="1px solid"
-      borderColor="gray.100"
+      borderColor={PHOS.line2}
+      borderRadius={0}
       {...props}
-      _dark={{
-        bg: 'gray.800',
-        borderColor: 'gray.900',
-        ...props._dark,
-      }}
     />
   );
 };
@@ -48,24 +46,22 @@ export const DataListRow = ({ withHover, ...props }: DataListRowProps) => {
   return (
     <Flex
       borderBottom="1px solid"
-      borderBottomColor="gray.100"
-      transition="0.2s"
-      px={1.5}
+      borderBottomColor={PHOS.line}
+      transition="0.15s"
+      px={2}
       {...props}
       _last={{
-        // Hide bottom border, if the row is at the bottom of the DataList
         mb: '-1px',
         ...props._last,
       }}
       _hover={{
         ...(withHover
-          ? { bg: 'gray.50', _dark: { bg: 'whiteAlpha.100' } }
+          ? {
+              bg: 'rgba(57,255,20,0.06)',
+              borderBottomColor: PHOS.line2,
+            }
           : {}),
         ...props._hover,
-      }}
-      _dark={{
-        borderBottomColor: 'gray.900',
-        ...props._dark,
       }}
     />
   );
@@ -98,8 +94,10 @@ export const DataListTextHeader = (props: DataListTextHeaderProps) => {
   return (
     <DataListText
       fontWeight="bold"
-      fontSize="xs"
-      color="text-dimmed"
+      fontSize="11px"
+      letterSpacing="0.12em"
+      textTransform="uppercase"
+      color={PHOS.greenDim}
       {...props}
     >
       {props.children}
@@ -110,7 +108,16 @@ export const DataListTextHeader = (props: DataListTextHeaderProps) => {
 export type DataListTextProps = TextProps;
 
 export const DataListText = (props: DataListTextProps) => {
-  return <Text as="div" fontSize="sm" maxW="full" noOfLines={1} {...props} />;
+  return (
+    <Text
+      as="div"
+      fontSize="sm"
+      maxW="full"
+      noOfLines={1}
+      color={PHOS.paper}
+      {...props}
+    />
+  );
 };
 
 export const DataListLoadingState = () => {
@@ -119,24 +126,60 @@ export const DataListLoadingState = () => {
       <DataListRow>
         <DataListCell>
           <Stack w="full" opacity={0.6} p={2}>
-            <Skeleton w="30%" h={2} noOfLines={1} />
-            <Skeleton w="20%" h={2} noOfLines={1} />
+            <Skeleton
+              w="30%"
+              h={2}
+              noOfLines={1}
+              startColor={PHOS.greenDeep}
+              endColor={PHOS.line2}
+            />
+            <Skeleton
+              w="20%"
+              h={2}
+              noOfLines={1}
+              startColor={PHOS.greenDeep}
+              endColor={PHOS.line2}
+            />
           </Stack>
         </DataListCell>
       </DataListRow>
       <DataListRow>
         <DataListCell>
           <Stack w="full" opacity={0.4} p={2}>
-            <Skeleton w="30%" h={2} noOfLines={1} />
-            <Skeleton w="20%" h={2} noOfLines={1} />
+            <Skeleton
+              w="30%"
+              h={2}
+              noOfLines={1}
+              startColor={PHOS.greenDeep}
+              endColor={PHOS.line2}
+            />
+            <Skeleton
+              w="20%"
+              h={2}
+              noOfLines={1}
+              startColor={PHOS.greenDeep}
+              endColor={PHOS.line2}
+            />
           </Stack>
         </DataListCell>
       </DataListRow>
       <DataListRow>
         <DataListCell>
           <Stack w="full" opacity={0.2} p={2}>
-            <Skeleton w="30%" h={2} noOfLines={1} />
-            <Skeleton w="20%" h={2} noOfLines={1} />
+            <Skeleton
+              w="30%"
+              h={2}
+              noOfLines={1}
+              startColor={PHOS.greenDeep}
+              endColor={PHOS.line2}
+            />
+            <Skeleton
+              w="20%"
+              h={2}
+              noOfLines={1}
+              startColor={PHOS.greenDeep}
+              endColor={PHOS.line2}
+            />
           </Stack>
         </DataListCell>
       </DataListRow>
@@ -157,18 +200,29 @@ export const DataListEmptyState = (props: DataListEmptyStateProps) => {
         flex={1}
         justifyContent="center"
         alignItems="center"
-        fontSize="sm"
-        fontWeight="semibold"
-        color="text-dimmed"
+        fontSize="12px"
+        fontFamily={PHOS.mono}
+        color={PHOS.greenDim}
+        py={6}
       >
         {props.searchTerm ? (
           <Box>
+            <Box as="span" color={PHOS.amber} mr={2}>
+              {'//'}
+            </Box>
             {t('components:datalist.noResultsTitle', {
               searchTerm: props.searchTerm,
             })}
           </Box>
         ) : (
-          props.children ?? <Box>{t('components:datalist.emptyTitle')}</Box>
+          props.children ?? (
+            <Box>
+              <Box as="span" color={PHOS.amber} mr={2}>
+                {'//'}
+              </Box>
+              {t('components:datalist.emptyTitle')}
+            </Box>
+          )
         )}
       </DataListCell>
     </DataListRow>
@@ -186,23 +240,41 @@ export const DataListErrorState = (props: DataListErrorStateProps) => {
   return (
     <DataListRow>
       <DataListCell>
-        <Alert status="error">
+        <Alert
+          status="error"
+          bg={PHOS.bg2}
+          color={PHOS.red}
+          border="1px solid"
+          borderColor={PHOS.red}
+          borderRadius={0}
+          fontFamily={PHOS.mono}
+        >
           <AlertTitle>
+            <Box as="span" color={PHOS.red} mr={2}>
+              !!
+            </Box>
             {props.title ?? t('components:datalist.errorTitle')}
           </AlertTitle>
           {(!!props.children || !!props.retry) && (
             <AlertDescription>
               <Wrap spacingX={2} spacingY={1}>
                 {!!props.children && (
-                  <Box alignSelf="center">{props.children}</Box>
+                  <Box alignSelf="center" color={PHOS.paper}>
+                    {props.children}
+                  </Box>
                 )}
                 {!!props.retry && (
                   <Button
-                    colorScheme="error"
-                    variant="ghost"
                     size="sm"
                     leftIcon={<LuRefreshCw />}
                     onClick={() => props.retry?.()}
+                    bg="transparent"
+                    color={PHOS.red}
+                    border="1px solid"
+                    borderColor={PHOS.red}
+                    borderRadius={0}
+                    fontFamily={PHOS.mono}
+                    _hover={{ bg: 'rgba(255,58,58,0.1)' }}
                   >
                     {t('components:datalist.retry')}
                   </Button>

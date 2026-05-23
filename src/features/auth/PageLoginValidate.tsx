@@ -1,11 +1,17 @@
 import React from 'react';
 
-import { Button, Stack } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
+import PhosPanel from '@/components/HomeRedesign/PhosPanel';
+import {
+  PHOS,
+  blink,
+  phosGhostBtn,
+} from '@/components/HomeRedesign/phosphorTheme';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -31,10 +37,7 @@ export default function PageLoginValidate() {
   });
 
   const customOnVerificationCodeSuccess = () => {
-    // Refresh auth state to ensure navbar updates
     refreshAuth();
-
-    // Use the original success handler
     onVerificationCodeSuccess();
   };
 
@@ -49,22 +52,51 @@ export default function PageLoginValidate() {
   });
 
   return (
-    <Stack spacing={6}>
-      <Button
-        me="auto"
-        size="sm"
-        leftIcon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
-        onClick={() => router.back()}
-      >
-        {t('common:actions.back')}
-      </Button>
+    <Stack spacing={5}>
+      <Box>
+        <HStack spacing={2} mb={2}>
+          <Text color={PHOS.greenDim} fontSize="13px" fontFamily={PHOS.mono}>
+            $
+          </Text>
+          <Text color={PHOS.green} fontSize="13px" fontFamily={PHOS.mono}>
+            verify --login
+          </Text>
+          <Box
+            as="span"
+            display="inline-block"
+            color={PHOS.green}
+            animation={`${blink} 1s steps(1) infinite`}
+          >
+            █
+          </Box>
+        </HStack>
+      </Box>
 
-      <Formiz connect={form} autoForm>
-        <VerificationCodeForm
-          email={email ?? ''}
-          isLoading={validate.isLoading || validate.isSuccess}
-        />
-      </Formiz>
+      <PhosPanel title="auth.verify" meta="6-digit code">
+        <Box
+          px={{ base: 4, md: 5 }}
+          py={{ base: 4, md: 5 }}
+          fontFamily={PHOS.mono}
+        >
+          <Stack spacing={4}>
+            <Button
+              me="auto"
+              size="sm"
+              leftIcon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
+              onClick={() => router.back()}
+              {...phosGhostBtn}
+            >
+              {t('common:actions.back')}
+            </Button>
+            <Formiz connect={form} autoForm>
+              <VerificationCodeForm
+                email={email ?? ''}
+                isLoading={validate.isLoading || validate.isSuccess}
+              />
+            </Formiz>
+          </Stack>
+        </Box>
+      </PhosPanel>
     </Stack>
   );
 }

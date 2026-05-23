@@ -9,9 +9,11 @@ import {
   FlexProps,
   HStack,
   Stack,
+  Text,
 } from '@chakra-ui/react';
 import useMeasure from 'react-use-measure';
 
+import { PHOS } from '@/components/HomeRedesign/phosphorTheme';
 import {
   AdminLayoutContextNavDisplayed,
   useAdminLayoutHideNav,
@@ -76,31 +78,52 @@ export const AdminLayoutPageTopBar = ({
       <Flex
         zIndex={2}
         direction="column"
-        py={3}
-        boxShadow="layout"
-        bg="white"
+        py={2.5}
+        bg={PHOS.bg2}
         ref={ref}
-        borderBottom="1px solid transparent"
-        borderBottomColor="gray.100"
-        _dark={{
-          bg: 'gray.900',
-          color: 'white',
-          borderBottomColor: 'gray.800',
-          boxShadow: 'layout-dark',
+        borderBottom="1px solid"
+        borderBottomColor={PHOS.line2}
+        fontFamily={PHOS.mono}
+        position="relative"
+        sx={{
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            height: '1px',
+            background: `linear-gradient(to right, transparent, ${PHOS.amber}, transparent)`,
+            opacity: 0.4,
+          },
         }}
         {...rest}
       >
         <Box w="full" h="0" pb="safe-top" />
         <PageContainer maxW={containerMaxWidth}>
-          <HStack spacing="4">
+          <HStack spacing={3} align="center">
+            <Text
+              fontSize="11px"
+              color={PHOS.amber}
+              opacity={0.7}
+              fontWeight={700}
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+              flexShrink={0}
+              display={{ base: 'none', md: 'inline' }}
+            >
+              [admin]
+            </Text>
             {!!leftActions && (
-              <ButtonGroup size="sm" spacing={3}>
+              <ButtonGroup size="sm" spacing={2}>
                 {leftActions}
               </ButtonGroup>
             )}
-            <Box flex="1">{children}</Box>
+            <Box flex="1" minW={0}>
+              {children}
+            </Box>
             {!!rightActions && (
-              <ButtonGroup size="sm" spacing={3}>
+              <ButtonGroup size="sm" spacing={2}>
                 {rightActions}
               </ButtonGroup>
             )}
@@ -129,17 +152,28 @@ export const AdminLayoutPageContent = ({
       zIndex="1"
       direction="column"
       flex="1"
-      py="4"
+      py={4}
+      color={PHOS.paper}
       {...rest}
     >
       <PageContainer maxW={containerMaxWidth} pb={16}>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
-          spacing={{ base: '4', lg: '8' }}
+          spacing={{ base: 4, lg: 6 }}
           flex="1"
         >
           {nav && (
-            <Flex direction="column" minW="0" w={{ base: 'full', lg: '12rem' }}>
+            <Flex
+              direction="column"
+              minW="0"
+              w={{ base: 'full', lg: '14rem' }}
+              border="1px solid"
+              borderColor={PHOS.line2}
+              bg={PHOS.panel}
+              p={2}
+              alignSelf="flex-start"
+              fontFamily={PHOS.mono}
+            >
               {nav}
             </Flex>
           )}
@@ -176,16 +210,11 @@ export const AdminLayoutPageBottomBar = ({
         bottom="0"
         insetStart="0"
         insetEnd="0"
-        py="2"
-        boxShadow="layout"
-        bg="white"
-        borderTop="1px solid transparent"
-        _dark={{
-          bg: 'gray.900',
-          color: 'white',
-          borderTopColor: 'gray.800',
-          boxShadow: 'layout-dark',
-        }}
+        py={2}
+        bg={PHOS.bg2}
+        borderTop="1px solid"
+        borderTopColor={PHOS.line2}
+        fontFamily={PHOS.mono}
         {...rest}
       >
         <PageContainer maxW={containerMaxWidth}>{children}</PageContainer>
